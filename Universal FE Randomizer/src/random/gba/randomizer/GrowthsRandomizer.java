@@ -6,38 +6,86 @@ import fedata.gba.GBAFECharacterData;
 import random.gba.loader.CharacterDataLoader;
 import util.WhyDoesJavaNotHaveThese;
 
-public class GrowthsRandomizer {
-	
+public class GrowthsRandomizer 
+{	
+	// Declarations
 	static final int rngSalt = 124;
-	
-	public static void randomizeGrowthsByRedistribution(int variance, int min, int max, boolean adjustHP, CharacterDataLoader charactersData, Random rng) {
+	static final int hpBonus = 25;
+
+	//////////////////////////////////////////////////////////////////
+	// UTILITIES
+	//////////////////////////////////////////////////////////////////
+
+	//================================================================
+	// Utility Function to set the randomized growths
+	//================================================================
+	private static void setRandGrowths( boolean adjustHP, int min, int max, CharacterDataLoader charactersData, GBAFECharacterData character, int newHPGrowth, int newSTRGrowth, int newSKLGrowth, int newSPDGrowth, int newLCKGrowth, int newDEFGrowth, int newRESGrowth )
+	{
+		for (GBAFECharacterData thisCharacter : charactersData.linkedCharactersForCharacter(character))
+		{
+			if(adjustHP)
+			{
+				thisCharacter.setHPGrowth(WhyDoesJavaNotHaveThese.clamp( newHPGrowth, min + hpBonus, max + hpBonus) );
+			}
+			thisCharacter.setSTRGrowth( WhyDoesJavaNotHaveThese.clamp(newSTRGrowth, min, max) );
+			thisCharacter.setSKLGrowth( WhyDoesJavaNotHaveThese.clamp(newSKLGrowth, min, max) );
+			thisCharacter.setSPDGrowth( WhyDoesJavaNotHaveThese.clamp(newSPDGrowth, min, max) );
+			thisCharacter.setLCKGrowth( WhyDoesJavaNotHaveThese.clamp(newLCKGrowth, min, max) );
+			thisCharacter.setDEFGrowth( WhyDoesJavaNotHaveThese.clamp(newDEFGrowth, min, max) );
+			thisCharacter.setRESGrowth( WhyDoesJavaNotHaveThese.clamp(newRESGrowth, min, max) );
+		}
+
+	}
+
+	//================================================================
+	// Draw from a triangle distribution
+	//================================================================
+	private static int triangleDist( int variance, Random rng )
+	{
+		return ( rng.nextInt(variance + 1) + rng.nextInt(variance + 1) - variance );
+	}
+
+	//////////////////////////////////////////////////////////////////
+	// MAIN METHODS
+	//////////////////////////////////////////////////////////////////
+
+	//================================================================
+	// Redistribute Growths, so that total growth rate amount stays
+	//  nearly the same, but get re-focused into different stats. 
+	//================================================================
+	public static void randomizeGrowthsByRedistribution(int variance, int min, int max, boolean adjustHP, CharacterDataLoader charactersData, Random rng)
+	{
+		// Get the playable characters, since only they have character growths
 		GBAFECharacterData[] allPlayableCharacters = charactersData.playableCharacters();
 		
-		// Commit anything outstanding first.
-		// In case any other randomization step modified characters, because we
-		// need to start from a clean slate.
+		// Commit outstanding changes to start from a clean slate.
 		charactersData.commit();
-		
-		for (GBAFECharacterData character : allPlayableCharacters) {
-			
+
+		// Check for doing it by 5%, which is more common
+		int mult = 1;
+		if( variance % 5 == 0 && min % 5 == 0 && max % 5 == 0 )
+		{
+			mult = 5; //Set the multiplier to five
+			variance = variance / 5; //And divide the Delta by five
+		}
+
+		// For each playable character		
+		for (GBAFECharacterData character : allPlayableCharacters)
+		{	
 			// Do not modify anything that was already modified.
 			// This is here because some characters are linked (for example, FE7 Lyn has two variants: Tutorial and Not Tutorial).
 			// If we generate growths for one, we apply it to all linked characters at the end of this loop.
-			if (character.wasModified()) {
-				continue;
-			}
-			
-			int growthTotal = character.getHPGrowth() + character.getSTRGrowth() + character.getSKLGrowth() + character.getSPDGrowth() + 
+			if (character.wasModified()) { continue; }
+
+			// Get the character's overall growth amount.
+			int growthTotal = (adjustHP ? character.getHPGrowth() - hpBonus : 0 ) + character.getSTRGrowth() + character.getSKLGrowth() + character.getSPDGrowth() + 
 					character.getLCKGrowth() + character.getDEFGrowth() + character.getRESGrowth();
-			
-			int randomNum = rng.nextInt(2);
-			if (randomNum == 0) {
-				growthTotal += rng.nextInt(variance + 1);
-			} else {
-				growthTotal -= rng.nextInt(variance + 1);
-			}
-			
-			int newHPGrowth = min;
+
+			// Triangular Distribution
+			growthTotal += mult * triangleDist( variance, rng );
+
+			// Start with growths at the minimum value			
+			int newHPGrowth = min + hpBonus;
 			int newSTRGrowth = min;
 			int newSKLGrowth = min;
 			int newSPDGrowth = min;
@@ -45,64 +93,66 @@ public class GrowthsRandomizer {
 			int newDEFGrowth = min;
 			int newRESGrowth = min;
 			
-			growthTotal -= (min * 7);
-		
-			int availableGrowthRemaining = (max - newHPGrowth) + (max - newSTRGrowth) + (max - newSKLGrowth) +
-					(max - newSPDGrowth) + (max - newLCKGrowth) + (max - newDEFGrowth) + (max - newRESGrowth);
-			
-			if (availableGrowthRemaining > growthTotal) {
-				while (growthTotal > 0) {
-					randomNum = rng.nextInt(adjustHP ? 10 : 8);
-					int amount = Math.min(5,  growthTotal);
+			// Then, figure out how much growth we can do
+			growthTotal -= (min * (adjustHP ? 7 : 6));
+			int availableGrowthRemaining = (adjustHP ? 7 : 6) * (max - min);
+			int randomNum = 0;
+
+			// If there are growths to distribute, do so			
+			if (availableGrowthRemaining > growthTotal) 
+			{
+				// While there is still growth to dole out
+				while (growthTotal > 0) 
+				{
+					// Depending on whether we're adjusting HP, pick a stat
+					randomNum = rng.nextInt( adjustHP ? 7 : 6 );
+					int amount = Math.min( 5, growthTotal ); // 5, unless we have less than that to give
 					int increaseAmount = 0;
-					switch (randomNum) {
+					switch (randomNum)
+					{
 					case 0:
-					case 1:
-						increaseAmount = Math.min(amount, max - newHPGrowth);
-						growthTotal -= increaseAmount;
-						newHPGrowth += increaseAmount;
-						break;
-					case 2:
 						increaseAmount = Math.min(amount, max - newSTRGrowth);
 						growthTotal -= increaseAmount;
 						newSTRGrowth += increaseAmount;
 						break;
-					case 3:
+					case 1:
 						increaseAmount = Math.min(amount, max - newSKLGrowth);
 						growthTotal -= increaseAmount;
 						newSKLGrowth += increaseAmount;
 						break;
-					case 4:
+					case 2:
 						increaseAmount = Math.min(amount, max - newSPDGrowth);
 						growthTotal -= increaseAmount;
 						newSPDGrowth += increaseAmount;
 						break;
-					case 5:
+					case 3:
 						increaseAmount = Math.min(amount, max - newLCKGrowth);
 						growthTotal -= increaseAmount;
 						newLCKGrowth += increaseAmount;
 						break;
-					case 6: 
+					case 4: 
 						increaseAmount = Math.min(amount, max - newDEFGrowth);
 						growthTotal -= increaseAmount;
 						newDEFGrowth += increaseAmount;
 						break;
-					case 7:
-						increaseAmount = Math.min(amount, max - newDEFGrowth);
+					case 5:
+						increaseAmount = Math.min(amount, max - newRESGrowth);
 						growthTotal -= increaseAmount;
 						newRESGrowth += increaseAmount;
 						break;
 					default:
-						increaseAmount = Math.min(amount, max - newHPGrowth);
+						increaseAmount = Math.min(amount, max + hpBonus - newHPGrowth);
 						growthTotal -= increaseAmount;
 						newHPGrowth += increaseAmount;
 						break;
 					}
 				}
-			} else {
+			} 
+			else 
+			{
 				// We can't satisfy the max constraints.
 				// Just max out everything.
-				newHPGrowth = max;
+				newHPGrowth = max + hpBonus;
 				newSTRGrowth = max;
 				newSKLGrowth = max;
 				newSPDGrowth = max;
@@ -110,140 +160,90 @@ public class GrowthsRandomizer {
 				newDEFGrowth = max;
 				newRESGrowth = max;
 			}
-			
-			for (GBAFECharacterData thisCharacter : charactersData.linkedCharactersForCharacter(character)) {
-				thisCharacter.setHPGrowth(newHPGrowth);
-				thisCharacter.setSTRGrowth(newSTRGrowth);
-				thisCharacter.setSKLGrowth(newSKLGrowth);
-				thisCharacter.setSPDGrowth(newSPDGrowth);
-				thisCharacter.setLCKGrowth(newLCKGrowth);
-				thisCharacter.setDEFGrowth(newDEFGrowth);
-				thisCharacter.setRESGrowth(newRESGrowth);
-			}
-		}
-		
+
+			// Finally, just set the growths
+			setRandGrowths( adjustHP, min, max, charactersData, character, newHPGrowth, newSTRGrowth, newSKLGrowth, newSPDGrowth, newLCKGrowth, newDEFGrowth, newRESGrowth );
+		}		
+		//Commit changes
 		charactersData.commit();
 	}
 	
-	public static void randomizeGrowthsByRandomDelta(int maxDelta, int min, int max, boolean adjustHP, CharacterDataLoader charactersData, Random rng) {
-		GBAFECharacterData[] allPlayableCharacters = charactersData.playableCharacters();
-		
+	//================================================================
+	// Adjusts existing growths by adding a delta to the 
+	//  existing growth amount.
+	//================================================================
+	public static void randomizeGrowthsByRandomDelta(int maxDelta, int min, int max, boolean adjustHP, CharacterDataLoader charactersData, Random rng)
+	{
+		// Get all the playable characters and make sure any outstanding changes are committed.
+		GBAFECharacterData[] allPlayableCharacters = charactersData.playableCharacters();	
 		charactersData.commit();
 		
-		for (GBAFECharacterData character : allPlayableCharacters) {
-			
-			if (character.wasModified()) {
-				continue;
-			}
-			
-			int newHPGrowth = character.getHPGrowth();
-			int newSTRGrowth = character.getSTRGrowth();
-			int newSKLGrowth = character.getSKLGrowth();
-			int newSPDGrowth = character.getSPDGrowth();
-			int newLCKGrowth = character.getLCKGrowth();
-			int newDEFGrowth = character.getDEFGrowth();
-			int newRESGrowth = character.getRESGrowth();
-			
-			int randomNum = rng.nextInt(2);
-			if ((randomNum == 0 && newHPGrowth < max) || adjustHP) {
-				newHPGrowth += rng.nextInt(Math.min(maxDelta + 1, max - newHPGrowth + 1));
-			} else if (newHPGrowth > min) {
-				newHPGrowth -= rng.nextInt(Math.min(maxDelta + 1, newHPGrowth - min + 1));
-			}
-			randomNum = rng.nextInt(2);
-			if (randomNum == 0 && newSTRGrowth < max) {
-				newSTRGrowth += rng.nextInt(Math.min(maxDelta + 1, max - newSTRGrowth + 1));
-			} else if (newSTRGrowth > min) {
-				newSTRGrowth -= rng.nextInt(Math.min(maxDelta + 1, newSTRGrowth - min + 1));
-			}
-			randomNum = rng.nextInt(2);
-			if (randomNum == 0 && newSKLGrowth < max) {
-				newSKLGrowth += rng.nextInt(Math.min(maxDelta + 1, max - newSKLGrowth + 1));
-			} else if (newSKLGrowth > min) {
-				newSKLGrowth -= rng.nextInt(Math.min(maxDelta + 1, newSKLGrowth - min + 1));
-			}
-			randomNum = rng.nextInt(2);
-			if (randomNum == 0 && newSPDGrowth < max) {
-				newSPDGrowth += rng.nextInt(Math.min(maxDelta + 1, max - newSPDGrowth + 1));
-			} else if (newSPDGrowth > min) {
-				newSPDGrowth -= rng.nextInt(Math.min(maxDelta + 1, newSPDGrowth - min + 1));
-			}
-			randomNum = rng.nextInt(2);
-			if (randomNum == 0 && newLCKGrowth < max) {
-				newLCKGrowth += rng.nextInt(Math.min(maxDelta + 1, max - newLCKGrowth + 1));
-			} else if (newLCKGrowth > min) {
-				newLCKGrowth -= rng.nextInt(Math.min(maxDelta + 1, newLCKGrowth - min + 1));
-			}
-			randomNum = rng.nextInt(2);
-			if (randomNum == 0 && newDEFGrowth < max) {
-				newDEFGrowth += rng.nextInt(Math.min(maxDelta + 1, max - newDEFGrowth + 1));
-			} else if (newDEFGrowth > min) {
-				newDEFGrowth -= rng.nextInt(Math.min(maxDelta + 1, newDEFGrowth - min + 1));
-			}
-			randomNum = rng.nextInt(2);
-			if (randomNum == 0 && newRESGrowth < max) {
-				newRESGrowth += rng.nextInt(Math.min(maxDelta + 1, max - newRESGrowth + 1));
-			} else if (newRESGrowth > min) {
-				newRESGrowth -= rng.nextInt(Math.min(maxDelta + 1, newRESGrowth - min + 1));
-			}
-			
-			for (GBAFECharacterData thisCharacter : charactersData.linkedCharactersForCharacter(character)) {
-				thisCharacter.setHPGrowth(WhyDoesJavaNotHaveThese.clamp(newHPGrowth, min, max));
-				thisCharacter.setSTRGrowth(WhyDoesJavaNotHaveThese.clamp(newSTRGrowth, min, max));
-				thisCharacter.setSKLGrowth(WhyDoesJavaNotHaveThese.clamp(newSKLGrowth, min, max));
-				thisCharacter.setSPDGrowth(WhyDoesJavaNotHaveThese.clamp(newSPDGrowth, min, max));
-				thisCharacter.setLCKGrowth(WhyDoesJavaNotHaveThese.clamp(newLCKGrowth, min, max));
-				thisCharacter.setDEFGrowth(WhyDoesJavaNotHaveThese.clamp(newDEFGrowth, min, max));
-				thisCharacter.setRESGrowth(WhyDoesJavaNotHaveThese.clamp(newRESGrowth, min, max));
-			}
+		// Check for doing it by 5%, which is more common
+		int mult = 1;
+		if( maxDelta % 5 == 0 && min % 5 == 0 && max % 5 == 0 )
+		{
+			mult = 5; //Set the multiplier to five
+			maxDelta = maxDelta / 5; //And divide the Delta by five
 		}
-		
+
+		// Then, for each of the playable characters
+		for (GBAFECharacterData character : allPlayableCharacters) 
+		{
+			//Skip them if they are already modified via link mondification	
+			if (character.wasModified()) { continue; }
+			
+			int newHPGrowth = character.getHPGrowth() + (mult * triangleDist( maxDelta, rng ));
+			int newSTRGrowth = character.getSTRGrowth() + (mult * triangleDist( maxDelta, rng ));
+			int newSKLGrowth = character.getSKLGrowth() + (mult * triangleDist( maxDelta, rng ));
+			int newSPDGrowth = character.getSPDGrowth() + (mult * triangleDist( maxDelta, rng ));
+			int newLCKGrowth = character.getLCKGrowth() + (mult * triangleDist( maxDelta, rng ));
+			int newDEFGrowth = character.getDEFGrowth() + (mult * triangleDist( maxDelta, rng ));
+			int newRESGrowth = character.getRESGrowth() + (mult * triangleDist( maxDelta, rng ));
+			
+			// Finally, just set the growths
+			setRandGrowths( adjustHP, min, max, charactersData, character, newHPGrowth, newSTRGrowth, newSKLGrowth, newSPDGrowth, newLCKGrowth, newDEFGrowth, newRESGrowth );
+		}
+		//Commit changes
 		charactersData.commit();
 	}
 	
-	public static void fullyRandomizeGrowthsWithRange(int minGrowth, int maxGrowth, boolean adjustHP, CharacterDataLoader charactersData, Random rng) {
-		GBAFECharacterData[] allPlayableCharacters = charactersData.playableCharacters();
-		
+	//================================================================
+	// Completely re-randomizes growths, keeping within a range
+	//================================================================
+	public static void fullyRandomizeGrowthsWithRange(int minGrowth, int maxGrowth, boolean adjustHP, CharacterDataLoader charactersData, Random rng)
+	{
+		// Get all the playable characters and commit any outstanding changes
+		GBAFECharacterData[] allPlayableCharacters = charactersData.playableCharacters();	
 		charactersData.commit();
-		
-		for (GBAFECharacterData character : allPlayableCharacters) {
-			
-			if (character.wasModified()) {
-				continue;
-			}
-			
-			int range = maxGrowth - minGrowth + 1;
-			
-			int newHPGrowth = rng.nextInt(range) + minGrowth;
-			int newSTRGrowth = rng.nextInt(range) + minGrowth;
-			int newSKLGrowth = rng.nextInt(range) + minGrowth;
-			int newSPDGrowth = rng.nextInt(range) + minGrowth;
-			int newLCKGrowth = rng.nextInt(range) + minGrowth;
-			int newDEFGrowth = rng.nextInt(range) + minGrowth;
-			int newRESGrowth = rng.nextInt(range) + minGrowth;
-			
-			if (adjustHP) {
-				int threshold = range / 2 + minGrowth;
-				if (newHPGrowth < threshold) {
-					if (newHPGrowth + range / 2 <= maxGrowth) {
-						newHPGrowth += range / 2;
-					} else {
-						newHPGrowth = maxGrowth;
-					}
-				}
-			}
-			
-			for (GBAFECharacterData thisCharacter : charactersData.linkedCharactersForCharacter(character)) {
-				thisCharacter.setHPGrowth(newHPGrowth);
-				thisCharacter.setSTRGrowth(newSTRGrowth);
-				thisCharacter.setSKLGrowth(newSKLGrowth);
-				thisCharacter.setSPDGrowth(newSPDGrowth);
-				thisCharacter.setLCKGrowth(newLCKGrowth);
-				thisCharacter.setDEFGrowth(newDEFGrowth);
-				thisCharacter.setRESGrowth(newRESGrowth);
-			}
+
+		// Check for doing it by 5%, which is more common
+		int mult = 1;
+		int range = maxGrowth - minGrowth + 1;
+		if( minGrowth % 5 == 0 && maxGrowth % 5 == 0 )
+		{
+			mult = 5; //Set the multiplier to five
+			range = ((maxGrowth - minGrowth) / 5) + 1; //And divide the Delta by five
 		}
 		
+		// Then, for each character
+		for (GBAFECharacterData character : allPlayableCharacters)
+		{	
+			// If they are previously modified for being a linked character, skip
+			if (character.wasModified()) { continue; }
+
+			// Determine max spread/range and add uniform random to the minimum			
+			int newHPGrowth = (mult * rng.nextInt(range)) + minGrowth + hpBonus;
+			int newSTRGrowth = (mult * rng.nextInt(range)) + minGrowth;
+			int newSKLGrowth = (mult * rng.nextInt(range)) + minGrowth;
+			int newSPDGrowth = (mult * rng.nextInt(range)) + minGrowth;
+			int newLCKGrowth = (mult * rng.nextInt(range)) + minGrowth;
+			int newDEFGrowth = (mult * rng.nextInt(range)) + minGrowth;
+			int newRESGrowth = (mult * rng.nextInt(range)) + minGrowth;
+			
+			// Finally, just set the growths
+			setRandGrowths( adjustHP, minGrowth, maxGrowth, charactersData, character, newHPGrowth, newSTRGrowth, newSKLGrowth, newSPDGrowth, newLCKGrowth, newDEFGrowth, newRESGrowth );
+		}
+		//Then commit the character changes		
 		charactersData.commit();
 	}
 

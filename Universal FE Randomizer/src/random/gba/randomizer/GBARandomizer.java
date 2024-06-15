@@ -183,7 +183,7 @@ public class GBARandomizer extends Randomizer {
 		chapterData.recordChapters(recordKeeper, true, charData, classData, itemData, textData);
 		
 		paletteData.recordReferencePalettes(recordKeeper, charData, classData, textData);
-		statboostData.recordInitial(recordKeeper, itemData, statboosterOptions);
+		//statboostData.recordInitial(recordKeeper, itemData, statboosterOptions);
 		
 		makePreliminaryAdjustments();
 		
@@ -204,7 +204,7 @@ public class GBARandomizer extends Randomizer {
 		updateProgress(0.70);
 		try { randomizeOtherThingsIfNecessary(seed); } catch (Exception e) { notifyError("Encountered error while randomizing miscellaneous settings.\n\n" + e.getClass().getSimpleName() + "\n\nStack Trace:\n\n" + String.join("\n", Arrays.asList(e.getStackTrace()).stream().map(element -> (element.toString())).limit(5).collect(Collectors.toList()))); return; } // i.e. Miscellaneous options.
 		updateProgress(0.75);
-		try { randomizeStatboostersIfNecessary(seed); } catch (Exception e) { notifyError("Encountered error while randomizing miscellaneous settings.\n\n" + e.getClass().getSimpleName() + "\n\nStack Trace:\n\n" + String.join("\n", Arrays.asList(e.getStackTrace()).stream().map(element -> (element.toString())).limit(5).collect(Collectors.toList()))); return; } // i.e. Miscellaneous options.
+		// try { randomizeStatboostersIfNecessary(seed); } catch (Exception e) { notifyError("Encountered error while randomizing miscellaneous settings.\n\n" + e.getClass().getSimpleName() + "\n\nStack Trace:\n\n" + String.join("\n", Arrays.asList(e.getStackTrace()).stream().map(element -> (element.toString())).limit(5).collect(Collectors.toList()))); return; } // i.e. Miscellaneous options.
 		updateProgress(0.70);
 		try { randomizeGrowthsIfNecessary(seed); } catch (Exception e) { notifyError("Encountered error while randomizing growths.\n\n" + e.getClass().getSimpleName() + "\n\nStack Trace:\n\n" + String.join("\n", Arrays.asList(e.getStackTrace()).stream().map(element -> (element.toString())).limit(5).collect(Collectors.toList()))); return; }
 		updateProgress(0.90);
@@ -267,7 +267,7 @@ public class GBARandomizer extends Randomizer {
 		classData.recordClasses(recordKeeper, false, classData, textData);
 		itemData.recordWeapons(recordKeeper, false, classData, textData, targetFileHandler);
 		chapterData.recordChapters(recordKeeper, false, charData, classData, itemData, textData);
-		statboostData.recordUpdated(recordKeeper, itemData, statboosterOptions);
+		//statboostData.recordUpdated(recordKeeper, itemData, statboosterOptions);
 		
 		if (gameType == FEBase.GameType.FE8) {
 			paletteData.recordUpdatedFE8Palettes(recordKeeper, charData, classData, textData);
