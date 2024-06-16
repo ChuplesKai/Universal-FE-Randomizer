@@ -175,7 +175,8 @@ public class CharacterShuffler {
             textData.setStringAtIndex(slot.getDescriptionIndex(), String.format("%s[0x1]%s[X]", crossGameData.description1, crossGameData.description2));
         }
 
-        for (GBAFECharacterData linkedSlot : characterData.linkedCharactersForCharacter(slot)) {
+        for (GBAFECharacterData linkedSlot : characterData.linkedCharactersForCharacter(slot))
+        {
             linkedSlot.setGrowths(crossGameData.growths);
             linkedSlot.setConstitution(crossGameData.constitution);
 
@@ -229,14 +230,14 @@ public class CharacterShuffler {
      */
     private GBAFEClassData updateBases(GBAFECharacterData slot, GBACrossGameData chara, int targetClassId,
                                               GBAFEClassData targetClass, GBAFEClassData sourceClass, int slotLevel) {
-        if (ui.model.CharacterShufflingOptions.ShuffleLevelingMode.UNCHANGED.equals(options.getLevelingMode())) {
+        if (ui.model.CharacterShufflingOptions.ShuffleLevelingMode.UNCHANGED.equals(options.getLevelingMode())) 
+        {
             slot.setBases(chara.bases);
-        } else if (ui.model.CharacterShufflingOptions.ShuffleLevelingMode.AUTOLEVEL.equals(options.getLevelingMode())) {
-
+        }
+        else if (ui.model.CharacterShufflingOptions.ShuffleLevelingMode.AUTOLEVEL.equals(options.getLevelingMode()))
+        {
             boolean shouldBePromoted = classData.isPromotedClass(slot.getClassID());
-
-            slot.setClassID(targetClassId);
-
+            slot.setClassID(targetClassId); 
             boolean isPromoted = classData.isPromotedClass(targetClassId);
 
             // Decide Target Class / Promotions or Demotions / Number of Autolevels
@@ -244,13 +245,20 @@ public class CharacterShuffler {
                     chara.level, shouldBePromoted, isPromoted, rng, classData, null, targetClass, slot,
                     sourceClass, null, textData, DebugPrinter.Key.GBA_CHARACTER_SHUFFLING);
             targetClass = adjustmentDAO.targetClass;
-            slot.setClassID(targetClassId);
+            slot.setClassID(targetClassId); //TODO: Why twice?
+
+            //Possible fix to the issue?  Need to subtract away class bases to get personal bases
+            GBAFEStatDto newBases = new GBAFEStatDto(chara.bases);
+            newBases.subtract( targetClass.getBases() );
+
+            System.out.println(String.format("%nAutoleveling: [%s]", chara.name ));
 
             // Calculate the auto leveled personal bases
-            GBAFEStatDto newPersonalBases = GBASlotAdjustmentService.autolevel(chara.bases, chara.growths,
-                    adjustmentDAO.promoBonuses, adjustmentDAO.levelAdjustment, targetClass, DebugPrinter.Key.GBA_CHARACTER_SHUFFLING);
+            GBAFEStatDto newPersonalBases = GBASlotAdjustmentService.autolevel(newBases, chara.growths,
+                    adjustmentDAO.promoBonuses, adjustmentDAO.levelAdjustment, sourceClass, targetClass, DebugPrinter.Key.GBA_CHARACTER_SHUFFLING);
 
             slot.setBases(newPersonalBases);
+            slot.setConstitution( chara.constitution - targetClass.getCON() );
         }
         return targetClass;
     }

@@ -82,6 +82,9 @@ public class GBARandomizer extends Randomizer {
 	
 	private boolean fe8_walkingSoundFixApplied = false;
 
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public GBARandomizer(String sourcePath, String targetPath, FEBase.GameType gameType, DiffCompiler diffs, 
 			GrowthOptions growths, BaseOptions bases, ClassOptions classes, WeaponOptions weapons,
 			OtherCharacterOptions other, EnemyOptions enemies, GameMechanicOptions otherOptions,
@@ -112,10 +115,16 @@ public class GBARandomizer extends Randomizer {
 		this.gameType = gameType;
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public void run() {
 		randomize(seedString);
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private void randomize(String seed) {
 		try {
 			handler = new FileHandler(sourcePath);
@@ -312,6 +321,9 @@ public class GBARandomizer extends Randomizer {
 		notifyCompletion(recordKeeper, null);
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private void generateFE7DataLoaders() {
 		handler.setAppliedDiffs(diffCompiler);
 		
@@ -348,6 +360,9 @@ public class GBARandomizer extends Randomizer {
 		handler.clearAppliedDiffs();
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private void generateFE6DataLoaders() {
 		handler.setAppliedDiffs(diffCompiler);
 		
@@ -387,6 +402,9 @@ public class GBARandomizer extends Randomizer {
 		handler.clearAppliedDiffs();
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private void generateFE8DataLoaders() {
 		handler.setAppliedDiffs(diffCompiler);
 		
@@ -437,6 +455,9 @@ public class GBARandomizer extends Randomizer {
 		handler.clearAppliedDiffs();
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public void shuffleCharactersIfNecessary(String seed) {
 		if(shufflingOptions != null && shufflingOptions.isShuffleEnabled()) {
 			Random rng = new Random(SeedGenerator.generateSeedValue(seed, GrowthsRandomizer.rngSalt));
@@ -446,6 +467,9 @@ public class GBARandomizer extends Randomizer {
 		}
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private void randomizeGrowthsIfNecessary(String seed) {
 		if (growths != null) {
 			Random rng = new Random(SeedGenerator.generateSeedValue(seed, GrowthsRandomizer.rngSalt));
@@ -466,6 +490,9 @@ public class GBARandomizer extends Randomizer {
 		}
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private void randomizeBasesIfNecessary(String seed) {
 		if (bases != null) {
 			Random rng = new Random(SeedGenerator.generateSeedValue(seed, BasesRandomizer.rngSalt));
@@ -482,6 +509,9 @@ public class GBARandomizer extends Randomizer {
 		}
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private void randomizeClassesIfNecessary(String seed) {
 		if (classes != null) {
 			if (classes.randomizePCs) {
@@ -504,6 +534,9 @@ public class GBARandomizer extends Randomizer {
 		}
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private void randomizeWeaponsIfNecessary(String seed) {
 		if (weapons != null) {
 			if (weapons.mightOptions != null) {
@@ -535,6 +568,9 @@ public class GBARandomizer extends Randomizer {
 		}
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private void randomizeOtherCharacterTraitsIfNecessary(String seed) {
 		if (otherCharacterOptions != null) {
 			if (otherCharacterOptions.movementOptions != null) {
@@ -555,6 +591,9 @@ public class GBARandomizer extends Randomizer {
 		}
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private void buffEnemiesIfNecessary(String seed) {
 		if (enemies != null) {
 			if (enemies.minionMode == EnemyOptions.MinionGrowthMode.FLAT) {
@@ -587,11 +626,17 @@ public class GBARandomizer extends Randomizer {
 		}
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private void randomizeStatboostersIfNecessary(String seed) {
 		Random rng = new Random(SeedGenerator.generateSeedValue(seed, StatboosterRandomizer.SALT));
 		StatboosterRandomizer.randomize(statboosterOptions, statboostData, itemData, textData, rng);
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private void randomizeOtherThingsIfNecessary(String seed) {
 		if (rewardOptions != null) {
 			if (rewardOptions.randomizeRewards) {
@@ -642,6 +687,9 @@ public class GBARandomizer extends Randomizer {
 		}
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private void randomizeRecruitmentIfNecessary(String seed) {
 		if (recruitOptions != null) {
 			updateStatusString("Randomizing recruitment...");
@@ -651,6 +699,9 @@ public class GBARandomizer extends Randomizer {
 		}
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private void makePreliminaryAdjustments() {
 		// FE8 Walking sound effect fix.
 		// From Tequila's patch.
@@ -675,6 +726,9 @@ public class GBARandomizer extends Randomizer {
 		itemData.prepareForRandomization();
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private void makeFinalAdjustments(String seed) {
 		
 		// If we need RNG, set one up here.
@@ -2254,6 +2308,9 @@ public class GBARandomizer extends Randomizer {
 		}
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private void syncWorldMapSpriteToCharacter(GBAFEWorldMapSpriteData sprite, int characterID) {
 		GBAFECharacterData character = charData.characterWithID(characterID);
 		boolean spriteIsPromoted = classData.isPromotedClass(sprite.getClassID());
@@ -2270,6 +2327,9 @@ public class GBARandomizer extends Randomizer {
 		}
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public RecordKeeper initializeRecordKeeper() {
 		int index = Math.max(targetPath.lastIndexOf('/'), targetPath.lastIndexOf('\\'));
 		String title =  targetPath.substring(index + 1);

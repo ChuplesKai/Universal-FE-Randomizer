@@ -47,10 +47,13 @@ public class RecruitmentRandomizer {
 	
 	static final int rngSalt = 911;
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public static Map<GBAFECharacterData, GBAFECharacterData> randomizeRecruitment(RecruitmentOptions options, ItemAssignmentOptions inventoryOptions, GameType type, 
 			CharacterDataLoader characterData, ClassDataLoader classData, ItemDataLoader itemData, ChapterLoader chapterData, TextLoader textData, FreeSpaceManager freeSpace,
-			Random rng) {
-		
+			Random rng)
+	{	
 		// Figure out mapping first.
 		List<GBAFECharacterData> characterPool = new ArrayList<GBAFECharacterData>(characterData.canonicalPlayableCharacters(options.includeExtras));
 		characterPool.removeIf(character -> (characterData.charactersExcludedFromRandomRecruitment().contains(character)));
@@ -247,6 +250,9 @@ public class RecruitmentRandomizer {
 		return characterMap;
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private static String patternStringFromReplacements(Map<String, String> replacements) {
 		StringBuilder sb = new StringBuilder();
 		for (String stringToReplace : replacements.keySet()) {
@@ -261,7 +267,11 @@ public class RecruitmentRandomizer {
 		return sb.toString();
 	}
 	
-	private static class SlotAssignment {
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
+	private static class SlotAssignment
+	{
 		GBAFECharacterData slot;
 		GBAFECharacterData fill;
 		
@@ -271,8 +281,12 @@ public class RecruitmentRandomizer {
 		}
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private static List<SlotAssignment> shuffleCharactersInPool(boolean assignAll, boolean separateByGender, List<GBAFECharacterData> slots, List<GBAFECharacterData> pool, Map<GBAFECharacterData, GBAFECharacterData> characterMap, Map<Integer, GBAFECharacterData> referenceData, 
-			CharacterDataLoader charData, ClassDataLoader classData, TextLoader textData, Random rng) {
+			CharacterDataLoader charData, ClassDataLoader classData, TextLoader textData, Random rng)
+	{
 		List<SlotAssignment> additions = new ArrayList<SlotAssignment>();
 		
 		DebugPrinter.log(DebugPrinter.Key.GBA_RANDOM_RECRUITMENT, "Slots: " + String.join(", ", slots.stream().map(character -> (String.format("%s[%s]", textData.getStringAtIndex(character.getNameIndex(), true), classData.debugStringForClass(character.getClassID())))).collect(Collectors.toList())));
@@ -306,6 +320,9 @@ public class RecruitmentRandomizer {
 		return additions;
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private static List<SlotAssignment> shuffle(List<GBAFECharacterData> slots, List<GBAFECharacterData> pool, Map<Integer, GBAFECharacterData> referenceData, 
 			ClassDataLoader classData, TextLoader textData, Random rng) {
 		List<SlotAssignment> additions = new ArrayList<SlotAssignment>();
@@ -376,6 +393,9 @@ public class RecruitmentRandomizer {
 		return additions;
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private static List<SlotAssignment> shuffle(List<GBAFECharacterData> slots, List<GBAFECharacterData> candidates, Map<Integer, GBAFECharacterData> referenceData, TextLoader textData, Random rng) {
 		List<SlotAssignment> additions = new ArrayList<SlotAssignment>();
 		
@@ -399,6 +419,9 @@ public class RecruitmentRandomizer {
 		return additions;
 	}
 
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private static void fillSlot(RecruitmentOptions options, ItemAssignmentOptions inventoryOptions, GBAFECharacterData slot, GBAFECharacterData fill, CharacterDataLoader characterData, ClassDataLoader classData, ItemDataLoader itemData, ChapterLoader chapterData, TextLoader textData, GameType type, Random rng) {
 		// Create copy for reference, since we're about to overwrite the slot data.
 		// slot is the target for the changes. All changes should be on slot.
@@ -426,18 +449,16 @@ public class RecruitmentRandomizer {
 			// The name is unnecessary because there's a text find/replace that we apply later.
 			linkedSlot.setDescriptionIndex(fill.getDescriptionIndex());
 			linkedSlot.setFaceID(fill.getFaceID());
-			
 			linkedSlot.setIsLord(characterData.isLordCharacterID(slotReference.getID()));
 			
 			int targetLevel = linkedSlot.getLevel();
 			int sourceLevel = fill.getLevel();
 			
 			DebugPrinter.log(DebugPrinter.Key.GBA_RANDOM_RECRUITMENT, "Slot level: " + Integer.toString(targetLevel) + "\tFill Level: " + Integer.toString(sourceLevel));
-			
 			List<GBAFEStatDto> promoBonuses = new ArrayList<>();
-
 			
-			
+			// Call the Class Adjustment to get the actual Target Class, # of Levels, 
+			//  and Any Pro-/De-motion bonuses
 			ClassAdjustmentDto adjustmentDAO = GBASlotAdjustmentService.handleClassAdjustment(targetLevel, sourceLevel, shouldBePromoted, 
 					isPromoted, rng, classData, targetClass, fillSourceClass, fill, slotSourceClass, 
 					options, textData, DebugPrinter.Key.GBA_RANDOM_RECRUITMENT);
@@ -445,8 +466,10 @@ public class RecruitmentRandomizer {
 			int levelsToAdd = adjustmentDAO.levelAdjustment;
 			promoBonuses =  adjustmentDAO.promoBonuses;
 			
+			// Setting the Slot Class
 			setSlotClass(inventoryOptions, linkedSlot, targetClass, characterData, classData, itemData, textData, chapterData, rng);
-			
+
+			// Then we're going to get the growths?
 			GBAFEStatDto targetGrowths;
 			switch(options.growthMode) {
 				case USE_SLOT:
@@ -463,21 +486,29 @@ public class RecruitmentRandomizer {
 			
 			}
 			
+			// We need to calculate the new stats, based on input mode
 			GBAFEStatDto newStats = new GBAFEStatDto();
-			
-			if (options.baseMode == StatAdjustmentMode.AUTOLEVEL) {
+			if (options.baseMode == StatAdjustmentMode.AUTOLEVEL) //Autolevel
+			{
+				// Figure out which growths to use, based on selected option
 				GBAFEStatDto growthsToUse = options.autolevelMode == BaseStatAutolevelType.USE_NEW ? targetGrowths : fill.getGrowths();
+
+				System.out.println(String.format("%nAutoleveling: [%s] -> [%s]", slot.displayString(), fill.displayString()));
 				
 				// Calculate the auto leveled personal bases
 				newStats = GBASlotAdjustmentService.autolevel(fill.getBases(), growthsToUse, 
-						promoBonuses, levelsToAdd, targetClass, DebugPrinter.Key.GBA_RANDOM_RECRUITMENT); 
-				
+						promoBonuses, levelsToAdd, slotSourceClass, targetClass, DebugPrinter.Key.GBA_RANDOM_RECRUITMENT);
+
 				DebugPrinter.log(DebugPrinter.Key.GBA_RANDOM_RECRUITMENT, String.format("== New Bases ==%n%s", newStats.toString()));
-			} else if (options.baseMode == StatAdjustmentMode.MATCH_SLOT) {
+			}
+			else if (options.baseMode == StatAdjustmentMode.MATCH_SLOT) //Simple add new, subtract old
+			{
 				newStats.add(linkedSlot.getBases()) // Add the original Bases of the slot
 					    .add(targetClass.getBases()) // Add the stats from the new class
 					    .subtract(slotSourceClass.getBases()); // remove the stats from the original class
-			} else if (options.baseMode == StatAdjustmentMode.RELATIVE_TO_SLOT) {
+			}
+			else if (options.baseMode == StatAdjustmentMode.RELATIVE_TO_SLOT) //The shuffling, relative assignment
+			{
 				newStats = new GBAFEStatDto();
 				newStats.hp = linkedSlot.getBaseHP() + slotSourceClass.getBaseHP() - targetClass.getBaseHP(); // Keep HP the same logic as above.
 				GBAFEStatDto slotStats = linkedSlot.getBases().add(slotSourceClass.getBases());
@@ -485,8 +516,7 @@ public class RecruitmentRandomizer {
 
 				// Set HP to an absurdly high value so that the HP values will be mapped to one another and we can ignore them easily
 				slotStats.hp = Integer.MAX_VALUE; 
-				fillStats.hp = Integer.MAX_VALUE; 
-				
+				fillStats.hp = Integer.MAX_VALUE; 	
 				
 				List<Integer> mappedStats = RelativeValueMapper.mappedValues(slotStats.asList(), fillStats.asList()); 
 				
@@ -497,20 +527,26 @@ public class RecruitmentRandomizer {
 				newStats.def = Math.max(mappedStats.get(4) - targetClass.getBaseDEF(), -1 * targetClass.getBaseDEF());
 				newStats.res = Math.max(mappedStats.get(5) - targetClass.getBaseRES(), -1 * targetClass.getBaseRES());
 				newStats.lck = Math.max(mappedStats.get(6) - targetClass.getBaseLCK(), -1 * targetClass.getBaseLCK());
-			} else {
+			} 
+			else 
+			{
 				assert false : "Invalid stat adjustment mode for random recruitment.";
 			}
+			
+			// Finalize the adjusted bases and growths
 			linkedSlot.setBases(newStats);
-			
-			// Transfer growths.
 			linkedSlot.setGrowths(targetGrowths);
-			
+			// Plus also Constitution and Affinity
 			linkedSlot.setConstitution(fill.getConstitution());
 			linkedSlot.setAffinityValue(fill.getAffinityValue());
 		}
 	}
 	
-	private static void setSlotClass(ItemAssignmentOptions inventoryOptions, GBAFECharacterData slot, GBAFEClassData targetClass, CharacterDataLoader characterData, ClassDataLoader classData, ItemDataLoader itemData, TextLoader textData, ChapterLoader chapterData, Random rng) {
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
+	private static void setSlotClass(ItemAssignmentOptions inventoryOptions, GBAFECharacterData slot, GBAFEClassData targetClass, CharacterDataLoader characterData, ClassDataLoader classData, ItemDataLoader itemData, TextLoader textData, ChapterLoader chapterData, Random rng)
+	{
 		int oldClassID = slot.getClassID();
 		GBAFEClassData originalClass = classData.classForID(oldClassID);
 		slot.setClassID(targetClass.getID());

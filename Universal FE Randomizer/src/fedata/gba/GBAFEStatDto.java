@@ -13,7 +13,7 @@ public class GBAFEStatDto {
 	/**
 	 * Static GBAFEStatDao which contains the minimum stats that a character may have
 	 */
-	public static final GBAFEStatDto MINIMUM_STATS = new GBAFEStatDto(10, 0, 0, 0, 0, 0 ,0);
+	public static final GBAFEStatDto MINIMUM_STATS = new GBAFEStatDto(0, 0, 0, 0, 0, 0 ,0);
 	
 	public int hp;
 	public int str;

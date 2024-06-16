@@ -30,6 +30,7 @@ import util.WhyDoesJavaNotHaveThese;
 import util.recordkeeper.RecordKeeper;
 
 public class PaletteLoader {
+	public boolean verbose = false;
 	private FEBase.GameType gameType;
 	
 	// V2
@@ -72,7 +73,7 @@ public class PaletteLoader {
 					referenceMap.put(classID, new PaletteV2(handler, paletteInfo));
 					FE6Data.CharacterClass fe6class = FE6Data.CharacterClass.valueOf(classID);
 					FE6Data.Character fe6char = FE6Data.Character.valueOf(charID);
-					DebugPrinter.log(DebugPrinter.Key.PALETTE, "Initializing Character 0x" + Integer.toHexString(charID) + " (" + fe6char.toString() + ")" + " with palette at offset 0x" + Long.toHexString(paletteInfo.getOffset()) + " (Class: " + Integer.toHexString(classID) + " (" + fe6class.toString() + "))");
+					if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Initializing Character 0x" + Integer.toHexString(charID) + " (" + fe6char.toString() + ")" + " with palette at offset 0x" + Long.toHexString(paletteInfo.getOffset()) + " (Class: " + Integer.toHexString(classID) + " (" + fe6class.toString() + "))"); }
 				}
 			}
 			for (FE6Data.Character boss : FE6Data.Character.allBossCharacters) {
@@ -89,7 +90,7 @@ public class PaletteLoader {
 					paletteByPaletteIDV2.put(paletteInfo.getPaletteID(), palette);
 					referenceMap.put(classID, new PaletteV2(handler, paletteInfo));
 					FE6Data.Character fe6char = FE6Data.Character.valueOf(charID);
-					DebugPrinter.log(DebugPrinter.Key.PALETTE, "Initializing Boss 0x" + Integer.toHexString(charID) + " (" + fe6char.toString() + ")" + " with palette at offset 0x" + Long.toHexString(paletteInfo.getOffset()));
+					if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Initializing Boss 0x" + Integer.toHexString(charID) + " (" + fe6char.toString() + ")" + " with palette at offset 0x" + Long.toHexString(paletteInfo.getOffset())); }
 				}
 			}
 			
@@ -128,7 +129,7 @@ public class PaletteLoader {
 					referenceMap.put(classID, new PaletteV2(handler, paletteInfo));
 					FE7Data.CharacterClass fe7class = FE7Data.CharacterClass.valueOf(classID);
 					FE7Data.Character fe7char = FE7Data.Character.valueOf(charID);
-					DebugPrinter.log(DebugPrinter.Key.PALETTE, "Initializing Character 0x" + Integer.toHexString(charID) + " (" + fe7char.toString() + ")" + " with palette at offset 0x" + Long.toHexString(paletteInfo.getOffset()) + " (Class: " + Integer.toHexString(classID) + " (" + fe7class.toString() + "))");
+					if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Initializing Character 0x" + Integer.toHexString(charID) + " (" + fe7char.toString() + ")" + " with palette at offset 0x" + Long.toHexString(paletteInfo.getOffset()) + " (Class: " + Integer.toHexString(classID) + " (" + fe7class.toString() + "))"); }
 				}
 			}
 			for (FE7Data.Character boss : FE7Data.Character.allBossCharacters) {
@@ -145,7 +146,7 @@ public class PaletteLoader {
 					paletteByPaletteIDV2.put(paletteInfo.getPaletteID(), palette);
 					referenceMap.put(classID, new PaletteV2(handler, paletteInfo));
 					FE7Data.Character fe7char = FE7Data.Character.valueOf(charID);
-					DebugPrinter.log(DebugPrinter.Key.PALETTE, "Initializing Boss 0x" + Integer.toHexString(charID) + " (" + fe7char.toString() + ")" + " with palette at offset 0x" + Long.toHexString(paletteInfo.getOffset()));
+					if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Initializing Boss 0x" + Integer.toHexString(charID) + " (" + fe7char.toString() + ")" + " with palette at offset 0x" + Long.toHexString(paletteInfo.getOffset())); }
 				}
 			}
 			
@@ -176,8 +177,10 @@ public class PaletteLoader {
 					referenceMap.put(classID, new PaletteV2(handler, paletteInfo));
 					FE8Data.CharacterClass fe8class = FE8Data.CharacterClass.valueOf(classID);
 					FE8Data.Character fe8char = FE8Data.Character.valueOf(charID);
-					DebugPrinter.log(DebugPrinter.Key.PALETTE, "Initializing Character 0x" + Integer.toHexString(charID) + " (" + fe8char.toString() + ")" + " with palette at offset 0x" + Long.toHexString(paletteInfo.getOffset()) + " (Class: " + Integer.toHexString(classID) + " (" + fe8class.toString() + "))");
-					DebugPrinter.log(DebugPrinter.Key.PALETTE, "Palette size: " + Integer.toString(palette.getOriginalCompressedLength()) + " bytes");
+					if(verbose) { 
+						DebugPrinter.log(DebugPrinter.Key.PALETTE, "Initializing Character 0x" + Integer.toHexString(charID) + " (" + fe8char.toString() + ")" + " with palette at offset 0x" + Long.toHexString(paletteInfo.getOffset()) + " (Class: " + Integer.toHexString(classID) + " (" + fe8class.toString() + "))");
+						DebugPrinter.log(DebugPrinter.Key.PALETTE, "Palette size: " + Integer.toString(palette.getOriginalCompressedLength()) + " bytes");
+					}
 				}
 			}
 			for (FE8Data.Character character : FE8Data.Character.safeCreatureCampaignCharacters) {
@@ -191,8 +194,10 @@ public class PaletteLoader {
 					referenceMap.put(classID, new PaletteV2(handler, paletteInfo));
 					FE8Data.CharacterClass fe8class = FE8Data.CharacterClass.valueOf(classID);
 					FE8Data.Character fe8char = FE8Data.Character.valueOf(charID);
-					DebugPrinter.log(DebugPrinter.Key.PALETTE, "Initializing Character 0x" + Integer.toHexString(charID) + " (" + fe8char.toString() + ")" + " with palette at offset 0x" + Long.toHexString(paletteInfo.getOffset()) + " (Class: " + Integer.toHexString(classID) + " (" + fe8class.toString() + "))");
-					DebugPrinter.log(DebugPrinter.Key.PALETTE, "Palette size: " + Integer.toString(palette.getOriginalCompressedLength()) + " bytes");
+					if(verbose) { 
+						DebugPrinter.log(DebugPrinter.Key.PALETTE, "Initializing Character 0x" + Integer.toHexString(charID) + " (" + fe8char.toString() + ")" + " with palette at offset 0x" + Long.toHexString(paletteInfo.getOffset()) + " (Class: " + Integer.toHexString(classID) + " (" + fe8class.toString() + "))");
+						DebugPrinter.log(DebugPrinter.Key.PALETTE, "Palette size: " + Integer.toString(palette.getOriginalCompressedLength()) + " bytes");
+					}
 				}
 			}
 			for (FE8Data.Character boss : FE8Data.Character.allBossCharacters) {
@@ -204,28 +209,36 @@ public class PaletteLoader {
 					paletteByPaletteIDV2.put(paletteInfo.getPaletteID(), palette);
 					referenceMap.put(paletteInfo.getClassID(), new PaletteV2(handler, paletteInfo));
 					FE8Data.Character fe8char = FE8Data.Character.valueOf(charID);
-					DebugPrinter.log(DebugPrinter.Key.PALETTE, "Initializing Boss 0x" + Integer.toHexString(charID) + " (" + fe8char.toString() + ")" + " with palette at offset 0x" + Long.toHexString(paletteInfo.getOffset()));
-					DebugPrinter.log(DebugPrinter.Key.PALETTE, "Palette size: " + Integer.toString(palette.getOriginalCompressedLength()) + " bytes");
+					if(verbose) { 
+						DebugPrinter.log(DebugPrinter.Key.PALETTE, "Initializing Boss 0x" + Integer.toHexString(charID) + " (" + fe8char.toString() + ")" + " with palette at offset 0x" + Long.toHexString(paletteInfo.getOffset()));
+						DebugPrinter.log(DebugPrinter.Key.PALETTE, "Palette size: " + Integer.toString(palette.getOriginalCompressedLength()) + " bytes");
+					}
 				}
 			}
 			
 			for (FE8Data.CharacterClass characterClass : FE8Data.CharacterClass.allValidClasses) {
 				PaletteV2 classPalette = new PaletteV2(handler, FE8Data.Palette.defaultPaletteForClass(characterClass.ID));
-				DebugPrinter.log(DebugPrinter.Key.PALETTE, "Registering palette for class " + characterClass.toString() + " (" + classPalette.getOriginalCompressedLength() + " bytes)");
-				DebugPrinter.log(DebugPrinter.Key.PALETTE, WhyDoesJavaNotHaveThese.displayStringForBytes(classPalette.getCompressedData()));
+				if(verbose) { 
+					DebugPrinter.log(DebugPrinter.Key.PALETTE, "Registering palette for class " + characterClass.toString() + " (" + classPalette.getOriginalCompressedLength() + " bytes)");
+					DebugPrinter.log(DebugPrinter.Key.PALETTE, WhyDoesJavaNotHaveThese.displayStringForBytes(classPalette.getCompressedData()));
+				}
 				templatesV2.put(characterClass.ID, classPalette);
 			}
 			for (FE8Data.CharacterClass characterClass : FE8Data.CharacterClass.additionalClassesToPalletLoad) {
 				PaletteV2 classPalette = new PaletteV2(handler, FE8Data.Palette.defaultPaletteForClass(characterClass.ID));
-				DebugPrinter.log(DebugPrinter.Key.PALETTE, "Registering palette for class " + characterClass.toString() + " (" + classPalette.getOriginalCompressedLength() + " bytes)");
-				DebugPrinter.log(DebugPrinter.Key.PALETTE, WhyDoesJavaNotHaveThese.displayStringForBytes(classPalette.getCompressedData()));
+				if(verbose) { 
+					DebugPrinter.log(DebugPrinter.Key.PALETTE, "Registering palette for class " + characterClass.toString() + " (" + classPalette.getOriginalCompressedLength() + " bytes)");
+					DebugPrinter.log(DebugPrinter.Key.PALETTE, WhyDoesJavaNotHaveThese.displayStringForBytes(classPalette.getCompressedData()));
+				}
 				templatesV2.put(characterClass.ID, classPalette);
 			}
 			// Trainee classes aren't technically valid classes in other contexts, but here they are.
 			for (FE8Data.CharacterClass characterClass : FE8Data.CharacterClass.allTraineeClasses) {
 				PaletteV2 classPalette = new PaletteV2(handler, FE8Data.Palette.defaultPaletteForClass(characterClass.ID));
-				DebugPrinter.log(DebugPrinter.Key.PALETTE, "Registering palette for class " + characterClass.toString() + " (" + classPalette.getOriginalCompressedLength() + " bytes)");
-				DebugPrinter.log(DebugPrinter.Key.PALETTE, WhyDoesJavaNotHaveThese.displayStringForBytes(classPalette.getCompressedData()));
+				if(verbose) { 
+					DebugPrinter.log(DebugPrinter.Key.PALETTE, "Registering palette for class " + characterClass.toString() + " (" + classPalette.getOriginalCompressedLength() + " bytes)");
+					DebugPrinter.log(DebugPrinter.Key.PALETTE, WhyDoesJavaNotHaveThese.displayStringForBytes(classPalette.getCompressedData()));
+				}
 				templatesV2.put(characterClass.ID, classPalette);
 			}
 			
@@ -295,7 +308,7 @@ public class PaletteLoader {
 		int characterID = character.getID();
 		int referenceID = reference.getID();
 		
-		DebugPrinter.log(DebugPrinter.Key.PALETTE, "Adapting Character " + FE8Data.Character.valueOf(characterID).toString() + " to class " + FE8Data.CharacterClass.valueOf(newClassID).toString() + " using Reference " + FE8Data.Character.valueOf(referenceID).toString());
+		if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Adapting Character " + FE8Data.Character.valueOf(characterID).toString() + " to class " + FE8Data.CharacterClass.valueOf(newClassID).toString() + " using Reference " + FE8Data.Character.valueOf(referenceID).toString()); }
 		
 		Boolean newClassHasPromotions = fe8Promotions.hasPromotions(newClassID);
 		int newPromotion1 = fe8Promotions.getFirstPromotionOptionClassID(newClassID);
@@ -311,7 +324,7 @@ public class PaletteLoader {
 		
 		if (willBecomeTrainee) {
 			if (fe8Mapper.classIDMappedToCharacterForType(charID, SlotType.TRAINEE) == newClassID && !character.hasBattlePaletteOverrides()) {
-				DebugPrinter.log(DebugPrinter.Key.PALETTE, "Same trainee class found. Skipping palette replacement.");
+				if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Same trainee class found. Skipping palette replacement."); }
 			} else {
 				int base1 = newPromotion1;
 				int base2 = newPromotion2;
@@ -358,7 +371,7 @@ public class PaletteLoader {
 			}
 		} else if (!newClassIsPromoted) {
 			if (fe8Mapper.classIDMappedToCharacterForType(charID, SlotType.PRIMARY_BASE) == newClassID && !character.hasBattlePaletteOverrides()) {
-				DebugPrinter.log(DebugPrinter.Key.PALETTE, "Same base class found. Skipping palette replacement.");
+				if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Same base class found. Skipping palette replacement."); }
 			} else {
 				if (newClassHasPromotions && !isBoss) {
 					int promoted1 = newPromotion1;
@@ -394,7 +407,7 @@ public class PaletteLoader {
 			}
 		} else { // New class is promoted
 			if (fe8Mapper.classIDMappedToCharacterForType(charID, SlotType.FIRST_PROMOTION) == newClassID && !character.hasBattlePaletteOverrides()) {
-				DebugPrinter.log(DebugPrinter.Key.PALETTE, "Same Promoted class found. Skipping palette replacement.");
+				if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Same Promoted class found. Skipping palette replacement."); }
 			} else {
 				PaletteV2 adaptedPromotion = v2PaletteForClass(newClassID, referencePalettes, isBoss ? PaletteType.ENEMY : PaletteType.PLAYER, supplementalHair);
 				if (character.hasBattlePaletteOverrides()) {
@@ -418,10 +431,12 @@ public class PaletteLoader {
 			if (offset != null) {
 				assert existingLength == null || existingLength >= newData.length : "Palette space is too small to accomodate adapted palette.";
 				adaptedPalette.overrideOffset(offset);
-				DebugPrinter.log(DebugPrinter.Key.PALETTE, "Assigned palette ID 0x" + Integer.toHexString(paletteID).toUpperCase() + " offset 0x" + Long.toHexString(offset));
-				DebugPrinter.log(DebugPrinter.Key.PALETTE, "Existing Palette Size: " + existingLength + "\tNew Palette Size: " + newData.length);
+				if(verbose) { 
+					DebugPrinter.log(DebugPrinter.Key.PALETTE, "Assigned palette ID 0x" + Integer.toHexString(paletteID).toUpperCase() + " offset 0x" + Long.toHexString(offset));
+					DebugPrinter.log(DebugPrinter.Key.PALETTE, "Existing Palette Size: " + existingLength + "\tNew Palette Size: " + newData.length);
+				}
 			} else {
-				DebugPrinter.log(DebugPrinter.Key.PALETTE, "Assigned New Palette ID 0x" + Integer.toHexString(paletteID).toUpperCase() + " (length: " + Integer.toString(newData.length) + ")");
+				if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Assigned New Palette ID 0x" + Integer.toHexString(paletteID).toUpperCase() + " (length: " + Integer.toString(newData.length) + ")"); }
 				newPalettesV2.put(paletteID, adaptedPalette);
 			}
 			
@@ -450,12 +465,12 @@ public class PaletteLoader {
 	
 	private PaletteV2 v2PaletteForClass(int newClassID, PaletteV2[] referencePalettes, PaletteV2.PaletteType type, PaletteColor[] supplementalHairColors) {
 		PaletteV2 template = getV2TemplatePalette(newClassID);
-		if (template == null) {
-			DebugPrinter.log(DebugPrinter.Key.PALETTE, String.format("No Template Palette found for Class %d.", newClassID));
-			
+		if (template == null) 
+		{
+			if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, String.format("No Template Palette found for Class %d.", newClassID)); }
 		}
 		PaletteV2 adapted = new PaletteV2(template);
-		DebugPrinter.log(DebugPrinter.Key.PALETTE, "Adapting Palette using " + referencePalettes.length + " reference palettes.");
+		if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Adapting Palette using " + referencePalettes.length + " reference palettes."); }
 		// We should just apply it to every allegiance. It'll cut down on compression space if they all match.
 		adapted.adaptPalette(referencePalettes, PaletteType.PLAYER, supplementalHairColors);
 		adapted.adaptPalette(referencePalettes, PaletteType.ENEMY, supplementalHairColors);
@@ -481,7 +496,7 @@ public class PaletteLoader {
 		int characterID = character.getID();
 		int referenceID = reference.getID();
 		
-		DebugPrinter.log(DebugPrinter.Key.PALETTE, "Enqueuing change for character " + charData.debugStringForCharacter(characterID) + " to class " + classData.debugStringForClass(targetClassID) + " using reference " + charData.debugStringForCharacter(referenceID));
+		if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Enqueuing change for character " + charData.debugStringForCharacter(characterID) + " to class " + classData.debugStringForClass(targetClassID) + " using reference " + charData.debugStringForCharacter(referenceID)); }
 		
 		Change change = new Change();
 		change.character = character;
@@ -495,7 +510,7 @@ public class PaletteLoader {
 			int originalPaletteIndex = character.getPromotedPaletteIndex();
 			PaletteV2 originalPalette = paletteByPaletteIDV2.get(originalPaletteIndex);
 			if (originalPalette != null && originalPalette.getClassID() == targetClassID && !character.hasBattlePaletteOverrides()) {
-				DebugPrinter.log(DebugPrinter.Key.PALETTE, "Same promoted class found. Skipping adapting palette.");
+				if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Same promoted class found. Skipping adapting palette."); }
 			} else {
 				PaletteV2 adaptedPromotion = v2PaletteForClass(targetClassID, referencePalettes, PaletteType.PLAYER, supplementalHairColors.get(referenceID));
 				if (character.hasBattlePaletteOverrides()) {
@@ -511,7 +526,7 @@ public class PaletteLoader {
 			int originalPaletteIndex = character.getUnpromotedPaletteIndex();
 			PaletteV2 originalPalette = paletteByPaletteIDV2.get(originalPaletteIndex);
 			if (originalPalette != null && originalPalette.getClassID() == targetClassID && !character.hasBattlePaletteOverrides()) {
-				DebugPrinter.log(DebugPrinter.Key.PALETTE, "Same unpromoted class found. Skipping adapting palette.");
+				if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Same unpromoted class found. Skipping adapting palette."); }
 			} else {
 				PaletteV2 adaptedBase = v2PaletteForClass(targetClassID, referencePalettes, PaletteType.PLAYER, supplementalHairColors.get(referenceID));
 				if (character.hasBattlePaletteOverrides()) {
@@ -533,7 +548,7 @@ public class PaletteLoader {
 			
 			if ((unpromotedPalette != null && unpromotedPalette.getClassID() == targetClassID && !character.hasBattlePaletteOverrides()) ||
 					(promotedPalette != null && promotedPalette.getClassID() == promotedClassID && !character.hasBattlePaletteOverrides())) {
-				DebugPrinter.log(DebugPrinter.Key.PALETTE, "Same unpromoted class found. Skipping adapting palette.");
+				if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Same unpromoted class found. Skipping adapting palette."); }
 			} else {
 				PaletteV2 adaptedBase = v2PaletteForClass(targetClassID, referencePalettes, PaletteType.PLAYER, supplementalHairColors.get(referenceID));
 				PaletteV2 adaptedPromotion = v2PaletteForClass(promotedClassID, referencePalettes, PaletteType.PLAYER, supplementalHairColors.get(referenceID));
@@ -726,14 +741,14 @@ public class PaletteLoader {
 		for (Change change : queuedChanges) {
 			GBAFECharacterData character = change.character;
 			String characterName = textData.getStringAtIndex(character.getNameIndex(), true);
-			DebugPrinter.log(DebugPrinter.Key.PALETTE, "Recording updated palette for " + characterName);
+			if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Recording updated palette for " + characterName); }
 			
 			if (change.basePalette != null) {
-				DebugPrinter.log(DebugPrinter.Key.PALETTE, "Base Palette Recorded");
+				if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Base Palette Recorded"); }
 				recordPalette(rk, category, characterName, change.basePalette.getClassID(), change.basePalette, classData, textData);
 			}
 			if (change.promotedPalette != null) {
-				DebugPrinter.log(DebugPrinter.Key.PALETTE, "Promoted Palette Recorded");
+				if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Promoted Palette Recorded"); }
 				recordPalette(rk, category, characterName, change.promotedPalette.getClassID(), change.promotedPalette, classData, textData);
 			}
 		}
