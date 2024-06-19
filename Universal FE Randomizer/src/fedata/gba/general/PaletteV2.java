@@ -13,9 +13,8 @@ import util.DiffCompiler;
 import util.LZ77;
 import util.WhyDoesJavaNotHaveThese;
 
-public class PaletteV2 {
-	public boolean verbose = false;
-
+public class PaletteV2 
+{
 	public enum PaletteType {
 		PLAYER, ENEMY, NPC, OTHER, LINK
 	}
@@ -249,12 +248,12 @@ public class PaletteV2 {
 		
 		compiler.addDiff(new Diff(getDestinationOffset(), compressed.length, compressed, null));
 		
-		if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "[PaletteID: 0x" + Integer.toHexString(identifier) + "] Wrote " + Integer.toString(compressed.length) + " bytes to address 0x" + Long.toHexString(getDestinationOffset())); }
+		DebugPrinter.log(DebugPrinter.Key.PALETTE, "[PaletteID: 0x" + Integer.toHexString(identifier) + "] Wrote " + Integer.toString(compressed.length) + " bytes to address 0x" + Long.toHexString(getDestinationOffset()));
 	}
 	
 	public void commitPalette(DiffCompiler compiler) {
 		if (identifier == 0) {
-			if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "No identifier assigned to palette. Dropping palette..."); }
+			DebugPrinter.log(DebugPrinter.Key.PALETTE, "No identifier assigned to palette. Dropping palette...");
 			return;
 		}
 		
@@ -264,7 +263,7 @@ public class PaletteV2 {
 		
 		compiler.addDiff(new Diff(getDestinationOffset(), compressed.length, compressed, null));
 		
-		if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "[PaletteID: 0x" + Integer.toHexString(identifier) + "] Wrote " + Integer.toString(compressed.length) + " bytes to address 0x" + Long.toHexString(getDestinationOffset())); }
+		DebugPrinter.log(DebugPrinter.Key.PALETTE, "[PaletteID: 0x" + Integer.toHexString(identifier) + "] Wrote " + Integer.toString(compressed.length) + " bytes to address 0x" + Long.toHexString(getDestinationOffset()));
 	}
 	
 	private void setHair(List<PaletteColor> referenceHair, PaletteType paletteType) {

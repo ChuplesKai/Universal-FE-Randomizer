@@ -492,8 +492,6 @@ public class RecruitmentRandomizer {
 			{
 				// Figure out which growths to use, based on selected option
 				GBAFEStatDto growthsToUse = options.autolevelMode == BaseStatAutolevelType.USE_NEW ? targetGrowths : fill.getGrowths();
-
-				System.out.println(String.format("%nAutoleveling: [%s] -> [%s]", slot.displayString(), fill.displayString()));
 				
 				// Calculate the auto leveled personal bases
 				newStats = GBASlotAdjustmentService.autolevel(fill.getBases(), growthsToUse, 

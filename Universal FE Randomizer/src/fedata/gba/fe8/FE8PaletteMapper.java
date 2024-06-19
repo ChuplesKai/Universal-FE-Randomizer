@@ -26,7 +26,6 @@ import io.FileHandler;
 // sprite itself, but characters like Tethys who go from no promotions to some promotions won't have
 // enough palettes to support it, not to mention Eirika and Ephraim have no custom palettes available to them othrwise.
 public class FE8PaletteMapper {
-	public boolean verbose = false;
 
 	public enum ClassMapType {
 		UNKNOWN, TRAINEE, UNPROMOTED, PROMOTED;
@@ -274,7 +273,7 @@ public class FE8PaletteMapper {
 		if (paletteID == 0) { return; }
 		Integer length = getRegisteredPaletteLength(paletteID);
 		assert length != null : "No length found for palette being marked as free. ID = 0x" + Integer.toHexString(paletteID);
-		if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE_RECYCLER, "Freed up palette with ID 0x" + Integer.toHexString(paletteID) + "(size: " + Integer.toString(length) + ")"); }
+		DebugPrinter.log(DebugPrinter.Key.PALETTE_RECYCLER, "Freed up palette with ID 0x" + Integer.toHexString(paletteID) + "(size: " + Integer.toString(length) + ")");
 		if (length != null) {
 			List<Integer> paletteIDList = recycledPaletteIDsByLength.get(length);
 			if (paletteIDList == null) {
@@ -294,7 +293,7 @@ public class FE8PaletteMapper {
 				recycledPaletteIDsByLength.remove(length);
 				return requestRecycledPaletteForSize(paletteSize); // Ask again for the next closest available slot.
 			} else {
-				if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE_RECYCLER, "Recycled palette with ID 0x" + Integer.toHexString(availableIDs.get(0)) + "(size: " + Integer.toString(length) + ", requested size: " + Integer.toString(paletteSize) + ")"); }
+				DebugPrinter.log(DebugPrinter.Key.PALETTE_RECYCLER, "Recycled palette with ID 0x" + Integer.toHexString(availableIDs.get(0)) + "(size: " + Integer.toString(length) + ", requested size: " + Integer.toString(paletteSize) + ")");
 				return availableIDs.remove(0);
 			}
 		}
@@ -374,13 +373,13 @@ public class FE8PaletteMapper {
 		List<SlotType> palettesNeeded = charactersThatNeedPalettes.get(character);
 		List<SlotType> slotsRemaining = new ArrayList<SlotType>(palettesNeeded);
 		
-		if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE_RECYCLER, "Handing out free palettes to character 0x" + Integer.toHexString(characterID)); }
+		DebugPrinter.log(DebugPrinter.Key.PALETTE_RECYCLER, "Handing out free palettes to character 0x" + Integer.toHexString(characterID));
 		
 		if (palettesNeeded.size() < emptyPaletteIDs.size()) {
 			Map<SlotType, Integer> recycledIndices = new HashMap<SlotType, Integer>();
 			while (!slotsRemaining.isEmpty()) {
 				int paletteIndex = emptyPaletteIDs.remove(0);
-				if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE_RECYCLER, "Handed out palette index 0x" + Integer.toHexString(paletteIndex)); }
+				DebugPrinter.log(DebugPrinter.Key.PALETTE_RECYCLER, "Handed out palette index 0x" + Integer.toHexString(paletteIndex));
 				recycledIndices.put(slotsRemaining.remove(0), paletteIndex);
 				if (slotsRemaining.isEmpty()) {
 					break;
@@ -405,7 +404,7 @@ public class FE8PaletteMapper {
 		PaletteMapEntry existingPaletteMap = paletteIndexMap.get(character);
 		List<SlotType> palettesNeeded = new ArrayList<SlotType>();
 		
-		if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Assigning unpromoted class ID 0x" + Integer.toHexString(unpromotedClassID) + " (" + unpromotedClass.toString() + ") to character 0x" + Integer.toHexString(characterID) + " (" + character.toString() + ")"); }
+		DebugPrinter.log(DebugPrinter.Key.PALETTE, "Assigning unpromoted class ID 0x" + Integer.toHexString(unpromotedClassID) + " (" + unpromotedClass.toString() + ") to character 0x" + Integer.toHexString(characterID) + " (" + character.toString() + ")");
 		
 		ClassMapEntry classMap = paletteClassMap.get(character);
 		classMap.setBaseClassID(unpromotedClassID);
@@ -415,7 +414,7 @@ public class FE8PaletteMapper {
 		if (existingPaletteMap.getBasePaletteID() == 0 || (paletteLength != null && basePaletteSize > paletteLength)) {
 			if (existingPaletteMap.getBasePaletteID() != 0) {
 				// We're about to replace this ID. Go ahead and recycle it.
-				if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Current palette (0x" + Integer.toHexString(existingPaletteMap.getBasePaletteID()) + ") is too small, looking for alternatives..."); }
+				DebugPrinter.log(DebugPrinter.Key.PALETTE, "Current palette (0x" + Integer.toHexString(existingPaletteMap.getBasePaletteID()) + ") is too small, looking for alternatives...");
 				markPaletteIDAsFree(existingPaletteMap.getBasePaletteID());
 				existingPaletteMap.setBasePaletteID(0);
 			}
@@ -424,19 +423,19 @@ public class FE8PaletteMapper {
 			Integer recycledPaletteID = requestRecycledPaletteForSize(basePaletteSize);
 			if (recycledPaletteID != null) {
 				existingPaletteMap.setBasePaletteID(recycledPaletteID);
-				if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Found recycled palette 0x" + Integer.toHexString(recycledPaletteID)); }
+				DebugPrinter.log(DebugPrinter.Key.PALETTE, "Found recycled palette 0x" + Integer.toHexString(recycledPaletteID));
 			} else {
 				Integer emptyID = requestEmptyPaletteForSize(basePaletteSize);
 				if (emptyID != null) {
 					existingPaletteMap.setBasePaletteID(emptyID);
-					if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Using empty palette 0x" + Integer.toHexString(emptyID)); }
+					DebugPrinter.log(DebugPrinter.Key.PALETTE, "Using empty palette 0x" + Integer.toHexString(emptyID));
 				} else {
 					palettesNeeded.add(SlotType.PRIMARY_BASE);
-					if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "No Palettes currently available. Adding to waitlist."); }
+					DebugPrinter.log(DebugPrinter.Key.PALETTE, "No Palettes currently available. Adding to waitlist.");
 				}
 			}
 		} else {
-			if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Palette (0x" + Integer.toHexString(existingPaletteMap.getBasePaletteID()) + ") OK! (oldSize: " + Integer.toString(paletteLength) + " newSize: " + Integer.toString(basePaletteSize) + ")"); }
+			DebugPrinter.log(DebugPrinter.Key.PALETTE, "Palette (0x" + Integer.toHexString(existingPaletteMap.getBasePaletteID()) + ") OK! (oldSize: " + Integer.toString(paletteLength) + " newSize: " + Integer.toString(basePaletteSize) + ")");
 		}
 		
 		if (setPromotions) {
@@ -445,7 +444,7 @@ public class FE8PaletteMapper {
 				paletteLength = registeredPaletteLengths.get(existingPaletteMap.getFirstPromotionPaletteID());
 				if (existingPaletteMap.getFirstPromotionPaletteID() == 0 || (paletteLength != null && promotedPaletteSize > paletteLength)) {
 					if (existingPaletteMap.getFirstPromotionPaletteID() != 0) {
-						if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Current palette (0x" + Integer.toHexString(existingPaletteMap.getFirstPromotionPaletteID()) + ") is too small or doesn't exist, looking for alternatives..."); }
+						DebugPrinter.log(DebugPrinter.Key.PALETTE, "Current palette (0x" + Integer.toHexString(existingPaletteMap.getFirstPromotionPaletteID()) + ") is too small or doesn't exist, looking for alternatives...");
 						markPaletteIDAsFree(existingPaletteMap.getFirstPromotionPaletteID());
 						existingPaletteMap.setFirstPromotionPaletteID(0);
 					}
@@ -453,19 +452,19 @@ public class FE8PaletteMapper {
 					Integer recycledPaletteID = requestRecycledPaletteForSize(promotedPaletteSize);
 					if (recycledPaletteID != null) {
 						existingPaletteMap.setFirstPromotionPaletteID(recycledPaletteID);
-						if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Found recycled palette 0x" + Integer.toHexString(recycledPaletteID)); }
+						DebugPrinter.log(DebugPrinter.Key.PALETTE, "Found recycled palette 0x" + Integer.toHexString(recycledPaletteID));
 					} else {
 						Integer emptyID = requestEmptyPaletteForSize(promotedPaletteSize);
 						if (emptyID != null) {
 							existingPaletteMap.setFirstPromotionPaletteID(emptyID);
-							if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Using empty palette 0x" + Integer.toHexString(emptyID)); }
+							DebugPrinter.log(DebugPrinter.Key.PALETTE, "Using empty palette 0x" + Integer.toHexString(emptyID));
 						} else {
 							palettesNeeded.add(SlotType.FIRST_PROMOTION);
-							if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "No Palettes currently available. Adding to waitlist."); }
+							DebugPrinter.log(DebugPrinter.Key.PALETTE, "No Palettes currently available. Adding to waitlist.");
 						}
 					}
 				} else {
-					if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Palette (0x" + Integer.toHexString(existingPaletteMap.getFirstPromotionPaletteID()) + ") OK! (oldSize: " + Integer.toString(paletteLength) + " newSize: " + Integer.toString(promotedPaletteSize) + ")"); }
+					DebugPrinter.log(DebugPrinter.Key.PALETTE, "Palette (0x" + Integer.toHexString(existingPaletteMap.getFirstPromotionPaletteID()) + ") OK! (oldSize: " + Integer.toString(paletteLength) + " newSize: " + Integer.toString(promotedPaletteSize) + ")");
 				}
 			} else {
 				classMap.setFirstPromotionClassID(0);
@@ -480,7 +479,7 @@ public class FE8PaletteMapper {
 				paletteLength = registeredPaletteLengths.get(existingPaletteMap.getSecondaryPromotionPaletteID());
 				if (existingPaletteMap.getSecondaryPromotionPaletteID() == 0 || (paletteLength != null && secondPromotionPaletteSize > paletteLength)) {
 					if (existingPaletteMap.getSecondaryPromotionPaletteID() != 0) {
-						if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Current palette (0x" + Integer.toHexString(existingPaletteMap.getSecondaryPromotionPaletteID()) + ") is too small or doesn't exist, looking for alternatives..."); }
+						DebugPrinter.log(DebugPrinter.Key.PALETTE, "Current palette (0x" + Integer.toHexString(existingPaletteMap.getSecondaryPromotionPaletteID()) + ") is too small or doesn't exist, looking for alternatives...");
 						markPaletteIDAsFree(existingPaletteMap.getSecondaryPromotionPaletteID());
 						existingPaletteMap.setSecondaryPromotionPaletteID(0);
 					}
@@ -488,19 +487,19 @@ public class FE8PaletteMapper {
 					Integer recycledPaletteID = requestRecycledPaletteForSize(secondPromotionPaletteSize);
 					if (recycledPaletteID != null) {
 						existingPaletteMap.setSecondaryPromotionPaletteID(recycledPaletteID);
-						if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Found recycled palette 0x" + Integer.toHexString(recycledPaletteID)); }
+						DebugPrinter.log(DebugPrinter.Key.PALETTE, "Found recycled palette 0x" + Integer.toHexString(recycledPaletteID));
 					} else {
 						Integer emptyID = requestEmptyPaletteForSize(secondPromotionPaletteSize);
 						if (emptyID != null) {
 							existingPaletteMap.setSecondaryPromotionPaletteID(emptyID);
-							if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Using empty palette 0x" + Integer.toHexString(emptyID)); }
+							DebugPrinter.log(DebugPrinter.Key.PALETTE, "Using empty palette 0x" + Integer.toHexString(emptyID));
 						} else {
 							palettesNeeded.add(SlotType.SECOND_PROMOTION);
-							if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "No Palettes currently available. Adding to waitlist."); }
+							DebugPrinter.log(DebugPrinter.Key.PALETTE, "No Palettes currently available. Adding to waitlist.");
 						}
 					}
 				} else {
-					if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Palette (0x" + Integer.toHexString(existingPaletteMap.getSecondaryPromotionPaletteID()) + ") OK! (oldSize: " + Integer.toString(paletteLength) + " newSize: " + Integer.toString(secondPromotionPaletteSize) + ")"); }
+					DebugPrinter.log(DebugPrinter.Key.PALETTE, "Palette (0x" + Integer.toHexString(existingPaletteMap.getSecondaryPromotionPaletteID()) + ") OK! (oldSize: " + Integer.toString(paletteLength) + " newSize: " + Integer.toString(secondPromotionPaletteSize) + ")");
 				}
 			} else {
 				classMap.setSecondaryPromotionClassID(0);
@@ -557,7 +556,7 @@ public class FE8PaletteMapper {
 		PaletteMapEntry existingPaletteMap = paletteIndexMap.get(character);
 		List<SlotType> palettesNeeded = new ArrayList<SlotType>();
 		
-		if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Assigning promoted class ID 0x" + Integer.toHexString(promotedClassID) + " (" + promotedClass.toString() + ") to character 0x" + Integer.toHexString(characterID) + " (" + character.toString() + ")"); }
+		DebugPrinter.log(DebugPrinter.Key.PALETTE, "Assigning promoted class ID 0x" + Integer.toHexString(promotedClassID) + " (" + promotedClass.toString() + ") to character 0x" + Integer.toHexString(characterID) + " (" + character.toString() + ")");
 
 		ClassMapEntry classMap = paletteClassMap.get(character);
 		
@@ -567,7 +566,7 @@ public class FE8PaletteMapper {
 		
 		if (existingPaletteMap.getFirstPromotionPaletteID() == 0 || (paletteLength != null && paletteSize > paletteLength)) {
 			if (existingPaletteMap.getFirstPromotionPaletteID() != 0) {
-				if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Current palette (0x" + Integer.toHexString(existingPaletteMap.getFirstPromotionPaletteID()) + ") is too small, looking for alternatives..."); }
+				DebugPrinter.log(DebugPrinter.Key.PALETTE, "Current palette (0x" + Integer.toHexString(existingPaletteMap.getFirstPromotionPaletteID()) + ") is too small, looking for alternatives...");
 				markPaletteIDAsFree(existingPaletteMap.getFirstPromotionPaletteID());
 				existingPaletteMap.setFirstPromotionPaletteID(0);
 			}
@@ -575,19 +574,19 @@ public class FE8PaletteMapper {
 			Integer recycledPaletteID = requestRecycledPaletteForSize(paletteSize);
 			if (recycledPaletteID != null) {
 				existingPaletteMap.setFirstPromotionPaletteID(recycledPaletteID);
-				if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Found recycled palette 0x" + Integer.toHexString(recycledPaletteID)); }
+				DebugPrinter.log(DebugPrinter.Key.PALETTE, "Found recycled palette 0x" + Integer.toHexString(recycledPaletteID));
 			} else {
 				Integer emptyID = requestEmptyPaletteForSize(paletteSize);
 				if (emptyID != null) {
 					existingPaletteMap.setFirstPromotionPaletteID(emptyID);
-					if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Using empty palette 0x" + Integer.toHexString(emptyID)); }
+					DebugPrinter.log(DebugPrinter.Key.PALETTE, "Using empty palette 0x" + Integer.toHexString(emptyID));
 				} else {
 					palettesNeeded.add(SlotType.FIRST_PROMOTION);
-					if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "No Palettes currently available. Adding to waitlist."); }
+					DebugPrinter.log(DebugPrinter.Key.PALETTE, "No Palettes currently available. Adding to waitlist.");
 				}
 			}
 		} else {
-			if(verbose) { DebugPrinter.log(DebugPrinter.Key.PALETTE, "Palette (0x" + Integer.toHexString(existingPaletteMap.getFirstPromotionPaletteID()) + ") OK! (oldSize: " + Integer.toString(paletteLength) + " newSize: " + Integer.toString(paletteSize) + ")"); }
+			DebugPrinter.log(DebugPrinter.Key.PALETTE, "Palette (0x" + Integer.toHexString(existingPaletteMap.getFirstPromotionPaletteID()) + ") OK! (oldSize: " + Integer.toString(paletteLength) + " newSize: " + Integer.toString(paletteSize) + ")");
 		}
 		
 		if (!palettesNeeded.isEmpty()) {

@@ -229,15 +229,17 @@ public class CharacterShuffler {
      * Update the class and stats for the slot based on the configured personal bases and potentially autolevels and promotion bonuses
      */
     private GBAFEClassData updateBases(GBAFECharacterData slot, GBACrossGameData chara, int targetClassId,
-                                              GBAFEClassData targetClass, GBAFEClassData sourceClass, int slotLevel) {
-        if (ui.model.CharacterShufflingOptions.ShuffleLevelingMode.UNCHANGED.equals(options.getLevelingMode())) 
-        {
-            slot.setBases(chara.bases);
-        }
-        else if (ui.model.CharacterShufflingOptions.ShuffleLevelingMode.AUTOLEVEL.equals(options.getLevelingMode()))
+                                              GBAFEClassData targetClass, GBAFEClassData sourceClass, int slotLevel) 
+    {
+        //Right of the top, get the new Personal Bases by subtracting the target class bases
+        GBAFEStatDto newPersonalBases = new GBAFEStatDto(chara.bases);
+        newPersonalBases.subtract( targetClass.getBases() );
+
+        // Only do addtional work if we are auto-leveling, otherwise we should be fine
+        if (ui.model.CharacterShufflingOptions.ShuffleLevelingMode.AUTOLEVEL.equals(options.getLevelingMode()))
         {
             boolean shouldBePromoted = classData.isPromotedClass(slot.getClassID());
-            slot.setClassID(targetClassId); 
+            slot.setClassID(targetClassId);
             boolean isPromoted = classData.isPromotedClass(targetClassId);
 
             // Decide Target Class / Promotions or Demotions / Number of Autolevels
@@ -245,21 +247,17 @@ public class CharacterShuffler {
                     chara.level, shouldBePromoted, isPromoted, rng, classData, null, targetClass, slot,
                     sourceClass, null, textData, DebugPrinter.Key.GBA_CHARACTER_SHUFFLING);
             targetClass = adjustmentDAO.targetClass;
-            slot.setClassID(targetClassId); //TODO: Why twice?
-
-            //Possible fix to the issue?  Need to subtract away class bases to get personal bases
-            GBAFEStatDto newBases = new GBAFEStatDto(chara.bases);
-            newBases.subtract( targetClass.getBases() );
-
-            System.out.println(String.format("%nAutoleveling: [%s]", chara.name ));
+            slot.setClassID(targetClassId);
 
             // Calculate the auto leveled personal bases
-            GBAFEStatDto newPersonalBases = GBASlotAdjustmentService.autolevel(newBases, chara.growths,
+            newPersonalBases = GBASlotAdjustmentService.autolevel(newPersonalBases, chara.growths,
                     adjustmentDAO.promoBonuses, adjustmentDAO.levelAdjustment, sourceClass, targetClass, DebugPrinter.Key.GBA_CHARACTER_SHUFFLING);
-
-            slot.setBases(newPersonalBases);
-            slot.setConstitution( chara.constitution - targetClass.getCON() );
         }
+
+        //Set the actual bases and also fix Constitution doubling
+        slot.setBases(newPersonalBases);
+        slot.setConstitution( chara.constitution - targetClass.getCON() );
+
         return targetClass;
     }
 

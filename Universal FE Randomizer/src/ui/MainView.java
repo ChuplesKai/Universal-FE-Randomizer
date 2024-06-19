@@ -8,6 +8,9 @@ import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.*;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 import ui.common.*;
@@ -351,8 +354,13 @@ public class MainView implements FileFlowDelegate {
 
         if (randomizeButton == null) {
             randomizeButton = new Button(mainContainer, SWT.PUSH);
-            randomizeButton.setText("Randomize");
+            randomizeButton.setText("Randomize!");
             randomizeButton.setLayoutData(new RowData(SWT.DEFAULT, 50));
+            FontData[] fD = randomizeButton.getFont().getFontData();
+            fD[0].setHeight(16);
+            fD[0].setStyle( SWT.BOLD );
+            randomizeButton.setFont( new Font(randomizeButton.getDisplay(),fD[0]) );
+            randomizeButton.setBackground( new Color( randomizeButton.getDisplay(), 255, 220, 170 ) );
         }
 
         if (loadedGameType != GameType.UNKNOWN) {
