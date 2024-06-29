@@ -232,14 +232,14 @@ public class LegacyViewContainer extends YuneViewContainer {
         prfViewData.right = new FormAttachment(itemAssignmentView.group, 0, SWT.RIGHT);
         prfView.group.setLayoutData(prfViewData);
         
-        statboosterView = new StatboosterView(this, SWT.NONE);
-        statboosterView.setSize(200, 200);
+        statboosterView = new StatboosterView(this, type);
+        statboosterView.group.setSize(200, 200);
         
         FormData statboosterData = new FormData();
         statboosterData.top = new FormAttachment(prfView.group, 5);
         statboosterData.left = new FormAttachment(prfView.group, 0, SWT.LEFT);
         statboosterData.right = new FormAttachment(prfView.group, 0, SWT.RIGHT);
-        statboosterView.setLayoutData(statboosterData);
+        statboosterView.group.setLayoutData(statboosterData);
     }
 
     private void composeFE4() {
@@ -328,6 +328,7 @@ public class LegacyViewContainer extends YuneViewContainer {
         recruitView.initialize(bundle.recruitmentOptions);
         itemAssignmentView.initialize(bundle.itemAssignmentOptions);
         characterShufflingView.initialize(bundle.characterShufflingOptions);
+        statboosterView.initialize(bundle.statboosterOptions);
     }
 
     @Override
@@ -345,6 +346,7 @@ public class LegacyViewContainer extends YuneViewContainer {
         bundle.other = otherCharOptionView.getOptions();
         bundle.itemAssignmentOptions = itemAssignmentView.getOptions();
         bundle.recruitmentOptions = recruitView.getOptions();
+        bundle.statboosterOptions = statboosterView.getOptions();
         bundle.characterShufflingOptions = characterShufflingView.getOptions();
     }
 

@@ -114,14 +114,12 @@ public class MainView implements FileFlowDelegate {
             return;
         }
 
-
         // Create a new Bundle so we can transfer over the selections to the new Layout
         Bundle bundle = OptionRecorder.createBundle(loadedGameType);
         viewContainer.updateOptionBundle(bundle);
 
         // User selected a new layout, so dispose of the old one
         viewContainer.dispose();
-
         createViewContainer(newLayout);
 
         // Load the options now that the new viewContainer has been created

@@ -44,7 +44,7 @@ public class GBAItemsTab extends YuneTabItem {
         // these two views are located below the weapons view which has a colspan of two.
         // But since there is a margin of 5 pixels between the two, views, they would be a bit wider and so misaligned.
         // reduce each of these views by 5px to make sure they are properly aligned with the weapons view
-        statboosters = addView(new StatboosterView(container));
+        statboosters = addView(new StatboosterView(container, type));
         setViewData(statboosters, 1, 3);
         rewards = addView(new RewardRandomizationView(container, type));
         prfs = addView(new PrfView(container));

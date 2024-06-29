@@ -35,23 +35,33 @@ public class CharacterShufflingView extends YuneView<CharacterShufflingOptions> 
 	private FileDialog fileDialog;
 	private List<String> includedShuffles = new ArrayList<>();
 	
-
-	
-	
+	/*****************************************************************
+	 * Constructor, just calls super
+	 ****************************************************************/
 	public CharacterShufflingView(Composite parent, GameType type) {
 		super(parent, type);
 	}
 
+	/*****************************************************************
+	 * getGropuTitle - Implementation
+	 ****************************************************************/
 	@Override
 	public String getGroupTitle() {
 		return "Character Shuffling";
 	}
 
+	/*****************************************************************
+	 * getGroupTooltip - Implemenetation
+	 ****************************************************************/
 	@Override
 	public String getGroupTooltip() {
 		return "Shuffle in characters from other games.";
 	}
 
+	/*****************************************************************
+	 * compose - Implementation - actually creates the buttons and
+	 * 	sets up the listener, etc.
+	 ****************************************************************/
 	@Override
 	protected void compose() {
 		enableButton = new Button(group, SWT.CHECK);
@@ -236,12 +246,13 @@ public class CharacterShufflingView extends YuneView<CharacterShufflingOptions> 
 		optionData = new FormData();
 		optionData.left = new FormAttachment(selectFilesButton, 0, SWT.LEFT);
 		optionData.top = new FormAttachment(selectFilesButton, 5);
-		includedFilesLabel.setLayoutData(optionData);
-
-		
+		includedFilesLabel.setLayoutData(optionData);		
 		
 	}
 
+	/*****************************************************************
+	 * getOptions - Implementation
+	 ****************************************************************/
 	@Override
 	public CharacterShufflingOptions getOptions() {
 		boolean isEnabled = enableButton.getSelection();
@@ -262,6 +273,9 @@ public class CharacterShufflingView extends YuneView<CharacterShufflingOptions> 
 		return new CharacterShufflingOptions(levelingMode, isEnabled, chance, shuffles, isEnabled);
 	}
 
+	/*****************************************************************
+	 * initialize - Implementation - sets the values based on options.
+	 ****************************************************************/
 	@Override
 	public void initialize(CharacterShufflingOptions options) {
 		if (options == null) {
