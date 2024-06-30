@@ -66,6 +66,7 @@ public class CharacterShufflingView extends YuneView<CharacterShufflingOptions> 
 	protected void compose() {
 		enableButton = new Button(group, SWT.CHECK);
 		enableButton.setText("Character Shuffling");
+		enableButton.setSelection(false);
 		enableButton.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
@@ -292,7 +293,7 @@ public class CharacterShufflingView extends YuneView<CharacterShufflingOptions> 
 		} else {
 			enableButton.setSelection(true);
 			
-			modeContainer.setEnabled(true);
+			modeContainer.setEnabled( options.isShuffleEnabled() );
 			
 			autoLevelingButton.setEnabled(true);
 			autoLevelingButton.setSelection(ShuffleLevelingMode.AUTOLEVEL.equals(options.getLevelingMode()));

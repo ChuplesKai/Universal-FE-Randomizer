@@ -19,6 +19,7 @@ import io.UPSPatcherStatusListener;
 import random.gba.loader.ItemDataLoader.AdditionalData;
 import random.gba.randomizer.shuffling.CharacterShuffler;
 import random.general.Randomizer;
+import random.general.FERandom;
 import ui.model.*;
 import ui.model.CharacterShufflingOptions.ShuffleLevelingMode;
 import ui.model.EnemyOptions.BossStatMode;
@@ -194,7 +195,7 @@ public class GBARandomizer extends Randomizer {
 		itemData.recordWeapons(recordKeeper, true, classData, textData, handler);
 		chapterData.recordChapters(recordKeeper, true, charData, classData, itemData, textData);
 		paletteData.recordReferencePalettes(recordKeeper, charData, classData, textData);
-		statboostData.recordInitial(recordKeeper, itemData, statboosterOptions);
+		if( statboosterOptions != null ) statboostData.recordInitial(recordKeeper, itemData, statboosterOptions);
 
 		//Pre-randomization adjustments		
 		makePreliminaryAdjustments();
@@ -288,7 +289,7 @@ public class GBARandomizer extends Randomizer {
 		classData.recordClasses(recordKeeper, false, classData, textData);
 		itemData.recordWeapons(recordKeeper, false, classData, textData, targetFileHandler);
 		chapterData.recordChapters(recordKeeper, false, charData, classData, itemData, textData);
-		statboostData.recordUpdated(recordKeeper, itemData, statboosterOptions);
+		if( statboosterOptions != null ) statboostData.recordUpdated(recordKeeper, itemData, statboosterOptions);
 		//FE8 does palettes differently
 		if (gameType == FEBase.GameType.FE8) {
 			paletteData.recordUpdatedFE8Palettes(recordKeeper, charData, classData, textData);
@@ -485,7 +486,8 @@ public class GBARandomizer extends Randomizer {
 	 ****************************************************************/
 	private void randomizeGrowthsIfNecessary(String seed) {
 		if (growths != null) {
-			Random rng = new Random(SeedGenerator.generateSeedValue(seed, GrowthsRandomizer.rngSalt));
+			FERandom rng = new FERandom(SeedGenerator.generateSeedValue(seed, GrowthsRandomizer.rngSalt));
+			rng.initialize( FERandom.randDist.TRIANGLE, true );
 			switch (growths.mode) {
 			case REDISTRIBUTE:
 				updateStatusString("Redistributing growths...");
@@ -651,8 +653,11 @@ public class GBARandomizer extends Randomizer {
 	 * Stat Booster Randomization
 	 ****************************************************************/
 	private void randomizeStatboostersIfNecessary(String seed) {
-		Random rng = new Random(SeedGenerator.generateSeedValue(seed, StatboosterRandomizer.SALT));
-		StatboosterRandomizer.randomize(statboosterOptions, statboostData, itemData, textData, rng);
+		if( statboosterOptions != null )
+		{
+			Random rng = new Random(SeedGenerator.generateSeedValue(seed, StatboosterRandomizer.SALT));
+			StatboosterRandomizer.randomize(statboosterOptions, statboostData, itemData, textData, rng);
+		}
 	}
 	
 	/*****************************************************************

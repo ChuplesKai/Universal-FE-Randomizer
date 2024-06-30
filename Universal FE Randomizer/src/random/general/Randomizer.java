@@ -10,10 +10,16 @@ public abstract class Randomizer extends Thread {
 
 	private RandomizerListener listener = null;
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public void setListener(RandomizerListener listener) {
 		this.listener = listener;
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	protected void updateStatusString(String string) {
 		DebugPrinter.log(DebugPrinter.Key.MAIN, string);
 		if (listener != null) {
@@ -26,6 +32,9 @@ public abstract class Randomizer extends Thread {
 		}
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	protected void updateProgress(double progress) {
 		if (listener != null) {
 			Display.getDefault().asyncExec(new Runnable() {
@@ -37,6 +46,9 @@ public abstract class Randomizer extends Thread {
 		}
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	protected void notifyError(String errorString) {
 		DebugPrinter.log(DebugPrinter.Key.MAIN, errorString);
 		if (listener != null) {
@@ -49,6 +61,9 @@ public abstract class Randomizer extends Thread {
 		}
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	protected void notifyCompletion(RecordKeeper rk, ChangelogBuilder cb) {
 		if (listener != null) {
 			Display.getDefault().asyncExec(new Runnable() {

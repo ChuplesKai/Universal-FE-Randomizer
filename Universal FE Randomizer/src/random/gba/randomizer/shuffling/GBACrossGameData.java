@@ -138,9 +138,10 @@ public class GBACrossGameData {
                             // These following female classes are too much of a pain to make work.
                             // They have the same animation as the male one anyway, don't have Promo Bonuses
                             // either.
+            				// TAG: Okay, but is that fixable?
                             FE8Data.CharacterClass.WYVERN_RIDER_F, FE8Data.CharacterClass.WYVERN_LORD_F,
-                            FE8Data.CharacterClass.HERO_F, FE8Data.CharacterClass.SHAMAN_F, FE8Data.CharacterClass.DRUID_F)
-                    .contains(chosenClass));
+                            FE8Data.CharacterClass.HERO_F, FE8Data.CharacterClass.SHAMAN_F, FE8Data.CharacterClass.DRUID_F
+            ).contains(chosenClass));
         } else if (provider instanceof FE7Data) {
             return (Arrays.asList(FE7Data.CharacterClass.CAVALIER_F, // Not a useable class
                     FE7Data.CharacterClass.MERCENARY_F, // Not a useable class
@@ -151,17 +152,14 @@ public class GBACrossGameData {
                     FE7Data.CharacterClass.HERO_F, FE7Data.CharacterClass.KNIGHT_F, FE7Data.CharacterClass.GENERAL_F,
                     FE7Data.CharacterClass.WYVERNKNIGHT_F, FE7Data.CharacterClass.NOMAD_F,
                     FE7Data.CharacterClass.NOMADTROOPER_F
-
             ).contains(chosenClass));
-
         } else if (provider instanceof FE6Data) {
             return (Arrays.asList(FE6Data.CharacterClass.PALADIN_F, // Not a useable class
                     FE6Data.CharacterClass.CAVALIER_F, // Not a useable class
                     FE6Data.CharacterClass.MERCENARY_F // Not a useable class
             ).contains(chosenClass));
-
         }
-
+        //Fall through - the class doesn't need to be excepted
         return false;
     }
 

@@ -9,6 +9,10 @@ import java.util.Set;
 
 import util.WhyDoesJavaNotHaveThese;
 
+
+/*****************************************************************
+ * 
+ ****************************************************************/
 public class PaletteColor implements Comparable<PaletteColor> {
 	private double red;
 	private double green;
@@ -17,7 +21,10 @@ public class PaletteColor implements Comparable<PaletteColor> {
 	private double hue;
 	private double saturation;
 	private double brightness;
-	
+
+	/*****************************************************************
+	 * Static - Implementation for the Comparable type
+	 ****************************************************************/
 	public static final Comparator<PaletteColor> lowToHighBrightnessComparator = new Comparator<PaletteColor>() {
 		@Override
 		public int compare(PaletteColor o1, PaletteColor o2) {
@@ -25,6 +32,9 @@ public class PaletteColor implements Comparable<PaletteColor> {
 		}
 	};
 	
+	/*****************************************************************
+	 * Static - Creates a color from a hex string.
+	 ****************************************************************/
 	public static PaletteColor colorFromHex(String hexString) {
 		if (hexString.startsWith("#")) {
 			hexString = hexString.substring(1);
@@ -37,24 +47,25 @@ public class PaletteColor implements Comparable<PaletteColor> {
 	    return new PaletteColor(r, g, b);
 	}
 	
+	/*****************************************************************
+	 * Constructor from byte tuple (GBA 5-bit format).
+	 ****************************************************************/
 	public PaletteColor(byte[] colorTuple) {
 		int colorValue = ((colorTuple[1] << 8) & 0xFF00) | (colorTuple[0] & 0xFF);
 		
 		int redComponent = ((colorValue & 0x1F)) & 0xFF;
 		int greenComponent = ((colorValue & 0x3E0) >> 5) & 0xFF;
 		int blueComponent = ((colorValue & 0x7C00) >> 10) & 0xFF;
-		
-		int redValue = redComponent * 8;
-		int greenValue = greenComponent * 8;
-		int blueValue = blueComponent * 8;
-		
-		red = redValue / 255.0;
-		green = greenValue / 255.0;
-		blue = blueValue / 255.0;
+		red = (redComponent * 8) / 255.0;
+		green = (greenComponent * 8) / 255.0;
+		blue = (blueComponent * 8) / 255.0;
 		
 		calculateValuesWithRGB();
 	}
 	
+	/*****************************************************************
+	 * Constructor from RGB integers [0,255]
+	 ****************************************************************/
 	public PaletteColor(int r, int g, int b) {
 		red = (double)WhyDoesJavaNotHaveThese.clamp(r, 0, 255) / 255.0;
 		green = (double)WhyDoesJavaNotHaveThese.clamp(g, 0, 255) / 255.0;
@@ -63,6 +74,9 @@ public class PaletteColor implements Comparable<PaletteColor> {
 		calculateValuesWithRGB();
 	}
 	
+	/*****************************************************************
+	 * Constructor from HSV values [0.0,1.0]
+	 ****************************************************************/
 	public PaletteColor(double h, double s, double b) {
 		while (h > 1) { h = h - 1; }
 		hue = h;
@@ -85,6 +99,9 @@ public class PaletteColor implements Comparable<PaletteColor> {
 	 * R = 1 |2222 <br>
 	 * B = 333 |44 <br>
 	 */
+	/*****************************************************************
+	 * Constructor from a string that's in hex format but GBA 5-bit.
+	 ****************************************************************/
 	public PaletteColor(String colorString) {
 		// We get 4 Hex Numbers, put each into it's own int
 		int byte1 = Integer.parseInt(colorString.substring(0, 1), 16);
@@ -111,21 +128,34 @@ public class PaletteColor implements Comparable<PaletteColor> {
 		blue = (double) WhyDoesJavaNotHaveThese.clamp(8 * Integer.parseInt(bByte, 2), 0, 255) / 255.0;
 	}
 	
+	/*****************************************************************
+	 * isSameAsColor - returns whether the colors are the same
+	 ****************************************************************/
 	public boolean isSameAsColor(PaletteColor otherColor) {
 		return toHexString().equals(otherColor.toHexString());
 	}
 	
+	/*****************************************************************
+	 * isNoColor - Seems to return if it's uninitialized?
+	 ****************************************************************/
 	public boolean isNoColor() {
 		return this.red == 0 && this.blue == 0 && this.green == 0 && this.brightness == 0 && this.hue == 0 && this.saturation == 0;
 	}
 	
+	/*****************************************************************
+	 * Returns the Hex-formatted string representing the color.
+	 ****************************************************************/
 	public String toHexString() {
 		return String.format("#%s%s%s", 
 				getRedValue() < 16 ? "0" + Integer.toHexString(getRedValue()) : Integer.toHexString(getRedValue()),
 				getGreenValue() < 16 ? "0" + Integer.toHexString(getGreenValue()) : Integer.toHexString(getGreenValue()),
-						getBlueValue() < 16 ? "0" + Integer.toHexString(getBlueValue()) : Integer.toHexString(getBlueValue()));
+				getBlueValue() < 16 ? "0" + Integer.toHexString(getBlueValue()) : Integer.toHexString(getBlueValue()));
 	}
 	
+	/*****************************************************************
+	 * Static - Attempts to take a palette of colors and make a particular 
+	 * number of them (either removing colors or adding new ones).
+	 ****************************************************************/
 	public static PaletteColor[] coerceColors(PaletteColor[] colors, int numberOfColors) {
 		if (numberOfColors == 0) { return new PaletteColor[] {}; }
 		
@@ -160,7 +190,9 @@ public class PaletteColor implements Comparable<PaletteColor> {
 		}
 	}
 	
-	// Will slightly shift all colors to yield different colors.
+	/***************************************************************** 
+	 * Static - Will slightly shift all colors to yield different colors.
+	 ****************************************************************/
 	public static List<PaletteColor> adjustColors(List<PaletteColor> colors, boolean favorBrightness, boolean favorSaturation) {
 		if (colors.size() == 0) { return new ArrayList<PaletteColor>(); }
 		List<PaletteColor> newColors = new ArrayList<PaletteColor>();
@@ -210,6 +242,9 @@ public class PaletteColor implements Comparable<PaletteColor> {
 		return newColors;
 	}
 	
+	/*****************************************************************
+	 * Removes colors from a palette of colors.
+	 ****************************************************************/
 	private static PaletteColor[] reduceColors(PaletteColor[] colors, int numberOfColors) {
 		int numberOfColorsToRemove = colors.length - numberOfColors;
 		int indexDelta = colors.length / (numberOfColorsToRemove + 1);
@@ -224,15 +259,24 @@ public class PaletteColor implements Comparable<PaletteColor> {
 		return result.toArray(new PaletteColor[result.size()]);
 	}
 	
+	/*****************************************************************
+	 * Static - Returns a darker version of a given color.
+	 ****************************************************************/
 	private static PaletteColor darkerColor(PaletteColor referenceColor) {
 		return new PaletteColor(referenceColor.hue, Math.max(referenceColor.saturation - 0.1, 0.0), Math.max(referenceColor.brightness * 0.6, 0.0));
 	}
 	
+	/*****************************************************************
+	 * Static - Returns a lighter version of a given color.
+	 ****************************************************************/
 	private static PaletteColor lighterColor(PaletteColor referenceColor) {
 		double distanceToMax = 1.0 - referenceColor.brightness;
 		return new PaletteColor(referenceColor.hue, Math.max(referenceColor.saturation + 0.1, 0.0), Math.max(referenceColor.brightness + distanceToMax * 0.4, 0.0));
 	}
 	
+	/*****************************************************************
+	 * Static - returns a palette with additional interpolated colors.
+	 ****************************************************************/
 	private static PaletteColor[] interpolateColors(PaletteColor[] colors, int numberOfColors) {
 		if (colors.length < 2) { return null; }
 		
@@ -267,6 +311,9 @@ public class PaletteColor implements Comparable<PaletteColor> {
 		return result.toArray(new PaletteColor[result.size()]);
 	}
 	
+	/*****************************************************************
+	 * Static - get the average of the provided colors.
+	 ****************************************************************/
 	public static PaletteColor averageColorFromColors(PaletteColor[] otherColors) {
 		double minHue = 1;
 		double maxHue = 0;
@@ -312,6 +359,9 @@ public class PaletteColor implements Comparable<PaletteColor> {
 		return averageColor;
 	}
 	
+	/*****************************************************************
+	 * Returns the color as a GBA-formatted 5-bit byte tuple.
+	 ****************************************************************/
 	public byte[] toColorTuple() {
 		int redValue = (int)(red * 255.0);
 		int greenValue = (int)(green * 255.0);
@@ -325,35 +375,62 @@ public class PaletteColor implements Comparable<PaletteColor> {
 		return new byte[] { (byte)(colorValue & 0xFF), (byte)((colorValue & 0xFF00) >> 8) };
 	}
 	
+	/*****************************************************************
+	 * Returns the RGB string representing this color
+	 ****************************************************************/
 	public String toRGBString() {
 		return "R: " + getRedValue() + " G: " + getGreenValue() + " B: " + getBlueValue();
 	}
 	
+	/*****************************************************************
+	 * Returns the HSV string representing this color
+	 ****************************************************************/
 	public String toHSBString() {
 		return "H: " + (getHue() * 360) + " S: " + (getSaturation() * 100) + " B: " + (getBrightness() * 100);
 	}
 	
 	// GBA only has color resolution up to 5 bits per component, so we should also note that when we return RGB values.
+	/*****************************************************************
+	 * Get the red component in [0,255], using only 5 MS bits.
+	 ****************************************************************/
 	public int getRedValue() {
 		return (int)(red * 255.0) / 8 * 8;
 	}
+	/*****************************************************************
+	 * Get the green component in [0,255], using only 5 MS bits.
+	 ****************************************************************/
 	public int getGreenValue() {
 		return (int)(green * 255.0) / 8 * 8;
 	}
+	/*****************************************************************
+	 * Get the blue component in [0,255], using only 5 MS bits.
+	 ****************************************************************/
 	public int getBlueValue() {
 		return (int)(blue * 255.0) / 8 * 8;
 	}
 	
+	/*****************************************************************
+	 * Get the Hue (presumably done for consistency with above)
+	 ****************************************************************/
 	public double getHue() {
 		return hue;
 	}
+	/*****************************************************************
+	 * Get the Saturation (presumably done for consistency with above)
+	 ****************************************************************/
 	public double getSaturation() {
 		return saturation;
 	}
+	/*****************************************************************
+	 * Get the Value (presumably done for consistency with above)
+	 ****************************************************************/
 	public double getBrightness() {
 		return brightness;
 	}
 	
+	/*****************************************************************
+	 * Update Red component
+	 ****************************************************************/
 	public void setRed(int newRedValue) {
 		if (newRedValue >= 0 && newRedValue <= 255) {
 			red = newRedValue / 255.0;
@@ -362,6 +439,9 @@ public class PaletteColor implements Comparable<PaletteColor> {
 			System.err.println("Invalid Red value detected.");
 		}
 	}
+	/*****************************************************************
+	 * Update Green component
+	 ****************************************************************/
 	public void setGreen(int newGreenValue) {
 		if (newGreenValue >= 0 && newGreenValue <= 255) {
 			green = newGreenValue / 255.0;
@@ -370,6 +450,9 @@ public class PaletteColor implements Comparable<PaletteColor> {
 			System.err.println("Invalid Green value detected.");
 		}
 	}
+	/*****************************************************************
+	 * Update Blue component
+	 ****************************************************************/
 	public void setBlue(int newBlueValue) {
 		if (newBlueValue >= 0 && newBlueValue <= 255) {
 			blue = newBlueValue / 255.0;
@@ -379,6 +462,9 @@ public class PaletteColor implements Comparable<PaletteColor> {
 		}
 	}
 	
+	/*****************************************************************
+	 * Update the color's Hue component
+	 ****************************************************************/
 	public void setHue(double newHueValue) {
 		if (newHueValue >= 0) {
 			hue = newHueValue;
@@ -387,6 +473,9 @@ public class PaletteColor implements Comparable<PaletteColor> {
 			System.err.println("Invalid Hue value detected.");
 		}
 	}
+	/*****************************************************************
+	 * Update the color's Saturation component
+	 ****************************************************************/
 	public void setSaturation(double newSaturationValue) {
 		if (newSaturationValue >= 0 && newSaturationValue <= 1) {
 			saturation = newSaturationValue;
@@ -395,6 +484,9 @@ public class PaletteColor implements Comparable<PaletteColor> {
 			System.err.println("Invalid Saturation value detected.");
 		}
 	}
+	/*****************************************************************
+	 * Update the color's Value component
+	 ****************************************************************/
 	public void setBrightness(double newBrightnessValue) {
 		if (newBrightnessValue >= 0 && newBrightnessValue <= 1) {
 			brightness = newBrightnessValue;
@@ -404,6 +496,9 @@ public class PaletteColor implements Comparable<PaletteColor> {
 		}
 	}
 	
+	/*****************************************************************
+	 * Recalculates the internal HSV values using the current RGB.
+	 ****************************************************************/
 	private void calculateValuesWithRGB() {
 		if (red == green && green == blue) {
 			hue = 0;
@@ -434,6 +529,9 @@ public class PaletteColor implements Comparable<PaletteColor> {
 		}
 	}
 	
+	/*****************************************************************
+	 * Recalculate the RGB values using the current HSV.
+	 ****************************************************************/
 	private void calculateValuesWithHSB() {
 		if (saturation == 0) {
 			red = brightness;
@@ -462,6 +560,9 @@ public class PaletteColor implements Comparable<PaletteColor> {
 		}
 	}
 
+	/*****************************************************************
+	 * compareTo override for comparable
+	 ****************************************************************/
 	@Override
 	public int compareTo(PaletteColor arg0) {
 		// Return -1 if this is less than arg0, 1 if this is greater than arg0, and 0 if the two are the same.
@@ -471,6 +572,9 @@ public class PaletteColor implements Comparable<PaletteColor> {
 		return brightness < arg0.brightness ? 1 : -1;
 	}
 	
+	/*****************************************************************
+	 * toString override for coercing into string
+	 ****************************************************************/
 	@Override
 	public String toString() {
 		return String.format("PaletteCollor red: %d, green %d, blue %d, brightness %f", getRedValue(), getGreenValue(), getBlueValue(), getBrightness());

@@ -1,10 +1,9 @@
 package random.gba.randomizer;
 
-import java.util.Random;
-
 import fedata.gba.GBAFECharacterData;
 import random.gba.loader.CharacterDataLoader;
 import util.WhyDoesJavaNotHaveThese;
+import random.general.FERandom;
 
 public class GrowthsRandomizer 
 {	
@@ -37,14 +36,6 @@ public class GrowthsRandomizer
 
 	}
 
-	//================================================================
-	// Draw from a triangle distribution
-	//================================================================
-	private static int triangleDist( int variance, Random rng )
-	{
-		return ( rng.nextInt(variance + 1) + rng.nextInt(variance + 1) - variance );
-	}
-
 	//////////////////////////////////////////////////////////////////
 	// MAIN METHODS
 	//////////////////////////////////////////////////////////////////
@@ -53,7 +44,7 @@ public class GrowthsRandomizer
 	// Redistribute Growths, so that total growth rate amount stays
 	//  nearly the same, but get re-focused into different stats. 
 	//================================================================
-	public static void randomizeGrowthsByRedistribution(int variance, int min, int max, boolean adjustHP, CharacterDataLoader charactersData, Random rng)
+	public static void randomizeGrowthsByRedistribution(int variance, int min, int max, boolean adjustHP, CharacterDataLoader charactersData, FERandom rng)
 	{
 		// Get the playable characters, since only they have character growths
 		GBAFECharacterData[] allPlayableCharacters = charactersData.playableCharacters();
@@ -81,8 +72,8 @@ public class GrowthsRandomizer
 			int growthTotal = (adjustHP ? character.getHPGrowth() - hpBonus : 0 ) + character.getSTRGrowth() + character.getSKLGrowth() + character.getSPDGrowth() + 
 					character.getLCKGrowth() + character.getDEFGrowth() + character.getRESGrowth();
 
-			// Triangular Distribution
-			growthTotal += mult * triangleDist( variance, rng );
+			// Sample from a distribution
+			growthTotal += mult * rng.sample( variance );
 
 			// Start with growths at the minimum value			
 			int newHPGrowth = min + hpBonus;
@@ -172,7 +163,7 @@ public class GrowthsRandomizer
 	// Adjusts existing growths by adding a delta to the 
 	//  existing growth amount.
 	//================================================================
-	public static void randomizeGrowthsByRandomDelta(int maxDelta, int min, int max, boolean adjustHP, CharacterDataLoader charactersData, Random rng)
+	public static void randomizeGrowthsByRandomDelta(int maxDelta, int min, int max, boolean adjustHP, CharacterDataLoader charactersData, FERandom rng)
 	{
 		// Get all the playable characters and make sure any outstanding changes are committed.
 		GBAFECharacterData[] allPlayableCharacters = charactersData.playableCharacters();	
@@ -192,13 +183,13 @@ public class GrowthsRandomizer
 			//Skip them if they are already modified via link mondification	
 			if (character.wasModified()) { continue; }
 			
-			int newHPGrowth = character.getHPGrowth() + (mult * triangleDist( maxDelta, rng ));
-			int newSTRGrowth = character.getSTRGrowth() + (mult * triangleDist( maxDelta, rng ));
-			int newSKLGrowth = character.getSKLGrowth() + (mult * triangleDist( maxDelta, rng ));
-			int newSPDGrowth = character.getSPDGrowth() + (mult * triangleDist( maxDelta, rng ));
-			int newLCKGrowth = character.getLCKGrowth() + (mult * triangleDist( maxDelta, rng ));
-			int newDEFGrowth = character.getDEFGrowth() + (mult * triangleDist( maxDelta, rng ));
-			int newRESGrowth = character.getRESGrowth() + (mult * triangleDist( maxDelta, rng ));
+			int newHPGrowth = character.getHPGrowth() + (mult * rng.sample( maxDelta ));
+			int newSTRGrowth = character.getSTRGrowth() + (mult * rng.sample( maxDelta ));
+			int newSKLGrowth = character.getSKLGrowth() + (mult * rng.sample( maxDelta ));
+			int newSPDGrowth = character.getSPDGrowth() + (mult * rng.sample( maxDelta ));
+			int newLCKGrowth = character.getLCKGrowth() + (mult * rng.sample( maxDelta ));
+			int newDEFGrowth = character.getDEFGrowth() + (mult * rng.sample( maxDelta ));
+			int newRESGrowth = character.getRESGrowth() + (mult * rng.sample( maxDelta ));
 			
 			// Finally, just set the growths
 			setRandGrowths( adjustHP, min, max, charactersData, character, newHPGrowth, newSTRGrowth, newSKLGrowth, newSPDGrowth, newLCKGrowth, newDEFGrowth, newRESGrowth );
@@ -210,7 +201,7 @@ public class GrowthsRandomizer
 	//================================================================
 	// Completely re-randomizes growths, keeping within a range
 	//================================================================
-	public static void fullyRandomizeGrowthsWithRange(int minGrowth, int maxGrowth, boolean adjustHP, CharacterDataLoader charactersData, Random rng)
+	public static void fullyRandomizeGrowthsWithRange(int minGrowth, int maxGrowth, boolean adjustHP, CharacterDataLoader charactersData, FERandom rng)
 	{
 		// Get all the playable characters and commit any outstanding changes
 		GBAFECharacterData[] allPlayableCharacters = charactersData.playableCharacters();	

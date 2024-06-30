@@ -181,6 +181,9 @@ public class SeedGenerator {
 		return "Type something in!";
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public static long generateSeedValue(String seedString, int seedSalt) {
 		StringBuilder sb = new StringBuilder(seedString);
 		while (sb.length() < 2) {
