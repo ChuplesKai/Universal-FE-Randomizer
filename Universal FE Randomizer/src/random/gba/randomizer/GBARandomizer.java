@@ -43,7 +43,8 @@ public class GBARandomizer extends Randomizer {
 	private FEBase.GameType gameType;
 	
 	private DiffCompiler diffCompiler;
-	
+
+	private DistributionOptions distributionOptions;	
 	private GrowthOptions growths;
 	private BaseOptions bases;
 	private ClassOptions classes;
@@ -97,7 +98,9 @@ public class GBARandomizer extends Randomizer {
 		this.seedString = seed;
 		
 		diffCompiler = diffs;
-		
+
+		//Debug - just make one for now, until it's in the UI.
+		this.distributionOptions = new DistributionOptions( FERandom.randDist.TRIANGLE, false );
 		this.growths = growths;
 		this.bases = bases;
 		this.classes = classes;
@@ -487,7 +490,7 @@ public class GBARandomizer extends Randomizer {
 	private void randomizeGrowthsIfNecessary(String seed) {
 		if (growths != null) {
 			FERandom rng = new FERandom(SeedGenerator.generateSeedValue(seed, GrowthsRandomizer.rngSalt));
-			rng.initialize( FERandom.randDist.TRIANGLE, true );
+			rng.initialize( distributionOptions.getDistribution(), distributionOptions.usingMemory() );
 			switch (growths.mode) {
 			case REDISTRIBUTE:
 				updateStatusString("Redistributing growths...");
@@ -510,7 +513,8 @@ public class GBARandomizer extends Randomizer {
 	 ****************************************************************/
 	private void randomizeBasesIfNecessary(String seed) {
 		if (bases != null) {
-			Random rng = new Random(SeedGenerator.generateSeedValue(seed, BasesRandomizer.rngSalt));
+			FERandom rng = new FERandom(SeedGenerator.generateSeedValue(seed, BasesRandomizer.rngSalt));
+			rng.initialize( distributionOptions.getDistribution(), distributionOptions.usingMemory() );
 			switch (bases.mode) {
 			case REDISTRIBUTE:
 				updateStatusString("Redistributing bases...");

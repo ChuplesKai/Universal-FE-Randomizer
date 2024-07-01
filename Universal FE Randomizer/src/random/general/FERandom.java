@@ -57,6 +57,31 @@ public class FERandom extends Random
     }
 
     /*****************************************************************
+     * sampleRange - draw a sample from the active distribution.
+     ****************************************************************/
+    public int sampleRange( int minimum, int maximum )
+    {
+        // First, check that the input makes any sense
+        if( minimum > maximum ) return 0;
+        // Need to compute the midpoint, and see if it is whole
+        double midpoint = (double)(minimum + maximum)/2.0;
+        int offset = (int)Math.floor( midpoint );
+        // Then, we'll do different things based on the distribution
+        switch( distribution )
+        {
+        case UNIFORM:
+            return sampleUniformRange( minimum, maximum, offset );
+        case TRIANGLE:
+            int sample = sampleTriangleRange( minimum, maximum, offset );
+            if( midpoint > (double)(offset + 0.1) ) sample += nextInt(1);
+            return sample;
+        }
+        // We shouldn't end up here, but return something just in case
+        return minimum;
+    }
+
+
+    /*****************************************************************
      * sampleTriangle - draw a sample from a triangular distribution
      *  centered on 0 within a maximum deviation.
      ****************************************************************/
@@ -66,6 +91,7 @@ public class FERandom extends Random
         int rtwo = __st( maxDev );
         return __decide( rone, rtwo, maxDev );
     }
+
 
     /*****************************************************************
      * sampleUniform - draw a sample from a uniform distribution
@@ -77,6 +103,32 @@ public class FERandom extends Random
         int rtwo = __su( maxDev );
         return __decide( rone, rtwo, maxDev );
     }
+
+
+    /*****************************************************************
+     * sampleUniformRange - draw a sample from a uniform distribution
+     *  within a specified range.
+     ****************************************************************/
+    public int sampleUniformRange( int minimum, int maximum, int offset )
+    {
+        // Draw the numbers from uniform
+        int rone = nextInt( maximum - minimum + 1 );
+        int rtwo = nextInt( maximum - minimum + 1 );
+        return __decide( rone - offset, rtwo - offset, maximum - offset ) + offset;
+    }
+
+
+    /*****************************************************************
+     * sampleTriangleRange - draw a sample from a uniform distribution
+     *  within a specified range.
+     ****************************************************************/
+    public int sampleTriangleRange( int minimum, int maximum, int offset )
+    {
+        int rone = __st( offset - minimum );
+        int rtwo = __st( offset - minimum );
+        return __decide( rone, rtwo, maximum - offset ) + offset;
+    }
+
 
     /*****************************************************************
      * Internal function to decide the result based on whether or not
@@ -109,7 +161,7 @@ public class FERandom extends Random
      ****************************************************************/
     private int __st( int maxDev )
     {
-        return ( nextInt(maxDev + 1) + nextInt(maxDev + 1) - maxDev );        
+        return ( nextInt(maxDev + 1) + nextInt(maxDev + 1) - maxDev );
     }
 
     /*****************************************************************
@@ -117,7 +169,7 @@ public class FERandom extends Random
      ****************************************************************/
     private int __su( int maxDev )
     {
-        return nextInt(2 * maxDev + 1) - maxDev;        
+        return nextInt(2 * maxDev + 1) - maxDev;
     }
 
 }
