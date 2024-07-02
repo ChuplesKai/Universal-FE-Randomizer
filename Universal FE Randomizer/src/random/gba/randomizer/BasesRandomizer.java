@@ -12,12 +12,41 @@ public class BasesRandomizer
 {
 	public static int rngSalt = 9001;
 	
+	private static WeightedDistributor<Integer> statDistributor;
+	private static boolean statDistributorMade = false;
+
+
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
+	public static void MakeDistributor()
+	{
+		if(!statDistributorMade)
+		{
+			//We're going to make the Stat Distributor and put in weights
+			statDistributor = new WeightedDistributor<Integer>();
+			statDistributor.addItem( 0, 5 ); // HP
+			statDistributor.addItem( 1, 3 ); // STR
+			statDistributor.addItem( 2, 4 ); // SKL
+			statDistributor.addItem( 3, 4 ); // SPD
+			statDistributor.addItem( 4, 3 ); // LCK
+			statDistributor.addItem( 5, 2 ); // DEF
+			statDistributor.addItem( 6, 2 ); // RES
+			statDistributorMade = true; // Never need to do it again
+		}
+	}
+
+
 	/*****************************************************************
 	 * 
 	 ****************************************************************/
 	public static void randomizeBasesByRedistribution(int variance, CharacterDataLoader charactersData, ClassDataLoader classData, FERandom rng)
 	{
 		GBAFECharacterData[] allPlayableCharacters = charactersData.playableCharacters();
+		MakeDistributor();
+		//Debuggin'
+		int[] uppies = {0,0,0,0,0,0,0};
+
 		for (GBAFECharacterData character : allPlayableCharacters) 
 		{
 			int baseTotal = character.getBaseHP() + 
@@ -28,90 +57,54 @@ public class BasesRandomizer
 			int classID = character.getClassID();
 			GBAFEClassData charClass = classData.classForID(classID);
 
+			//System.out.println( String.format( "[%s - %s] :: %d", character.displayString(), charClass.displayString(), baseTotal ) );
+			
 			// Adjust the base stat total by the variance
-			baseTotal += rng.sample( variance );
+			int baseVar = rng.sample( variance ); 
+			baseTotal += baseVar;
 
-			// Start at 0, except for luck for whatever reason.			
-			int newHPBase = 0;
-			int newSTRBase = 0;
-			int newSKLBase = 0;
-			int newSPDBase = 0;
-			int newLCKBase = rng.sampleRange( 0, 4 ); //Reduced [0,6]->[0,4]
-			int newDEFBase = 0;
-			int newRESBase = 0;
-			
-			baseTotal -= newLCKBase;
-			if (baseTotal < 0) baseTotal = 0;
-			
-			if (baseTotal > 0)
+			// Bases tart at 0, except for luck.
+			int[] newBase = {0,0,0,0,rng.sampleRange( 0, 2 ),0,0};
+			// Also calculate the maximum for each base, based on class
+			int[] maxBase = {charClass.getMaxHP() - charClass.getBaseHP(), 
+					charClass.getMaxSTR() - charClass.getBaseSTR(), charClass.getMaxSKL() - charClass.getBaseSKL(),
+					charClass.getMaxSPD() - charClass.getBaseSPD(), charClass.getMaxLCK() - charClass.getBaseLCK(),
+					charClass.getMaxDEF() - charClass.getBaseDEF(), charClass.getMaxRES() - charClass.getBaseRES() };
+
+			// Then, subtract out the luck we pre-allocated (presumably for non-0 luck)
+			baseTotal = Math.max( baseTotal - newBase[4], 0 );
+			if (baseTotal > 0) // If there is work to do
 			{
-				do
+				do // Allocate bases until there are no more
 				{
-					int randomNum = rng.nextInt( 23 ); // Selecting which stat to bump
-					int amount = rng.sampleRange( 1, 3 ); // bump by 1 - 3
-					
-					switch (randomNum) {
-					case 0:
-					case 1:
-					case 2:
-					case 3:
-					case 4:
-						if (!WhyDoesJavaNotHaveThese.isValueBetween(newHPBase + amount, -1 * charClass.getBaseHP(), charClass.getMaxHP() - charClass.getBaseHP())) continue;
-						newHPBase += amount;
-						break;
-					case 5:
-					case 6:
-					case 7:
-						if (!WhyDoesJavaNotHaveThese.isValueBetween(newSTRBase + amount, -1 * charClass.getBaseSTR(), charClass.getMaxSTR() - charClass.getBaseSTR())) continue;
-						newSTRBase += amount;
-						break;
-					case 8:
-					case 9:
-					case 10:
-					case 11:
-						if (!WhyDoesJavaNotHaveThese.isValueBetween(newSKLBase + amount, -1 * charClass.getBaseSKL(), charClass.getMaxSKL() - charClass.getBaseSKL())) continue;
-						newSKLBase += amount;
-						break;
-					case 12:
-					case 13:
-					case 14:
-					case 15:
-						if (!WhyDoesJavaNotHaveThese.isValueBetween(newSPDBase + amount, -1 * charClass.getBaseSPD(), charClass.getMaxSPD() - charClass.getBaseSPD())) continue;
-						newSPDBase += amount;
-						break;
-					case 16:
-					case 17:
-					case 18:
-						if (!WhyDoesJavaNotHaveThese.isValueBetween(newLCKBase + amount, -1 * charClass.getBaseLCK(), charClass.getMaxLCK() - charClass.getBaseLCK())) continue;
-						newLCKBase += amount;
-						break;
-					case 19: 
-					case 20:
-						if (!WhyDoesJavaNotHaveThese.isValueBetween(newDEFBase + amount, -1 * charClass.getBaseDEF(), charClass.getMaxDEF() - charClass.getBaseDEF())) continue;
-						newDEFBase += amount;
-						break;
-					case 21:
-					case 22:
-						if (!WhyDoesJavaNotHaveThese.isValueBetween(newRESBase + amount, -1 * charClass.getBaseRES(), charClass.getMaxRES() - charClass.getBaseRES())) continue;
-						newRESBase += amount;
-						break;
-					}
-					
-					baseTotal -= amount;
+					// First, use the weighted distributor to select the stat
+					int sStat = statDistributor.getRandomItem( rng );
+					// We bump by 1-3, but no more than the remaining total
+					int amount = Math.min( rng.sampleRange( 1, 3 ), baseTotal );
+					// If the amount would put us over the maximum for the base, loop again
+					if( newBase[sStat] + amount > maxBase[sStat] ) continue;
+					// If we are good to apply,
+					newBase[sStat] += amount; // Add the amount to base
+					baseTotal -= amount; // And reduce our reserve of base stats
+					uppies[sStat] += 1;
 				} while (baseTotal > 0);
 			}
-			
-			character.setBaseHP(newHPBase);
-			character.setBaseSTR(newSTRBase);
-			character.setBaseSKL(newSKLBase);
-			character.setBaseSPD(newSPDBase);
-			character.setBaseLCK(newLCKBase);
-			character.setBaseDEF(newDEFBase);
-			character.setBaseRES(newRESBase);
+			// Then, slot in those bases in order
+			character.setBaseHP( newBase[0] );
+			character.setBaseSTR( newBase[1] );
+			character.setBaseSKL( newBase[2] );
+			character.setBaseSPD( newBase[3] );
+			character.setBaseLCK( newBase[4] );
+			character.setBaseDEF( newBase[5] );
+			character.setBaseRES( newBase[6] );
 		}
+
+		//Debug Print Uppies
+		System.out.println( String.format("[%d,%d,%d,%d,%d,%d,%d]", uppies[0], uppies[1], uppies[2], uppies[3], uppies[4], uppies[5], uppies[6]) );
 		
 		charactersData.commit();
 	}
+
 	
 	/*****************************************************************
 	 * 

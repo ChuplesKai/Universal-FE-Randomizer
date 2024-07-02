@@ -100,7 +100,7 @@ public class GBARandomizer extends Randomizer {
 		diffCompiler = diffs;
 
 		//Debug - just make one for now, until it's in the UI.
-		this.distributionOptions = new DistributionOptions( FERandom.randDist.TRIANGLE, false );
+		this.distributionOptions = new DistributionOptions( FERandom.randDist.TRIANGLE, true );
 		this.growths = growths;
 		this.bases = bases;
 		this.classes = classes;
