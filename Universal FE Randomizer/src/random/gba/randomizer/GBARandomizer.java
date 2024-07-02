@@ -561,25 +561,29 @@ public class GBARandomizer extends Randomizer {
 			//Weapon might (Mt.) value
 			if (weapons.mightOptions != null) {
 				updateStatusString("Randomizing weapon power...");
-				Random rng = new Random(SeedGenerator.generateSeedValue(seed, WeaponsRandomizer.rngSalt));
+				FERandom rng = new FERandom(SeedGenerator.generateSeedValue(seed, WeaponsRandomizer.rngSalt));
+				rng.initialize( distributionOptions.getDistribution(), distributionOptions.usingMemory() );
 				WeaponsRandomizer.randomizeMights(weapons.mightOptions.minValue, weapons.mightOptions.maxValue, weapons.mightOptions.variance, itemData, rng);
 			}
 			//Weapon hit value
 			if (weapons.hitOptions != null) {
 				updateStatusString("Randomizing weapon accuracy...");
-				Random rng = new Random(SeedGenerator.generateSeedValue(seed, WeaponsRandomizer.rngSalt + 1));
+				FERandom rng = new FERandom(SeedGenerator.generateSeedValue(seed, WeaponsRandomizer.rngSalt + 1));
+				rng.initialize( distributionOptions.getDistribution(), distributionOptions.usingMemory() );
 				WeaponsRandomizer.randomizeHit(weapons.hitOptions.minValue, weapons.hitOptions.maxValue, weapons.hitOptions.variance, itemData, rng);
 			}
 			//Weapon weight (Wgt.) value
 			if (weapons.weightOptions != null) {
 				updateStatusString("Randomizing weapon weights...");
-				Random rng = new Random(SeedGenerator.generateSeedValue(seed, WeaponsRandomizer.rngSalt + 2));
+				FERandom rng = new FERandom(SeedGenerator.generateSeedValue(seed, WeaponsRandomizer.rngSalt + 2));
+				rng.initialize( distributionOptions.getDistribution(), distributionOptions.usingMemory() );
 				WeaponsRandomizer.randomizeWeight(weapons.weightOptions.minValue, weapons.weightOptions.maxValue, weapons.weightOptions.variance, itemData, rng);
 			}
 			//Weapon Durability/uses value
 			if (weapons.durabilityOptions != null) {
 				updateStatusString("Randomizing weapon durability...");
-				Random rng = new Random(SeedGenerator.generateSeedValue(seed, WeaponsRandomizer.rngSalt + 3));
+				FERandom rng = new FERandom(SeedGenerator.generateSeedValue(seed, WeaponsRandomizer.rngSalt + 3));
+				rng.initialize( distributionOptions.getDistribution(), distributionOptions.usingMemory() );
 				WeaponsRandomizer.randomizeDurability(weapons.durabilityOptions.minValue, weapons.durabilityOptions.maxValue, weapons.durabilityOptions.variance, itemData, rng);
 			}
 			//Random effects like range, critical, or self-damage			

@@ -44,8 +44,6 @@ public class BasesRandomizer
 	{
 		GBAFECharacterData[] allPlayableCharacters = charactersData.playableCharacters();
 		MakeDistributor();
-		//Debuggin'
-		int[] uppies = {0,0,0,0,0,0,0};
 
 		for (GBAFECharacterData character : allPlayableCharacters) 
 		{
@@ -53,12 +51,9 @@ public class BasesRandomizer
 					character.getBaseSTR() + character.getBaseSKL() +
 					character.getBaseSPD() + character.getBaseDEF() + 
 					character.getBaseRES() + character.getBaseLCK();
-
+			// Need to pull down class information to make sure we don't go above max'es
 			int classID = character.getClassID();
 			GBAFEClassData charClass = classData.classForID(classID);
-
-			//System.out.println( String.format( "[%s - %s] :: %d", character.displayString(), charClass.displayString(), baseTotal ) );
-			
 			// Adjust the base stat total by the variance
 			int baseVar = rng.sample( variance ); 
 			baseTotal += baseVar;
@@ -86,7 +81,6 @@ public class BasesRandomizer
 					// If we are good to apply,
 					newBase[sStat] += amount; // Add the amount to base
 					baseTotal -= amount; // And reduce our reserve of base stats
-					uppies[sStat] += 1;
 				} while (baseTotal > 0);
 			}
 			// Then, slot in those bases in order
@@ -98,9 +92,6 @@ public class BasesRandomizer
 			character.setBaseDEF( newBase[5] );
 			character.setBaseRES( newBase[6] );
 		}
-
-		//Debug Print Uppies
-		System.out.println( String.format("[%d,%d,%d,%d,%d,%d,%d]", uppies[0], uppies[1], uppies[2], uppies[3], uppies[4], uppies[5], uppies[6]) );
 		
 		charactersData.commit();
 	}
