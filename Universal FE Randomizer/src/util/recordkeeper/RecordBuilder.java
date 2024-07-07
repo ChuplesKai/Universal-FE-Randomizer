@@ -103,7 +103,7 @@ public class RecordBuilder {
         if( darkMode ) // If we're outputting in dark mode, need to change these
         {
             tableDefStr = "table, th, td {\n\tborder: 1px solid #585050;\n}\n";
-            bodyStyleStr = "body {background-color: #182820; color: white;} h1 {color: white;} p {color: white;}";
+            bodyStyleStr = "body {background-color: #201810; color: white;} h1 {color: white;} p {color: white;}";
         }
 
         output.append("<html><meta http-equiv=\"Content-Type\" content = \"text/html; charset=utf-8\" /><head><style>\n")

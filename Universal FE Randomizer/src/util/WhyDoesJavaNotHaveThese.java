@@ -18,6 +18,9 @@ import java.util.List;
 
 public class WhyDoesJavaNotHaveThese {
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public static enum ComparatorResult {
 		SECOND_GREATER, EQUAL, FIRST_GREATER;
 		
@@ -31,6 +34,9 @@ public class WhyDoesJavaNotHaveThese {
 		}
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public static final Comparator<Integer> ascendingIntegerComparator = new Comparator<Integer>() {
 		@Override
 		public int compare(Integer arg0, Integer arg1) {
@@ -38,10 +44,16 @@ public class WhyDoesJavaNotHaveThese {
 		}
 	};
 
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public static int clamp(int value, int min, int max) {
 		return Math.min(max, Math.max(min, value));
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public static Boolean isValueBetween(int value, int min, int max) {
 		if (value >= min && value <= max) {
 			return true;
@@ -49,7 +61,27 @@ public class WhyDoesJavaNotHaveThese {
 		
 		return false;
 	}
+
+	/*****************************************************************
+	 * round5 - Rounds the integer to the nearest multiple of 5.
+	 ****************************************************************/
+	public static int round5( int value )
+	{
+		int rmod = value % 5; // Get the modulo 5
+		if( rmod > 2 ) // If we're close to the next-highest value
+		{
+			return value - rmod + 5; // Round up
+		}
+		else if( rmod > 0 && rmod < 3 ) // If we're close to the next lowest
+		{
+			return value - rmod; // Round down
+		}
+		return value; // Otherwise we're mod 0 and no change needed
+	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public static String displayStringForBytes(byte[] bytes) {
 		StringBuilder sb = new StringBuilder();
 		
@@ -66,6 +98,9 @@ public class WhyDoesJavaNotHaveThese {
 		return sb.toString().toUpperCase();
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public static Boolean byteArraysAreEqual(byte[] array1, byte[] array2) {
 		if (array1.length != array2.length) {
 			return false;
@@ -80,6 +115,9 @@ public class WhyDoesJavaNotHaveThese {
 		return true;
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public static Boolean byteArrayHasPrefix(byte[] array, byte[] prefix) {
 		if (prefix.length > array.length) { return false; }
 		for (int i = 0; i < prefix.length; i++) {
@@ -89,6 +127,9 @@ public class WhyDoesJavaNotHaveThese {
 		return true;
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public static Boolean byteArrayMatchesFormat(byte[] array, List<Byte> format) {
 		if (format.size() > array.length) { return false; }
 		for (int i = 0; i < format.size(); i++) {
@@ -101,10 +142,16 @@ public class WhyDoesJavaNotHaveThese {
 		return true;
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public static byte[] bytesFromPointer(long pointer) {
 		return new byte[] {(byte)((pointer >> 24) & 0xFF), (byte)((pointer >> 16) & 0xFF), (byte)((pointer >> 8 & 0xFF)), (byte)(pointer & 0xFF)};
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public static byte[] bytesFromAddress(long address) {
 		if (address <= 0x8000000) {
 			address += 0x8000000;
@@ -113,6 +160,9 @@ public class WhyDoesJavaNotHaveThese {
 		return new byte[] {(byte)(address & 0xFF), (byte)((address & 0xFF00) >> 8), (byte)((address & 0xFF0000) >> 16), (byte)((address & 0xFF000000) >> 24)};
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public static byte[] byteArrayFromByteList(List<Byte> byteList) {
 		byte[] byteArray = new byte[byteList.size()];
 		for (int i = 0; i < byteList.size(); i++) {
@@ -122,12 +172,18 @@ public class WhyDoesJavaNotHaveThese {
 		return byteArray;
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public static String stringByCapitalizingFirstLetter(String input) {
 		String firstLetter = input.substring(0, 1);
 		String remainder = input.substring(1).replace('_', ' ');
 		return firstLetter.toUpperCase() + remainder.toLowerCase();
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public static byte[] gbaAddressFromOffset(long offset) {
 		byte[] result = new byte[4];
 		long actualOffset = offset + 0x08000000;
@@ -140,7 +196,9 @@ public class WhyDoesJavaNotHaveThese {
 		return result;
 	}
 	
-	// Copies x bytes from source array into an offset destination array.
+	/*****************************************************************
+	 * Copies x bytes from source array into an offset destination array.
+	 ****************************************************************/
 	public static void copyBytesIntoByteArrayAtIndex(byte[] source, byte[] destination, int destinationOffset, int copyLength) {
 		assert destination.length >= copyLength + destinationOffset : "Attempted to copy source into destination with insufficient space";
 		assert copyLength <= source.length : "Copy length is too large for source array";
@@ -150,7 +208,9 @@ public class WhyDoesJavaNotHaveThese {
 		}
 	}
 	
-	// Copies x bytes from an offset source array into the destination array.
+	/*****************************************************************
+	 * Copies x bytes from an offset source array into the destination array.
+	 ****************************************************************/
 	public static void copyBytesFromByteArray(byte[] source, byte[] destination, int sourceOffset, int copyLength) {
 		assert source.length >= copyLength + sourceOffset : "Attempted to copy beyond the source array's bounds.";
 		assert copyLength <= destination.length : "Copy length is too large for destination array";
@@ -160,6 +220,9 @@ public class WhyDoesJavaNotHaveThese {
 		}
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public static String stringFromAsciiBytes(byte[] input) {
 		StringBuilder sb = new StringBuilder();
 		for (byte currentByte : input) {
@@ -169,6 +232,9 @@ public class WhyDoesJavaNotHaveThese {
 		return sb.toString();
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public static String stringFromShiftJIS(byte[] input) {
 		StringBuilder sb = new StringBuilder();
 		
@@ -190,6 +256,9 @@ public class WhyDoesJavaNotHaveThese {
 		return sb.toString();
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public static byte[] asciiBytesFromString(String string) {
 		byte[] byteArray = new byte[string.length()];
 		for (int i = 0; i < string.length(); i++) {
@@ -199,6 +268,9 @@ public class WhyDoesJavaNotHaveThese {
 		return byteArray;
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public static byte[] shiftJISBytesFromString(String string) {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		Writer writer = new OutputStreamWriter(out, Charset.forName("SJIS"));
@@ -214,6 +286,9 @@ public class WhyDoesJavaNotHaveThese {
 		return out.toByteArray();
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public static long longValueFromByteArray(byte[] input, boolean isLittleEndian) {
 		long offsetValue = 0;
 		long mask = 0;
@@ -241,6 +316,9 @@ public class WhyDoesJavaNotHaveThese {
 		return (offsetValue & mask);
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public static byte[] byteArrayFromLongValue(long input, boolean isLittleEndian, int numBytes) {
 		ByteArrayBuilder builder = new ByteArrayBuilder();
 		for (int i = 0; i < numBytes; i++) {
@@ -254,6 +332,9 @@ public class WhyDoesJavaNotHaveThese {
 		return builder.toByteArray();
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public static String inCamelCase(String baseString) {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < baseString.length(); i++) {
@@ -270,6 +351,9 @@ public class WhyDoesJavaNotHaveThese {
 		return sb.toString();
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public static byte[] subArray(byte[] original, int start, int length) {
 		byte[] result = new byte[length];
 		for (int i = 0; i < length; i++) {
@@ -279,6 +363,9 @@ public class WhyDoesJavaNotHaveThese {
 		return result;
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public static <T> List<T> createMutableCopy(List<T> list) {
 		List<T> copy = new ArrayList<T>();
 		for(T item : list) {
@@ -287,6 +374,9 @@ public class WhyDoesJavaNotHaveThese {
 		return copy;
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public static List<Byte> byteArrayToByteList(byte[] byteArray) {
 		List<Byte> list = new ArrayList<Byte>();
 		for (byte current : byteArray) {
@@ -295,6 +385,9 @@ public class WhyDoesJavaNotHaveThese {
 		return list;
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public static int firstIndexOfBytesInByteArray(byte[] byteArray, byte[] targetBytes, int startOffset, int maxOffset) {
 		if (startOffset >= byteArray.length || maxOffset <= startOffset) { return -1; }
 		for (int i = startOffset; i < Math.min(maxOffset, byteArray.length); i++) {

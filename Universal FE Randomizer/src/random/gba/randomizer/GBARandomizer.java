@@ -2392,7 +2392,7 @@ public class GBARandomizer extends Randomizer {
 			break;
 		}
 		
-		RecordKeeper rk = new RecordKeeper(title);		
+		RecordKeeper rk = new RecordKeeper(title);
 		rk.addHeaderItem("Game Title", gameTitle);
 
 		if (distributionOptions != null)

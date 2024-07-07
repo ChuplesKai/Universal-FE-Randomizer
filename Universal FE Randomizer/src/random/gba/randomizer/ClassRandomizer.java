@@ -27,6 +27,7 @@ import ui.model.ItemAssignmentOptions;
 import ui.model.ClassOptions.GenderRestrictionOption;
 import ui.model.ItemAssignmentOptions.WeaponReplacementPolicy;
 import util.DebugPrinter;
+import util.WhyDoesJavaNotHaveThese;
 
 public class ClassRandomizer {
 	
@@ -463,13 +464,13 @@ public class ClassRandomizer {
 			int defOffset = character.getDEFGrowth() - sourceClass.getDEFGrowth();
 			int resOffset = character.getRESGrowth() - sourceClass.getRESGrowth();
 			
-			character.setHPGrowth(Math.max(0, targetClass.getHPGrowth() + hpOffset));
-			character.setSTRGrowth(Math.max(0, targetClass.getSTRGrowth() + strOffset));
-			character.setSKLGrowth(Math.max(0, targetClass.getSKLGrowth() + sklOffset));
-			character.setSPDGrowth(Math.max(0, targetClass.getSPDGrowth() + spdOffset));
-			character.setLCKGrowth(Math.max(0, targetClass.getLCKGrowth() + lckOffset));
-			character.setDEFGrowth(Math.max(0, targetClass.getDEFGrowth() + defOffset));
-			character.setRESGrowth(Math.max(0, targetClass.getRESGrowth() + resOffset));
+			character.setHPGrowth(Math.max(0, WhyDoesJavaNotHaveThese.round5( targetClass.getHPGrowth() + hpOffset ) ));
+			character.setSTRGrowth(Math.max(0, WhyDoesJavaNotHaveThese.round5( targetClass.getSTRGrowth() + strOffset ) ));
+			character.setSKLGrowth(Math.max(0, WhyDoesJavaNotHaveThese.round5( targetClass.getSKLGrowth() + sklOffset ) ));
+			character.setSPDGrowth(Math.max(0, WhyDoesJavaNotHaveThese.round5( targetClass.getSPDGrowth() + spdOffset ) ));
+			character.setLCKGrowth(Math.max(0, WhyDoesJavaNotHaveThese.round5( targetClass.getLCKGrowth() + lckOffset ) ));
+			character.setDEFGrowth(Math.max(0, WhyDoesJavaNotHaveThese.round5( targetClass.getDEFGrowth() + defOffset ) ));
+			character.setRESGrowth(Math.max(0, WhyDoesJavaNotHaveThese.round5( targetClass.getRESGrowth() + resOffset ) ));
 			break;
 		case CLASS_RELATIVE_GROWTHS:
 			adjustGrowthsToMatchClass(character, sourceClass, targetClass);
@@ -562,13 +563,13 @@ public class ClassRandomizer {
 		List<Integer> mappedGrowths = RelativeValueMapper.mappedValues(Arrays.asList(character.getHPGrowth(), character.getSTRGrowth(), character.getSKLGrowth(), character.getSPDGrowth(), character.getDEFGrowth(), character.getRESGrowth(), character.getLCKGrowth()),
 				Arrays.asList(targetClass.getHPGrowth(), targetClass.getSTRGrowth(), targetClass.getSKLGrowth(), targetClass.getSPDGrowth(), targetClass.getDEFGrowth(), targetClass.getRESGrowth(), targetClass.getLCKGrowth()));
 		
-		character.setHPGrowth(mappedGrowths.get(0));
-		character.setSTRGrowth(mappedGrowths.get(1));
-		character.setSKLGrowth(mappedGrowths.get(2));
-		character.setSPDGrowth(mappedGrowths.get(3));
-		character.setDEFGrowth(mappedGrowths.get(4));
-		character.setRESGrowth(mappedGrowths.get(5));
-		character.setLCKGrowth(mappedGrowths.get(6));
+		character.setHPGrowth( WhyDoesJavaNotHaveThese.round5( mappedGrowths.get(0)) );
+		character.setSTRGrowth( WhyDoesJavaNotHaveThese.round5( mappedGrowths.get(1)) );
+		character.setSKLGrowth( WhyDoesJavaNotHaveThese.round5( mappedGrowths.get(2)) );
+		character.setSPDGrowth( WhyDoesJavaNotHaveThese.round5( mappedGrowths.get(3)) );
+		character.setDEFGrowth( WhyDoesJavaNotHaveThese.round5( mappedGrowths.get(4)) );
+		character.setRESGrowth( WhyDoesJavaNotHaveThese.round5( mappedGrowths.get(5)) );
+		character.setLCKGrowth( WhyDoesJavaNotHaveThese.round5( mappedGrowths.get(6)) );
 	}
 	
 	// TODO: Offer an option for sidegrade strictness?

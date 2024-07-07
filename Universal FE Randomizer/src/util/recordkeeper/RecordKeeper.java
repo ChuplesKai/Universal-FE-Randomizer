@@ -21,15 +21,27 @@ public class RecordKeeper {
 	private Map<String, RecordCategoryMap> entriesByCategory;
 	
 	private List<String> notes;
+	private boolean darkMode;
 	
-	public RecordKeeper(String title) {
+	public RecordKeeper(String title)
+	{
+		allocate(title); // Allocate and set the title
+		darkMode = true; // And set darkMode - default true
+	}
+
+	public RecordKeeper(String title, boolean dark)
+	{
+		allocate(title); // Allocate and set the title
+		darkMode = dark; // And set darkMode
+	}
+
+	private void allocate(String title)
+	{
 		allCategories = new ArrayList<>();
 		entriesByCategory = new HashMap<>();
+		notes = new ArrayList<String>();		
 		header = new RecordHeader();
 		header.title = title;
-		
-		
-		notes = new ArrayList<String>();
 	}
 	
 	public void addHeaderItem(String title, String value) {
@@ -136,7 +148,7 @@ public class RecordKeeper {
 	}
 	
 	public Boolean exportRecordsToHTML(String outputPath) {
-		RecordBuilder builder = new RecordBuilder(outputPath);
+		RecordBuilder builder = new RecordBuilder(outputPath, darkMode);
 		builder.buildHeader(header.title)
 			.appendBasicTable(header.randomizationOptions.entrySet()).appendHorizontalSpacer()
 			.appendSectionHeader("Notes", 2)
