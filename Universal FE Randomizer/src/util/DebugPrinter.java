@@ -65,8 +65,7 @@ public class DebugPrinter {
 	
 	private static Boolean shouldPrintLabel(Key label) {
 		switch (label) {
-//		case MAIN:
-		case GBA_RANDOM_RECRUITMENT:
+		case MAIN:
 			return true;
 		default:
 			return false;

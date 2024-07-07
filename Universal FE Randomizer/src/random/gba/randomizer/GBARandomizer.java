@@ -550,6 +550,7 @@ public class GBARandomizer extends Randomizer {
 				ClassRandomizer.randomizeBossCharacterClasses(classes, itemAssignmentOptions, gameType, charData, classData, chapterData, itemData, textData, rng);
 				needsPaletteFix = true;
 			}
+			System.out.println( ClassRandomizer.hasThief ? "Party has Thief/Rogue" : "No party Thief/Rogue" );
 		}
 	}
 	

@@ -32,6 +32,7 @@ import util.WhyDoesJavaNotHaveThese;
 public class ClassRandomizer {
 	
 	static final int rngSalt = 874;
+	static boolean hasThief = false;
 	
 	public static void randomizeClassMovement(int minMOV, int maxMOV, ClassDataLoader classData, Random rng) {
 		GBAFEClassData[] allClasses = classData.allClasses();
@@ -150,12 +151,19 @@ public class ClassRandomizer {
 				continue;
 			}
 			
-			DebugPrinter.log(DebugPrinter.Key.CLASS_RANDOMIZER, "Assigning character 0x" + Integer.toHexString(character.getID()).toUpperCase() + " (" + textData.getStringAtIndex(character.getNameIndex(), true) + ") to class 0x" + Integer.toHexString(targetClass.getID()) + " (" + textData.getStringAtIndex(targetClass.getNameIndex(), true) + ")");
-			
+			String targetClassName = textData.getStringAtIndex(targetClass.getNameIndex(), true).toUpperCase();
+			DebugPrinter.log(DebugPrinter.Key.CLASS_RANDOMIZER, "Assigning character 0x" + Integer.toHexString(character.getID()).toUpperCase() + " (" + textData.getStringAtIndex(character.getNameIndex(), true) + ") to class 0x" + Integer.toHexString(targetClass.getID()) + " (" + targetClassName + ")");
+
 			for (GBAFECharacterData linked : charactersData.linkedCharactersForCharacter(character)) {
 				determinedClasses.put(linked.getID(), targetClass);
 				updateCharacterToClass(options, inventoryOptions, linked, originalClass, targetClass, characterRequiresRange, characterRequiresMelee, charactersData, classData, chapterData, itemData, textData, false, rng);
 				linked.setIsLord(isLordCharacter);
+			}
+
+			// For planning purposes, report light spoilers - do we have a Thief/Rogue
+			if( targetClassName.equals("THIEF") || targetClassName.equals("ROGUE") )
+			{
+				hasThief = true;
 			}
 		}
 	}
