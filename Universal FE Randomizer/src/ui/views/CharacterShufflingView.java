@@ -291,7 +291,7 @@ public class CharacterShufflingView extends YuneView<CharacterShufflingOptions> 
 			includeFE8Button.setEnabled(false);
 			selectFilesButton.setEnabled(false);
 		} else {
-			enableButton.setSelection(true);
+			enableButton.setSelection(false);
 			
 			modeContainer.setEnabled( options.isShuffleEnabled() );
 			

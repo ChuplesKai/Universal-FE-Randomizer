@@ -30,6 +30,7 @@ public class MainView implements FileFlowDelegate {
 
     private ScrolledComposite scrollable;
     private Composite mainContainer;
+    private Composite seedROMContainer;
     private ControlListener resizeListener;
     private int screenHeight;
 
@@ -129,6 +130,9 @@ public class MainView implements FileFlowDelegate {
     }
 
 
+    /*****************************************************************
+     * 
+     ****************************************************************/
     private void resize() {
         mainShell.layout();
         mainContainer.layout();
@@ -192,6 +196,9 @@ public class MainView implements FileFlowDelegate {
         scrollable.setLayoutData(scrollableData);
     }
 
+    /*****************************************************************
+     * 
+     ****************************************************************/
     private void onGameChosen() {
         // (1) Create the View Container for the users prefered layout
         createViewContainer(OptionRecorder.getLayoutPreference());
@@ -211,6 +218,9 @@ public class MainView implements FileFlowDelegate {
         }
     }
 
+    /*****************************************************************
+     * 
+     ****************************************************************/
     private void initializeMenu() {
         Menu menuBar = mainShell.getDisplay().getMenuBar();
         if (menuBar == null) {
@@ -240,6 +250,9 @@ public class MainView implements FileFlowDelegate {
 
     }
 
+    /*****************************************************************
+     * 
+     ****************************************************************/
     private void createViewContainer(int newLayout) {
         if (viewContainer != null) {
             viewContainer.dispose();
@@ -262,6 +275,9 @@ public class MainView implements FileFlowDelegate {
     }
 
 
+    /*****************************************************************
+     * 
+     ****************************************************************/
     public void showModalProgressDialog() {
         if (!isShowingModalProgressDialog) {
             isShowingModalProgressDialog = true;
@@ -272,6 +288,9 @@ public class MainView implements FileFlowDelegate {
         }
     }
 
+    /*****************************************************************
+     * 
+     ****************************************************************/
     public void hideModalProgressDialog() {
         if (isShowingModalProgressDialog) {
             isShowingModalProgressDialog = false;
@@ -280,18 +299,28 @@ public class MainView implements FileFlowDelegate {
         }
     }
 
+    /*****************************************************************
+     * 
+     ****************************************************************/
     public void setProgressDialogText(String status) {
         progressBox.statusLabel.setText(status);
     }
 
+    /*****************************************************************
+     * 
+     ****************************************************************/
     public void setProgressDialogPercentage(Integer value) {
         progressBox.progressBar.setSelection(value);
     }
 
+    /*****************************************************************
+     * 
+     ****************************************************************/
     private void disposeAll() {
         if (romSelection != null) romSelection.dispose();
         if (romInfo != null) romInfo.dispose();
         if (seedGroup != null) seedGroup.dispose();
+        if (seedROMContainer != null) seedROMContainer.dispose();
         if (viewContainer != null) viewContainer.dispose();
         if (randomizeButton != null) randomizeButton.dispose();
     }
@@ -313,6 +342,9 @@ public class MainView implements FileFlowDelegate {
         }
     }
 
+    /*****************************************************************
+     * 
+     ****************************************************************/
     @Override
     public void onSelectedFile(String pathToFile) {
         if (pathToFile == null) {
@@ -327,11 +359,22 @@ public class MainView implements FileFlowDelegate {
         loadingModal.showRaw();
 
         // Create the groups if they don't exist yet
+        if( seedROMContainer == null ) {
+            seedROMContainer = new Composite( mainContainer, SWT.NONE );
+
+            // Try to make a column layout for this?
+            GridLayout colLayout = new GridLayout();
+            colLayout.numColumns = 2;
+            colLayout.makeColumnsEqualWidth = false;
+            colLayout.verticalSpacing = 1;
+            colLayout.horizontalSpacing = 4;
+            seedROMContainer.setLayout(colLayout);
+        }
         if (romInfo == null) {
-            romInfo = new RomInfoGroup(mainContainer);
+            romInfo = new RomInfoGroup(seedROMContainer);
         }
         if (seedGroup == null) {
-            seedGroup = new SeedGroup(mainContainer);
+            seedGroup = new SeedGroup(seedROMContainer);
         }
 
         // Create the File Handler and try parsing the rom Info from it
@@ -350,6 +393,7 @@ public class MainView implements FileFlowDelegate {
         patchingAvailable = romInfoDto.isPatchingAvailable();
         romInfo.initialize(romInfoDto);
 
+        // This is where the randomize! button gets made
         if (randomizeButton == null) {
             randomizeButton = new Button(mainContainer, SWT.PUSH);
             randomizeButton.setText("Randomize!");
@@ -358,7 +402,7 @@ public class MainView implements FileFlowDelegate {
             fD[0].setHeight(16);
             fD[0].setStyle( SWT.BOLD );
             randomizeButton.setFont( new Font(randomizeButton.getDisplay(),fD[0]) );
-            randomizeButton.setBackground( new Color( randomizeButton.getDisplay(), 255, 220, 170 ) );
+            randomizeButton.setBackground( new Color( randomizeButton.getDisplay(), 255, 195, 140 ) );
         }
 
         if (loadedGameType != GameType.UNKNOWN) {
@@ -381,6 +425,9 @@ public class MainView implements FileFlowDelegate {
     }
 
 
+    /*****************************************************************
+     * 
+     ****************************************************************/
     private MessageModal buildChecksumFailureModal(String pathToFile, FileHandler handler) {
         MessageModal checksumFailure = new MessageModal(mainShell, "Unrecognized Checksum", "Yune was unable to determine the game from the file selected.\n" + "If you know the game for the file, you may select it below.\n\nNote: Patching cannot be guaranteed, and is therefore, disabled.\n\n" + "Warning: Be aware that this file is likely untested and may cause errors.\n" + "There will be very limited support for issues from randomizing this file.");
         ModalButtonListener fe4Selection = new ModalButtonListener() {

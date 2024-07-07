@@ -52,10 +52,16 @@ public class LegacyViewContainer extends YuneViewContainer {
     private FE9EnemyBuffView fe9EnemyView;
     private FE9ClassesView fe9ClassesView;
 
+    /*****************************************************************
+     * 
+     ****************************************************************/
     public LegacyViewContainer(Composite parent, GameType loadedType) {
         super(parent, loadedType);
     }
 
+    /*****************************************************************
+     * 
+     ****************************************************************/
     @Override
     protected void compose() {
         this.setLayout(new FormLayout());
@@ -85,6 +91,9 @@ public class LegacyViewContainer extends YuneViewContainer {
         }
     }
 
+    /*****************************************************************
+     * 
+     ****************************************************************/
     private void composeFE9(){
         conAffinityView = new CONAffinityView(this);
         conAffinityView.group.setSize(200, 200);
@@ -141,107 +150,124 @@ public class LegacyViewContainer extends YuneViewContainer {
         fe9EnemyView.group.setLayoutData(enemyData);
     }
 
+    /*****************************************************************
+     * 
+     ****************************************************************/
     private void composeGBA() {
+        // Other Data (CON/Affinity)
         otherCharOptionView = new MOVCONAffinityView(this);
         otherCharOptionView.group.setSize(200, 200);
 
-        FormData otherData = new FormData();
+        FormData otherData = new FormData(); // Below Bases
         otherData.top = new FormAttachment(baseView.group, 5);
         otherData.left = new FormAttachment(baseView.group, 0, SWT.LEFT);
         otherData.right = new FormAttachment(baseView.group, 0, SWT.RIGHT);
         otherCharOptionView.group.setLayoutData(otherData);
 
+        // Misc Game Mechanics (FoW, etc.)
         miscView = new GameMechanicsView(this, type);
         miscView.group.setSize(200, 200);
 
-        FormData miscData = new FormData();
+        FormData miscData = new FormData(); // Below CON/Affinity
         miscData.top = new FormAttachment(otherCharOptionView.group, 5);
         miscData.left = new FormAttachment(otherCharOptionView.group, 0, SWT.LEFT);
         miscData.right = new FormAttachment(otherCharOptionView.group, 0, SWT.RIGHT);
         miscView.group.setLayoutData(miscData);
 
+        // Randomized Rewards
         rewardView = new RewardRandomizationView(this, type);
         rewardView.group.setSize(200, 200);
 
-        FormData rewardData = new FormData();
+        FormData rewardData = new FormData(); // Below Misc
         rewardData.top = new FormAttachment(miscView.group, 5);
         rewardData.left = new FormAttachment(miscView.group, 0, SWT.LEFT);
         rewardData.right = new FormAttachment(miscView.group, 0, SWT.RIGHT);
         rewardView.group.setLayoutData(rewardData);
 
+        // Weapon Randomization
         weaponView = new WeaponsView(this, type, 1);
         weaponView.group.setSize(200, 200);
 
-        FormData weaponData = new FormData();
+        FormData weaponData = new FormData(); // To the Right of Growths
         weaponData.top = new FormAttachment(growthView.group, 0, SWT.TOP);
         weaponData.left = new FormAttachment(growthView.group, 5);
         weaponData.bottom = new FormAttachment(100, -10);
         weaponView.group.setLayoutData(weaponData);
 
+        // Classes Randomization
         classView = new ClassesView(this, type);
         classView.group.setSize(200, 200);
 
-        FormData classData = new FormData();
+        FormData classData = new FormData(); // To the Right of Weapons
         classData.top = new FormAttachment(weaponView.group, 0, SWT.TOP);
         classData.left = new FormAttachment(weaponView.group, 5);
         classData.width = GuiUtil.DEFAULT_ITEM_WIDTH_300;
         classView.group.setLayoutData(classData);
 
+        // Enemy Buffs/Randomization
         enemyView = new EnemyBuffsView(this);
         enemyView.group.setSize(200, 200);
 
-        FormData enemyData = new FormData();
+        FormData enemyData = new FormData(); // Below Class View
         enemyData.top = new FormAttachment(classView.group, 5);
         enemyData.left = new FormAttachment(classView.group, 0, SWT.LEFT);
         enemyData.right = new FormAttachment(classView.group, 0, SWT.RIGHT);
         enemyData.bottom = new FormAttachment(100, -10);
         enemyView.group.setLayoutData(enemyData);
 
+        // Recruitment Randomization View
         recruitView = new RecruitmentView(this, type);
         recruitView.group.setSize(200, 200);
 
-        FormData recruitData = new FormData();
+        FormData recruitData = new FormData(); // To the Right of the Classes
         recruitData.top = new FormAttachment(classView.group, 0, SWT.TOP);
         recruitData.left = new FormAttachment(classView.group, 5);
         recruitView.group.setLayoutData(recruitData);
 
+        // Character Shuffling View
         characterShufflingView = new CharacterShufflingView(this, type);
         characterShufflingView.group.setSize(200, 200);
 
-        FormData characterShufflingData = new FormData();
+        FormData characterShufflingData = new FormData(); // To the Right of Recruitment
         characterShufflingData.top = new FormAttachment(recruitView.group, 0, SWT.TOP);
         characterShufflingData.left = new FormAttachment(recruitView.group, 5);
         characterShufflingData.right = new FormAttachment(100, 0);
         characterShufflingView.group.setLayoutData(characterShufflingData);
 
+        // Item Reassignment (i.e. rank of weapons and such)
         itemAssignmentView = new ItemAssignmentView(this, type);
         itemAssignmentView.group.setSize(200, 200);
 
-        FormData itemAssignData = new FormData();
+        FormData itemAssignData = new FormData(); // Below the Character Shuffling
         itemAssignData.top = new FormAttachment(characterShufflingView.group, 5);
         itemAssignData.left = new FormAttachment(characterShufflingView.group, 0, SWT.LEFT);
         itemAssignData.right = new FormAttachment(characterShufflingView.group, 0, SWT.RIGHT);
         itemAssignmentView.group.setLayoutData(itemAssignData);
 
+        // Small view for whether PRF weapons get made
         prfView = new PrfView(this);
         prfView.group.setSize(200, 200);
 
-        FormData prfViewData = new FormData();
+        FormData prfViewData = new FormData(); // Below Item Assignment
         prfViewData.top = new FormAttachment(itemAssignmentView.group, 5);
         prfViewData.left = new FormAttachment(itemAssignmentView.group, 0, SWT.LEFT);
         prfViewData.right = new FormAttachment(itemAssignmentView.group, 0, SWT.RIGHT);
         prfView.group.setLayoutData(prfViewData);
-        
+
+        // View for randomizing Stat boosters        
         statboosterView = new StatboosterView(this, type);
         statboosterView.group.setSize(200, 200);
         
-        FormData statboosterData = new FormData();
+        FormData statboosterData = new FormData(); // Below PRF view
         statboosterData.top = new FormAttachment(prfView.group, 5);
         statboosterData.left = new FormAttachment(prfView.group, 0, SWT.LEFT);
         statboosterData.right = new FormAttachment(prfView.group, 0, SWT.RIGHT);
         statboosterView.group.setLayoutData(statboosterData);
     }
 
+    /*****************************************************************
+     * 
+     ****************************************************************/
     private void composeFE4() {
         // To prevent gen 2 overflow, the max growth allowed for any single stat is 85%.
         growthView.overrideMaxGrowthAllowed(85);
@@ -312,6 +338,9 @@ public class LegacyViewContainer extends YuneViewContainer {
         rewardView.group.setLayoutData(rewardData);
     }
 
+    /*****************************************************************
+     * 
+     ****************************************************************/
     @Override
     public void preloadOptions(OptionRecorder.GBAOptionBundle bundle) {
         growthView.initialize(bundle.growths);
@@ -331,6 +360,9 @@ public class LegacyViewContainer extends YuneViewContainer {
         statboosterView.initialize(bundle.statboosterOptions);
     }
 
+    /*****************************************************************
+     * 
+     ****************************************************************/
     @Override
     public void updateOptionBundle(OptionRecorder.GBAOptionBundle bundle) {
         bundle.growths = growthView.getOptions();
@@ -350,6 +382,9 @@ public class LegacyViewContainer extends YuneViewContainer {
         bundle.characterShufflingOptions = characterShufflingView.getOptions();
     }
 
+    /*****************************************************************
+     * 
+     ****************************************************************/
     @Override
     public void preloadOptions(OptionRecorder.FE4OptionBundle bundle) {
         growthView.initialize(bundle.growths);
@@ -365,6 +400,9 @@ public class LegacyViewContainer extends YuneViewContainer {
         holyBloodView.initialize(bundle.holyBlood);
     }
 
+    /*****************************************************************
+     * 
+     ****************************************************************/
     @Override
     public void updateOptionBundle(OptionRecorder.FE4OptionBundle bundle) {
         bundle.growths = growthView.getOptions();
@@ -380,6 +418,9 @@ public class LegacyViewContainer extends YuneViewContainer {
         bundle.promo = fe4PromotionView.getOptions();
     }
 
+    /*****************************************************************
+     * 
+     ****************************************************************/
     @Override
     public void preloadOptions(OptionRecorder.FE9OptionBundle bundle) {
         growthView.initialize(bundle.growths);
@@ -395,6 +436,9 @@ public class LegacyViewContainer extends YuneViewContainer {
         fe9EnemyView.initialize(bundle.enemyBuff);
     }
 
+    /*****************************************************************
+     * 
+     ****************************************************************/
     @Override
     public void updateOptionBundle(OptionRecorder.FE9OptionBundle bundle) {
         bundle.growths = growthView.getOptions();

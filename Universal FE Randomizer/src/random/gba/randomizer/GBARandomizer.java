@@ -44,7 +44,7 @@ public class GBARandomizer extends Randomizer {
 	
 	private DiffCompiler diffCompiler;
 
-	private DistributionOptions distributionOptions;	
+	private DistributionOptions distributionOptions;
 	private GrowthOptions growths;
 	private BaseOptions bases;
 	private ClassOptions classes;
@@ -91,16 +91,16 @@ public class GBARandomizer extends Randomizer {
 			GrowthOptions growths, BaseOptions bases, ClassOptions classes, WeaponOptions weapons,
 			OtherCharacterOptions other, EnemyOptions enemies, GameMechanicOptions otherOptions,
 			RecruitmentOptions recruit, ItemAssignmentOptions itemAssign, CharacterShufflingOptions shufflingOptions, StatboosterOptions statboosterOptions, 
-			RewardOptions rewards, PrfOptions prfs, String seed) {
+			RewardOptions rewards, PrfOptions prfs, DistributionOptions dist) {
 		super();
 		this.sourcePath = sourcePath;
 		this.targetPath = targetPath;
-		this.seedString = seed;
+		this.seedString = dist.getSeed();
 		
 		diffCompiler = diffs;
 
 		//Debug - just make one for now, until it's in the UI.
-		this.distributionOptions = new DistributionOptions( FERandom.randDist.TRIANGLE, true );
+		this.distributionOptions = dist;
 		this.growths = growths;
 		this.bases = bases;
 		this.classes = classes;
@@ -2394,6 +2394,12 @@ public class GBARandomizer extends Randomizer {
 		
 		RecordKeeper rk = new RecordKeeper(title);		
 		rk.addHeaderItem("Game Title", gameTitle);
+
+		if (distributionOptions != null)
+		{
+			rk.addHeaderItem( "Sample Distribution", distributionOptions.getDistribution() == FERandom.randDist.UNIFORM ? "Uniform" : "Triangular" );
+			rk.addHeaderItem( "Streak Breaker", distributionOptions.usingMemory() ? "Enabled" : "Disabled" );
+		}
 		
 		if (growths != null) {
 			switch (growths.mode) {
@@ -2735,15 +2741,23 @@ public class GBARandomizer extends Randomizer {
 			rk.addHeaderItem("Assign Poison Weapons", itemAssignmentOptions.assignPoisonWeapons ? "YES" : "NO");
 		}
 		
-
-		if(shufflingOptions != null) {
+		if(shufflingOptions != null) 
+		{
 			StringBuilder sb = new StringBuilder();
-			sb.append(String.format("Leveling Mode: %s", shufflingOptions.getLevelingMode() == ShuffleLevelingMode.AUTOLEVEL ? "autolevel characters": "leave characters unchanged")).append("<br>");
-			sb.append(String.format("Shuffle chance: %d%%", shufflingOptions.getChance())).append("<br>");
-			sb.append(shufflingOptions.shouldChangeDescription() ? "Description will be changed" : "Description will be left unchanged").append("<br>");
-			sb.append("Included configurations:<br>");
-			for (String s : shufflingOptions.getIncludedShuffles()) {
-				sb.append(s).append("<br>");
+			if( shufflingOptions.isShuffleEnabled() )
+			{
+				sb.append(String.format("Leveling Mode: %s", shufflingOptions.getLevelingMode() == ShuffleLevelingMode.AUTOLEVEL ? "autolevel characters": "leave characters unchanged")).append("<br>");
+				sb.append(String.format("Shuffle chance: %d%%", shufflingOptions.getChance())).append("<br>");
+				sb.append(shufflingOptions.shouldChangeDescription() ? "Description will be changed" : "Description will be left unchanged").append("<br>");
+				sb.append("Included configurations:<br>");
+				for (String s : shufflingOptions.getIncludedShuffles())
+				{
+					sb.append(s).append("<br>");
+				}
+			}
+			else
+			{
+				sb.append( "NO" );
 			}
 			rk.addHeaderItem("Character Shuffling", sb.toString());
 		}

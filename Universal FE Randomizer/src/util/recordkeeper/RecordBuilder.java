@@ -11,9 +11,17 @@ import java.util.Set;
 public class RecordBuilder {
     private final String outputPath;
     private StringBuilder output = new StringBuilder();
+    private final boolean darkMode;
 
     public RecordBuilder(String path) {
         this.outputPath = path;
+        darkMode = true; //I like dark mode
+    }
+
+    public RecordBuilder(String path, boolean dark)
+    {
+        this.outputPath = path;
+        this.darkMode = dark;
     }
 
     public RecordBuilder appendBasicTable(Set<Map.Entry<String, String>> entrySet) {
@@ -90,9 +98,18 @@ public class RecordBuilder {
     }
 
     public RecordBuilder buildHeader(String title) {
+        String tableDefStr = "table, th, td {\n\tborder: 1px solid black;\n}\n";
+        String bodyStyleStr = "";
+        if( darkMode ) // If we're outputting in dark mode, need to change these
+        {
+            tableDefStr = "table, th, td {\n\tborder: 1px solid #585050;\n}\n";
+            bodyStyleStr = "body {background-color: #182820; color: white;} h1 {color: white;} p {color: white;}";
+        }
+
         output.append("<html><meta http-equiv=\"Content-Type\" content = \"text/html; charset=utf-8\" /><head><style>\n")
-                .append("table, th, td {\n\tborder: 1px solid black;\n}\n")
-                .append(".notes {\n\twidth: 66%;\n\tmargin: auto;\n}\n")
+                .append( tableDefStr )
+                .append(".notes {\n\twidth: 75%;\n\tmargin: auto;\n}\n")
+                .append( bodyStyleStr )
                 .append("</style></head><body>\n")
                 .append("<center><h1><p>Changelog for ").append(title).append("</p></h1><br>\n")
                 .append("<hr>\n");
