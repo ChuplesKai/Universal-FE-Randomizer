@@ -145,14 +145,13 @@ public class FERandom extends Random
             // We'll need an outcome and a threshold to decide "goodness"
             int thresh = (int)Math.ceil( maxDev / 2.0 ); //
             // First, use the memory results to decide the outcome
-            if( trend == 1 ) outcome = Math.min( rone, rtwo ); // Take the smaller
-            if( trend == -1 ) outcome = Math.max( rone, rtwo ); // Take the larger
+            if( trend == 2 ) outcome = Math.min( rone, rtwo ); // Take the smaller
+            if( trend == -2 ) outcome = Math.max( rone, rtwo ); // Take the larger
             //Then, update trend based on outcome being good or bad
-            if( outcome >= thresh ) trend = Math.min( trend + 1, 1 );
-            if( outcome <= -thresh ) trend = Math.max( trend - 1, -1 );
+            if( outcome >= thresh ) trend = Math.min( trend + 1, 2 );
+            if( outcome <= -thresh ) trend = Math.max( trend - 1, -2 );
             //System.out.println( String.format("Result [%d (%d,%d)]: Max/Thresh [%d - %d] with Trend [%d]", outcome, rone, rtwo, maxDev, thresh, trend) );
         }
-        // Otherwise, no memory means just return the first number.
         return outcome;
     }
 

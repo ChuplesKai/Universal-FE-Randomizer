@@ -36,10 +36,18 @@ public class WeaponsRandomizer {
 	 ****************************************************************/
 	public static void randomizeHit(int minHit, int maxHit, int variance, ItemDataLoader itemsData, FERandom rng) {
 		GBAFEItemData[] allWeapons = itemsData.getAllWeapons();
+
+		// Hit numbers are high enough and tend to be multiples of 5 to try this check
+		int mult = 1;
+		if( minHit % 5 == 0 && maxHit % 5 == 0 && variance % 5 == 0 )
+		{
+			mult = 5;
+			variance = variance / 5;
+		}
 		
 		for (GBAFEItemData weapon : allWeapons) {
 			int originalHit = weapon.getHit();
-			int newHit = originalHit + rng.sample( variance );
+			int newHit = originalHit + mult * rng.sample( variance );
 			weapon.setHit(WhyDoesJavaNotHaveThese.clamp(newHit, minHit, maxHit));
 		}
 		
@@ -51,16 +59,19 @@ public class WeaponsRandomizer {
 	 ****************************************************************/
 	public static void randomizeDurability(int minDurability, int maxDurability, int variance, ItemDataLoader itemsData, FERandom rng) {
 		GBAFEItemData[] allWeapons = itemsData.getAllWeapons();
-		
-		for (GBAFEItemData weapon : allWeapons) {
+		// For each weapon		
+		for (GBAFEItemData weapon : allWeapons)
+		{
 			int originalDurability = weapon.getDurability();
-			int newDurability = originalDurability + rng.sample( variance );
-			if (weapon.getMaxRange() == 10) {
-				// Siege Tomes get a minimum of 1 since they're normally low use.
-				weapon.setDurability(WhyDoesJavaNotHaveThese.clamp(newDurability, 1, maxDurability));
-			} else {
-				weapon.setDurability(WhyDoesJavaNotHaveThese.clamp(newDurability, minDurability, maxDurability));
+			int durVar = variance;
+			int minDur = minDurability;
+			// Siege Tomes get special handling
+			if (weapon.getMaxRange() > 5) 
+			{
+				durVar = (int)Math.ceil( (double)variance / 4.0 ); //Drop the variance down a ton
+				minDur = 1;
 			}
+			weapon.setDurability(WhyDoesJavaNotHaveThese.clamp(originalDurability + rng.sample( durVar ), minDur, maxDurability));
 		}
 		
 		itemsData.commit();
