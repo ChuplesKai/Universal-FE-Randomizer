@@ -19,9 +19,9 @@ public class GBAFEStatDto {
 	public int str;
 	public int skl;
 	public int spd;
+	public int lck;
 	public int def;
 	public int res;
-	public int lck;
 	
 	
 	/**
@@ -62,16 +62,24 @@ public class GBAFEStatDto {
 		str = args[1];
 		skl = args[2];
 		spd = args[3];
-		def = args[4];
-		res = args[5];
-		lck = args[6];
+		lck = args[4];
+		def = args[5];
+		res = args[6];
 	}
 	
 	/**
-	 * Returns the stats as a list with stats in order hp, str, skl, spd, def, res, lck
+	 * Returns the stats as a list with stats in order hp, str, skl, spd, lck, def, res
 	 */
 	public List<Integer> asList(){
-		return Arrays.asList(hp, str, skl, spd, def, res, lck);
+		return Arrays.asList(hp, str, skl, spd, lck, def, res);
+	}
+
+	/**
+	 * Return the total (sum) of this data object 
+	 */
+	public int total()
+	{
+		return hp + str + skl + spd + lck + def + res;
 	}
 	
 	/**
@@ -97,9 +105,9 @@ public class GBAFEStatDto {
 		this.str += other.str;
 		this.skl += other.skl;
 		this.spd += other.spd;
+		this.lck += other.lck;
 		this.def += other.def;
 		this.res += other.res;
-		this.lck += other.lck;
 		return this;
 	} 
 	
@@ -111,9 +119,9 @@ public class GBAFEStatDto {
 		this.str -= other.str;
 		this.skl -= other.skl;
 		this.spd -= other.spd;
+		this.lck -= other.lck;
 		this.def -= other.def;
 		this.res -= other.res;
-		this.lck -= other.lck;
 		return this;
 	} 
 	
@@ -122,13 +130,13 @@ public class GBAFEStatDto {
 	 * Clamps the stats of the current instance against the given upper and lower values
 	 */
 	public GBAFEStatDto clamp(GBAFEStatDto lower, GBAFEStatDto upper) {
-		this.hp =  WhyDoesJavaNotHaveThese.clamp(this.hp,   lower.hp , upper.hp );
-		this.str = WhyDoesJavaNotHaveThese.clamp(this.str,  lower.str, upper.str);
-		this.skl = WhyDoesJavaNotHaveThese.clamp(this.skl,  lower.skl, upper.skl);
-		this.spd = WhyDoesJavaNotHaveThese.clamp(this.spd,  lower.spd, upper.spd);
-		this.def = WhyDoesJavaNotHaveThese.clamp(this.def,  lower.def, upper.def);
-		this.res = WhyDoesJavaNotHaveThese.clamp(this.res,  lower.res, upper.res);
-		this.lck = WhyDoesJavaNotHaveThese.clamp(this.lck,  lower.lck, upper.lck);
+		this.hp =  WhyDoesJavaNotHaveThese.clamp(this.hp,  lower.hp , upper.hp );
+		this.str = WhyDoesJavaNotHaveThese.clamp(this.str, lower.str, upper.str);
+		this.skl = WhyDoesJavaNotHaveThese.clamp(this.skl, lower.skl, upper.skl);
+		this.spd = WhyDoesJavaNotHaveThese.clamp(this.spd, lower.spd, upper.spd);
+		this.lck = WhyDoesJavaNotHaveThese.clamp(this.lck, lower.lck, upper.lck);
+		this.def = WhyDoesJavaNotHaveThese.clamp(this.def, lower.def, upper.def);
+		this.res = WhyDoesJavaNotHaveThese.clamp(this.res, lower.res, upper.res);
 		
 		return this;
 	}
@@ -143,9 +151,9 @@ public class GBAFEStatDto {
 		if (o1.str > o2.str) { dao.str -= o1.str - o2.str; }
 		if (o1.skl > o2.skl) { dao.skl -= o1.skl - o2.skl; }
 		if (o1.spd > o2.spd) { dao.spd -= o1.spd - o2.spd; }
+		if (o1.lck > o2.lck) { dao.lck -= o1.lck - o2.lck; }
 		if (o1.def > o2.def) { dao.def -= o1.def - o2.def; }
 		if (o1.res > o2.res) { dao.res -= o1.res - o2.res; }
-		if (o1.lck > o2.lck) { dao.lck -= o1.lck - o2.lck; }
 		return dao;
 	}
 	
@@ -159,14 +167,14 @@ public class GBAFEStatDto {
 		if (o1.str < o2.str) { dao.str += o1.str - o2.str; }
 		if (o1.skl < o2.skl) { dao.skl += o1.skl - o2.skl; }
 		if (o1.spd < o2.spd) { dao.spd += o1.spd - o2.spd; }
+		if (o1.lck < o2.lck) { dao.lck += o1.lck - o2.lck; }
 		if (o1.def < o2.def) { dao.def += o1.def - o2.def; }
 		if (o1.res < o2.res) { dao.res += o1.res - o2.res; }
-		if (o1.lck < o2.lck) { dao.lck += o1.lck - o2.lck; }
 		return dao;
 	}
 	
 	@Override
 	public String toString() {
-		return String.format("GBAFEStatDAO: hp %d, str %d, skl %d, spd %d, def %d, res %d, lck %d", hp, str, skl, spd, def, res, lck);
+		return String.format("GBAFEStatDAO: hp %d, str %d, skl %d, spd %d, lck %d, def %d, res %d", hp, str, skl, spd, lck, def, res);
 	}
 }

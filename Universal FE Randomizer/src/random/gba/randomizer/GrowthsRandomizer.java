@@ -170,9 +170,9 @@ public class GrowthsRandomizer
 				WhyDoesJavaNotHaveThese.clamp( inputGrowths.str + (mult * rng.sample( delta )), minGrowth, maxGrowth ),
 				WhyDoesJavaNotHaveThese.clamp( inputGrowths.skl + (mult * rng.sample( delta )), minGrowth, maxGrowth ),
 				WhyDoesJavaNotHaveThese.clamp( inputGrowths.spd + (mult * rng.sample( delta )), minGrowth, maxGrowth ),
+				WhyDoesJavaNotHaveThese.clamp( inputGrowths.lck + (mult * rng.sample( delta )), minGrowth, maxGrowth ),
 				WhyDoesJavaNotHaveThese.clamp( inputGrowths.def + (mult * rng.sample( delta )), minGrowth, maxGrowth ),
-				WhyDoesJavaNotHaveThese.clamp( inputGrowths.res + (mult * rng.sample( delta )), minGrowth, maxGrowth ),
-				WhyDoesJavaNotHaveThese.clamp( inputGrowths.lck + (mult * rng.sample( delta )), minGrowth, maxGrowth )
+				WhyDoesJavaNotHaveThese.clamp( inputGrowths.res + (mult * rng.sample( delta )), minGrowth, maxGrowth )
 				);
 	}
 

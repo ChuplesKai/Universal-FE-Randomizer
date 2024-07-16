@@ -241,7 +241,7 @@ public abstract class GBAFECharacterData extends AbstractGBAData implements FELo
 	}
 	
 	public GBAFEStatDto getGrowths() {
-		return new GBAFEStatDto(getHPGrowth(), getSTRGrowth(), getSKLGrowth(), getSPDGrowth(), getDEFGrowth(), getRESGrowth(), getLCKGrowth());
+		return new GBAFEStatDto(getHPGrowth(), getSTRGrowth(), getSKLGrowth(), getSPDGrowth(), getLCKGrowth(), getDEFGrowth(), getRESGrowth());
 	}
 	
 
@@ -361,7 +361,7 @@ public abstract class GBAFECharacterData extends AbstractGBAData implements FELo
 	}
 	
 	public GBAFEStatDto getBases() {
-		return new GBAFEStatDto(getBaseHP(), getBaseSTR(), getBaseSKL(), getBaseSPD(), getBaseDEF(), getBaseRES(), getBaseLCK());
+		return new GBAFEStatDto(getBaseHP(), getBaseSTR(), getBaseSKL(), getBaseSPD(), getBaseLCK(), getBaseDEF(), getBaseRES());
 	}
 	
 	public int getSwordRank() {

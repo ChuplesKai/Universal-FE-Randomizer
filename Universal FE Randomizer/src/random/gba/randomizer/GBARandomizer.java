@@ -520,14 +520,15 @@ public class GBARandomizer extends Randomizer {
 		if (bases != null) {
 			FERandom rng = new FERandom(SeedGenerator.generateSeedValue(seed, BasesRandomizer.rngSalt));
 			rng.initialize( distributionOptions.getDistribution(), distributionOptions.usingMemory() );
-			switch (bases.mode) {
+			switch (bases.mode)
+			{
 			case REDISTRIBUTE:
 				updateStatusString("Redistributing bases...");
-				BasesRandomizer.randomizeBasesByRedistribution(bases.redistributionOption.variance, charData, classData, rng);
+				BasesRandomizer.randomizePartyBases(bases.mode, bases.redistributionOption.variance, charData, classData, rng);
 				break;
 			case DELTA:
-				updateStatusString("Applying random deltas to growths...");
-				BasesRandomizer.randomizeBasesByRandomDelta(bases.deltaOption.variance, charData, classData, rng);
+				updateStatusString("Applying random deltas to bases...");
+				BasesRandomizer.randomizePartyBases(bases.mode, bases.deltaOption.variance, charData, classData, rng);
 				break;
 			}
 		}
