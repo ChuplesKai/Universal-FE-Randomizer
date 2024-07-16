@@ -102,7 +102,7 @@ public class LZ77 {
 	
 	public static byte[] decompress(byte[] inputBytes) {
 		byte[] header = new byte[4];
-		WhyDoesJavaNotHaveThese.copyBytesIntoByteArrayAtIndex(inputBytes, header, 0, 4);
+		YuneUtil.copyBytesIntoByteArrayAtIndex(inputBytes, header, 0, 4);
 		if (header[0] != 0x10) { return null; }
 		int size = (header[1] & 0xFF) | ((header[2] & 0xFF) << 8) | ((header[3] & 0xFF) << 16);
 		
@@ -155,7 +155,7 @@ public class LZ77 {
 		byte[] compressedData = new byte[255];
 		int outputOffset = 0;
 		
-		WhyDoesJavaNotHaveThese.copyBytesIntoByteArrayAtIndex(header, compressedData, outputOffset, header.length);
+		YuneUtil.copyBytesIntoByteArrayAtIndex(header, compressedData, outputOffset, header.length);
 		outputOffset += header.length;
 		
 		byte[] currentBlock = new byte[16]; // At most we can have 16 bytes (uncompressed blocks are 1 byte, compressed blocks are 2 bytes)
@@ -184,14 +184,14 @@ public class LZ77 {
 					if (decompressed[index] == currentInputByte) {
 						int matchingLength = 0;
 						int potentialLength = Math.min(18, inputOffset - index);
-						WhyDoesJavaNotHaveThese.copyBytesFromByteArray(decompressed, potentialSequence, index, potentialLength);
+						YuneUtil.copyBytesFromByteArray(decompressed, potentialSequence, index, potentialLength);
 						while (matchingLength < 18 &&
 								inputOffset + matchingLength < decompressed.length &&
 								potentialSequence[matchingLength % potentialLength] == decompressed[inputOffset + matchingLength]) {
 							matchingLength++;
 						}
 						int actualLength = Math.min(matchingLength, potentialLength);
-						WhyDoesJavaNotHaveThese.copyBytesFromByteArray(potentialSequence, actualSequence, 0, actualLength);
+						YuneUtil.copyBytesFromByteArray(potentialSequence, actualSequence, 0, actualLength);
 						if (actualLength > 1 && matchingLength >= 3) {
 							if ((matchingLength >= longestMatchLength)) {// || (matchingLength == longestMatchLength && (inputOffset - index - 1 == 1 || actualLength >= longestSequence)))) {
 								longestMatchingIndex = index;
@@ -206,7 +206,7 @@ public class LZ77 {
 				if (longestMatchingIndex != -1 && offset > 0) {
 					index = longestMatchingIndex;
 					int sequenceLength = Math.min(inputOffset - index, 18);
-					WhyDoesJavaNotHaveThese.copyBytesFromByteArray(decompressed, sequence, index, sequenceLength);
+					YuneUtil.copyBytesFromByteArray(decompressed, sequence, index, sequenceLength);
 					// We need three matching bytes at a minimum to use compression.
 					int matchedArrayIndex = 0;
 					matchedBytes[matchedArrayIndex++] = currentInputByte;
@@ -259,7 +259,7 @@ public class LZ77 {
 				byte[] expandedData = Arrays.copyOf(compressedData, compressedData.length * 2);
 				compressedData = expandedData;
 			}
-			WhyDoesJavaNotHaveThese.copyBytesIntoByteArrayAtIndex(currentBlock, compressedData, outputOffset, blockIndex);
+			YuneUtil.copyBytesIntoByteArrayAtIndex(currentBlock, compressedData, outputOffset, blockIndex);
 			outputOffset += blockIndex;
 		}
 		
@@ -270,7 +270,7 @@ public class LZ77 {
 		}
 		
 		byte[] truncated = new byte[outputSize];
-		WhyDoesJavaNotHaveThese.copyBytesIntoByteArrayAtIndex(compressedData, truncated, 0, outputOffset);
+		YuneUtil.copyBytesIntoByteArrayAtIndex(compressedData, truncated, 0, outputOffset);
 		
 		return truncated;
 	}

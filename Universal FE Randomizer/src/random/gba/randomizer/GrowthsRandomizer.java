@@ -2,7 +2,7 @@ package random.gba.randomizer;
 
 import fedata.gba.GBAFECharacterData;
 import random.gba.loader.CharacterDataLoader;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 import random.general.FERandom;
 import fedata.gba.GBAFEStatDto;
 import ui.model.GrowthOptions;
@@ -166,13 +166,13 @@ public class GrowthsRandomizer
 	 ****************************************************************/
 	public static GBAFEStatDto randomizeDelta(int mult, int delta, int minGrowth, int maxGrowth, boolean adjustHP, GBAFEStatDto inputGrowths, FERandom rng)
 	{
-		return new GBAFEStatDto( WhyDoesJavaNotHaveThese.clamp( adjustHP ? inputGrowths.hp + (mult * rng.sample( delta )) : inputGrowths.hp, minGrowth, maxGrowth ),
-				WhyDoesJavaNotHaveThese.clamp( inputGrowths.str + (mult * rng.sample( delta )), minGrowth, maxGrowth ),
-				WhyDoesJavaNotHaveThese.clamp( inputGrowths.skl + (mult * rng.sample( delta )), minGrowth, maxGrowth ),
-				WhyDoesJavaNotHaveThese.clamp( inputGrowths.spd + (mult * rng.sample( delta )), minGrowth, maxGrowth ),
-				WhyDoesJavaNotHaveThese.clamp( inputGrowths.lck + (mult * rng.sample( delta )), minGrowth, maxGrowth ),
-				WhyDoesJavaNotHaveThese.clamp( inputGrowths.def + (mult * rng.sample( delta )), minGrowth, maxGrowth ),
-				WhyDoesJavaNotHaveThese.clamp( inputGrowths.res + (mult * rng.sample( delta )), minGrowth, maxGrowth )
+		return new GBAFEStatDto( YuneUtil.clamp( adjustHP ? inputGrowths.hp + (mult * rng.sample( delta )) : inputGrowths.hp, minGrowth, maxGrowth ),
+				YuneUtil.clamp( inputGrowths.str + (mult * rng.sample( delta )), minGrowth, maxGrowth ),
+				YuneUtil.clamp( inputGrowths.skl + (mult * rng.sample( delta )), minGrowth, maxGrowth ),
+				YuneUtil.clamp( inputGrowths.spd + (mult * rng.sample( delta )), minGrowth, maxGrowth ),
+				YuneUtil.clamp( inputGrowths.lck + (mult * rng.sample( delta )), minGrowth, maxGrowth ),
+				YuneUtil.clamp( inputGrowths.def + (mult * rng.sample( delta )), minGrowth, maxGrowth ),
+				YuneUtil.clamp( inputGrowths.res + (mult * rng.sample( delta )), minGrowth, maxGrowth )
 				);
 	}
 

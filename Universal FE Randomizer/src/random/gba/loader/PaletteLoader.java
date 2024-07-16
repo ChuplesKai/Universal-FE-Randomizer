@@ -26,7 +26,7 @@ import util.DebugPrinter;
 import util.Diff;
 import util.DiffCompiler;
 import util.FreeSpaceManager;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 import util.recordkeeper.RecordKeeper;
 
 public class PaletteLoader {
@@ -212,20 +212,20 @@ public class PaletteLoader {
 			for (FE8Data.CharacterClass characterClass : FE8Data.CharacterClass.allValidClasses) {
 				PaletteV2 classPalette = new PaletteV2(handler, FE8Data.Palette.defaultPaletteForClass(characterClass.ID));
 				DebugPrinter.log(DebugPrinter.Key.PALETTE, "Registering palette for class " + characterClass.toString() + " (" + classPalette.getOriginalCompressedLength() + " bytes)");
-				DebugPrinter.log(DebugPrinter.Key.PALETTE, WhyDoesJavaNotHaveThese.displayStringForBytes(classPalette.getCompressedData()));
+				DebugPrinter.log(DebugPrinter.Key.PALETTE, YuneUtil.displayStringForBytes(classPalette.getCompressedData()));
 				templatesV2.put(characterClass.ID, classPalette);
 			}
 			for (FE8Data.CharacterClass characterClass : FE8Data.CharacterClass.additionalClassesToPalletLoad) {
 				PaletteV2 classPalette = new PaletteV2(handler, FE8Data.Palette.defaultPaletteForClass(characterClass.ID));
 				DebugPrinter.log(DebugPrinter.Key.PALETTE, "Registering palette for class " + characterClass.toString() + " (" + classPalette.getOriginalCompressedLength() + " bytes)");
-				DebugPrinter.log(DebugPrinter.Key.PALETTE, WhyDoesJavaNotHaveThese.displayStringForBytes(classPalette.getCompressedData()));
+				DebugPrinter.log(DebugPrinter.Key.PALETTE, YuneUtil.displayStringForBytes(classPalette.getCompressedData()));
 				templatesV2.put(characterClass.ID, classPalette);
 			}
 			// Trainee classes aren't technically valid classes in other contexts, but here they are.
 			for (FE8Data.CharacterClass characterClass : FE8Data.CharacterClass.allTraineeClasses) {
 				PaletteV2 classPalette = new PaletteV2(handler, FE8Data.Palette.defaultPaletteForClass(characterClass.ID));
 				DebugPrinter.log(DebugPrinter.Key.PALETTE, "Registering palette for class " + characterClass.toString() + " (" + classPalette.getOriginalCompressedLength() + " bytes)");
-				DebugPrinter.log(DebugPrinter.Key.PALETTE, WhyDoesJavaNotHaveThese.displayStringForBytes(classPalette.getCompressedData()));
+				DebugPrinter.log(DebugPrinter.Key.PALETTE, YuneUtil.displayStringForBytes(classPalette.getCompressedData()));
 				templatesV2.put(characterClass.ID, classPalette);
 			}
 			
@@ -639,7 +639,7 @@ public class PaletteLoader {
 			for (Integer appendedPaletteID : appendedPaletteIDsV2.keySet()) {
 				PaletteV2 appendedPalette = appendedPaletteIDsV2.get(appendedPaletteID);
 				long offsetToWriteTo = baseOffset + (appendedPaletteID * entrySize);
-				byte[] bytesToWrite = WhyDoesJavaNotHaveThese.bytesFromAddress(appendedPalette.getDestinationOffset());
+				byte[] bytesToWrite = YuneUtil.bytesFromAddress(appendedPalette.getDestinationOffset());
 				compiler.addDiff(new Diff(offsetToWriteTo, bytesToWrite.length, bytesToWrite, new byte[] {0, 0, 0, 0}));
 			}
 			
@@ -658,7 +658,7 @@ public class PaletteLoader {
 			for (Integer appendedPaletteID : appendedPaletteIDsV2.keySet()) {
 				PaletteV2 appendedPalette = appendedPaletteIDsV2.get(appendedPaletteID);
 				long offsetToWriteTo = baseOffset + (appendedPaletteID * entrySize);
-				byte[] bytesToWrite = WhyDoesJavaNotHaveThese.bytesFromAddress(appendedPalette.getDestinationOffset());
+				byte[] bytesToWrite = YuneUtil.bytesFromAddress(appendedPalette.getDestinationOffset());
 				compiler.addDiff(new Diff(offsetToWriteTo, bytesToWrite.length, bytesToWrite, new byte[] {0, 0, 0, 0}));
 			}
 		}

@@ -13,7 +13,7 @@ import fedata.gba.general.PaletteColor;
 import fedata.general.FEBase.GameType;
 import fedata.general.FELockableData;
 import fedata.general.FEPrintableData;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public abstract class GBAFECharacterData extends AbstractGBAData implements FELockableData, FEPrintableData {
 	
@@ -159,7 +159,7 @@ public abstract class GBAFECharacterData extends AbstractGBAData implements FELo
 
 	public void setHPGrowth(int hpGrowth) {
 		assert !isReadOnly : "Attempted to modify a locked character.";
-		hpGrowth = WhyDoesJavaNotHaveThese.clamp(hpGrowth, 0, 255);
+		hpGrowth = YuneUtil.clamp(hpGrowth, 0, 255);
 		data[28] = (byte)(hpGrowth & 0xFF);
 		wasModified = true;
 	}
@@ -170,7 +170,7 @@ public abstract class GBAFECharacterData extends AbstractGBAData implements FELo
 
 	public void setSTRGrowth(int strGrowth) {
 		assert !isReadOnly : "Attempted to modify a locked character.";
-		strGrowth = WhyDoesJavaNotHaveThese.clamp(strGrowth, 0, 255);
+		strGrowth = YuneUtil.clamp(strGrowth, 0, 255);
 		data[29] = (byte)(strGrowth & 0xFF);
 		wasModified = true;
 	}
@@ -181,7 +181,7 @@ public abstract class GBAFECharacterData extends AbstractGBAData implements FELo
 
 	public void setSKLGrowth(int sklGrowth) {
 		assert !isReadOnly : "Attempted to modify a locked character.";
-		sklGrowth = WhyDoesJavaNotHaveThese.clamp(sklGrowth, 0, 255);
+		sklGrowth = YuneUtil.clamp(sklGrowth, 0, 255);
 		data[30] = (byte)(sklGrowth & 0xFF);
 		wasModified = true;
 	}
@@ -192,7 +192,7 @@ public abstract class GBAFECharacterData extends AbstractGBAData implements FELo
 
 	public void setSPDGrowth(int spdGrowth) {
 		assert !isReadOnly : "Attempted to modify a locked character.";
-		spdGrowth = WhyDoesJavaNotHaveThese.clamp(spdGrowth, 0, 255);
+		spdGrowth = YuneUtil.clamp(spdGrowth, 0, 255);
 		data[31] = (byte)(spdGrowth & 0xFF);
 		wasModified = true;
 	}
@@ -203,7 +203,7 @@ public abstract class GBAFECharacterData extends AbstractGBAData implements FELo
 
 	public void setDEFGrowth(int defGrowth) {
 		assert !isReadOnly : "Attempted to modify a locked character.";
-		defGrowth = WhyDoesJavaNotHaveThese.clamp(defGrowth, 0, 255);
+		defGrowth = YuneUtil.clamp(defGrowth, 0, 255);
 		data[32] = (byte)(defGrowth & 0xFF);
 		wasModified = true;
 	}
@@ -214,7 +214,7 @@ public abstract class GBAFECharacterData extends AbstractGBAData implements FELo
 
 	public void setRESGrowth(int resGrowth) {
 		assert !isReadOnly : "Attempted to modify a locked character.";
-		resGrowth = WhyDoesJavaNotHaveThese.clamp(resGrowth, 0, 255);
+		resGrowth = YuneUtil.clamp(resGrowth, 0, 255);
 		data[33] = (byte)(resGrowth & 0xFF);
 		wasModified = true;
 	}
@@ -225,7 +225,7 @@ public abstract class GBAFECharacterData extends AbstractGBAData implements FELo
 
 	public void setLCKGrowth(int lckGrowth) {
 		assert !isReadOnly : "Attempted to modify a locked character.";
-		lckGrowth = WhyDoesJavaNotHaveThese.clamp(lckGrowth, 0, 255);
+		lckGrowth = YuneUtil.clamp(lckGrowth, 0, 255);
 		data[34] = (byte)(lckGrowth & 0xFF);
 		wasModified = true;
 	}

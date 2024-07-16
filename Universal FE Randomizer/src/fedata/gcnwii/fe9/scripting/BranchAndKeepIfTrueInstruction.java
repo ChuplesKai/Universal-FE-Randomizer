@@ -1,14 +1,14 @@
 package fedata.gcnwii.fe9.scripting;
 
 import io.gcn.GCNCMBFileHandler;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class BranchAndKeepIfTrueInstruction extends ScriptInstruction {
 
 	int offset;
 	
 	public BranchAndKeepIfTrueInstruction(byte[] arg) {
-		offset = (int)(WhyDoesJavaNotHaveThese.longValueFromByteArray(arg, false) & 0xFFFF);
+		offset = (int)(YuneUtil.longValueFromByteArray(arg, false) & 0xFFFF);
 	}
 	
 	public BranchAndKeepIfTrueInstruction(int offset) { // Branches to specified offset + 1

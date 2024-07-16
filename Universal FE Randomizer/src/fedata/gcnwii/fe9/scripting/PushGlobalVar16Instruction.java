@@ -1,14 +1,14 @@
 package fedata.gcnwii.fe9.scripting;
 
 import io.gcn.GCNCMBFileHandler;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class PushGlobalVar16Instruction extends ScriptInstruction {
 
 	int globalVariableNumber;
 	
 	public PushGlobalVar16Instruction(byte[] arg) {
-		globalVariableNumber = (int)(WhyDoesJavaNotHaveThese.longValueFromByteArray(arg, false) & 0xFFFF);
+		globalVariableNumber = (int)(YuneUtil.longValueFromByteArray(arg, false) & 0xFFFF);
 	}
 	
 	public PushGlobalVar16Instruction(int globalVariableNumber) {

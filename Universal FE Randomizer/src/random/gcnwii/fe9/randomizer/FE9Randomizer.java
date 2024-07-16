@@ -19,7 +19,7 @@ import ui.model.fe9.FE9EnemyBuffOptions;
 import ui.model.fe9.FE9OtherCharacterOptions;
 import util.SeedGenerator;
 import util.recordkeeper.fe9.*;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 import java.io.IOException;
 import java.util.*;

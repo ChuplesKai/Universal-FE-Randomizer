@@ -169,7 +169,7 @@ public class FreeSpaceManager {
 	public void commitChanges(DiffCompiler compiler) {
 		for (String key : changes.keySet()) {
 			AssignedSpace assignment = changes.get(key);
-			DebugPrinter.log(DebugPrinter.Key.FREESPACE, "Commiting values " + WhyDoesJavaNotHaveThese.displayStringForBytes(assignment.value) + " to offset 0x" + Long.toHexString(assignment.offset) + " Key = " + key);
+			DebugPrinter.log(DebugPrinter.Key.FREESPACE, "Commiting values " + YuneUtil.displayStringForBytes(assignment.value) + " to offset 0x" + Long.toHexString(assignment.offset) + " Key = " + key);
 			compiler.addDiff(new Diff(assignment.offset, assignment.value.length, assignment.value, null));
 		}
 	}

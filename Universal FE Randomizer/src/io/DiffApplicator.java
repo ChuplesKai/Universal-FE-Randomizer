@@ -14,7 +14,7 @@ import util.DebugPrinter;
 import util.Diff;
 import util.DiffCompiler;
 import util.FindAndReplace;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class DiffApplicator {
 	
@@ -61,14 +61,14 @@ public class DiffApplicator {
 			byte[] newValue = currentDiff.changes;
 			
 			DebugPrinter.log(DebugPrinter.Key.DIFF, "Address: 0x" + Long.toHexString(nextAddress).toUpperCase() + " - Length: " + length + ", Old Value: " + 
-					WhyDoesJavaNotHaveThese.displayStringForBytes(oldValue) + ", New Value: " + WhyDoesJavaNotHaveThese.displayStringForBytes(newValue));
+					YuneUtil.displayStringForBytes(oldValue) + ", New Value: " + YuneUtil.displayStringForBytes(newValue));
 			
 			try {
 				resultFile.seek(nextAddress);
 				if (oldValue != null) {
 					byte[] existingValue = new byte[length];
 					resultFile.read(existingValue);
-					if (!WhyDoesJavaNotHaveThese.byteArraysAreEqual(existingValue, oldValue)) {
+					if (!YuneUtil.byteArraysAreEqual(existingValue, oldValue)) {
 						assert false;
 						failedDiffs.add(currentDiff);
 						continue;

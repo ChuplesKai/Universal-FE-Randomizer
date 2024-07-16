@@ -8,7 +8,7 @@ import random.gcnwii.fe9.loader.FE9CharacterDataLoader;
 import random.gcnwii.fe9.loader.FE9ClassDataLoader;
 import random.gcnwii.fe9.loader.FE9ClassDataLoader.StatBias;
 import random.general.WeightedDistributor;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class FE9GrowthRandomizer {
 	
@@ -175,7 +175,7 @@ public class FE9GrowthRandomizer {
 			} else if (min < character.getHPGrowth()) {
 				delta = rng.nextInt(Math.min(character.getHPGrowth() - min + 1, variance + 1));
 			}
-			character.setHPGrowth(WhyDoesJavaNotHaveThese.clamp(character.getHPGrowth() + sign * delta, min, max));
+			character.setHPGrowth(YuneUtil.clamp(character.getHPGrowth() + sign * delta, min, max));
 			
 			delta = 0;
 			sign = rng.nextInt(2) == 0 ? 1 : -1;
@@ -184,7 +184,7 @@ public class FE9GrowthRandomizer {
 			} else if (min < character.getSTRGrowth()) {
 				delta = rng.nextInt(Math.min(character.getSTRGrowth() - min + 1, variance + 1));
 			}
-			character.setSTRGrowth(WhyDoesJavaNotHaveThese.clamp(character.getSTRGrowth() + sign * delta, min, max));
+			character.setSTRGrowth(YuneUtil.clamp(character.getSTRGrowth() + sign * delta, min, max));
 			
 			delta = 0;
 			sign = rng.nextInt(2) == 0 ? 1 : -1;
@@ -193,7 +193,7 @@ public class FE9GrowthRandomizer {
 			} else if (min < character.getMAGGrowth()) {
 				delta = rng.nextInt(Math.min(character.getMAGGrowth() - min + 1, variance + 1));
 			}
-			character.setMAGGrowth(WhyDoesJavaNotHaveThese.clamp(character.getMAGGrowth() + sign * delta, min, max));
+			character.setMAGGrowth(YuneUtil.clamp(character.getMAGGrowth() + sign * delta, min, max));
 			
 			delta = 0;
 			sign = rng.nextInt(2) == 0 ? 1 : -1;
@@ -202,7 +202,7 @@ public class FE9GrowthRandomizer {
 			} else if (min < character.getSKLGrowth()) {
 				delta = rng.nextInt(Math.min(character.getSKLGrowth() - min + 1, variance + 1));
 			}
-			character.setSKLGrowth(WhyDoesJavaNotHaveThese.clamp(character.getSKLGrowth() + sign * delta, min, max));
+			character.setSKLGrowth(YuneUtil.clamp(character.getSKLGrowth() + sign * delta, min, max));
 			
 			delta = 0;
 			sign = rng.nextInt(2) == 0 ? 1 : -1;
@@ -211,7 +211,7 @@ public class FE9GrowthRandomizer {
 			} else if (min < character.getSPDGrowth()) {
 				delta = rng.nextInt(Math.min(character.getSPDGrowth() - min + 1, variance + 1));
 			}
-			character.setSPDGrowth(WhyDoesJavaNotHaveThese.clamp(character.getSPDGrowth() + sign * delta, min, max));
+			character.setSPDGrowth(YuneUtil.clamp(character.getSPDGrowth() + sign * delta, min, max));
 			
 			delta = 0;
 			sign = rng.nextInt(2) == 0 ? 1 : -1;
@@ -220,7 +220,7 @@ public class FE9GrowthRandomizer {
 			} else if (min < character.getLCKGrowth()) {
 				delta = rng.nextInt(Math.min(character.getLCKGrowth() - min + 1, variance + 1));
 			}
-			character.setLCKGrowth(WhyDoesJavaNotHaveThese.clamp(character.getLCKGrowth() + sign * delta, min, max));
+			character.setLCKGrowth(YuneUtil.clamp(character.getLCKGrowth() + sign * delta, min, max));
 			
 			delta = 0;
 			sign = rng.nextInt(2) == 0 ? 1 : -1;
@@ -229,7 +229,7 @@ public class FE9GrowthRandomizer {
 			} else if (min < character.getDEFGrowth()) {
 				delta = rng.nextInt(Math.min(character.getDEFGrowth() - min + 1, variance + 1));
 			}
-			character.setDEFGrowth(WhyDoesJavaNotHaveThese.clamp(character.getDEFGrowth() + sign * delta, min, max));
+			character.setDEFGrowth(YuneUtil.clamp(character.getDEFGrowth() + sign * delta, min, max));
 			
 			delta = 0;
 			sign = rng.nextInt(2) == 0 ? 1 : -1;
@@ -238,7 +238,7 @@ public class FE9GrowthRandomizer {
 			} else if (min < character.getRESGrowth()) {
 				delta = rng.nextInt(Math.min(character.getRESGrowth() - min + 1, variance + 1));
 			}
-			character.setRESGrowth(WhyDoesJavaNotHaveThese.clamp(character.getRESGrowth() + sign * delta, min, max));
+			character.setRESGrowth(YuneUtil.clamp(character.getRESGrowth() + sign * delta, min, max));
 			
 			if (adjustSTRMAG) {
 				FE9Class charClass = classData.classWithID(charData.getJIDForCharacter(character));

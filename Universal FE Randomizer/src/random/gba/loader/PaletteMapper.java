@@ -7,7 +7,7 @@ import java.util.Map;
 
 import fedata.gba.GBAFECharacterData;
 import util.DebugPrinter;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 // For use with FE6 and FE7 only.
 public class PaletteMapper {
@@ -281,8 +281,8 @@ public class PaletteMapper {
 	}
 
 	private Integer requestRecycledPaletteID(int sizeNeeded) {
-		if (recycledPaletteIDsBySize.keySet().stream().filter(length -> (length >= sizeNeeded)).min(WhyDoesJavaNotHaveThese.ascendingIntegerComparator).isPresent()) {
-			int bestFit = recycledPaletteIDsBySize.keySet().stream().filter(length -> (length >= sizeNeeded)).min(WhyDoesJavaNotHaveThese.ascendingIntegerComparator).get();
+		if (recycledPaletteIDsBySize.keySet().stream().filter(length -> (length >= sizeNeeded)).min(YuneUtil.ascendingIntegerComparator).isPresent()) {
+			int bestFit = recycledPaletteIDsBySize.keySet().stream().filter(length -> (length >= sizeNeeded)).min(YuneUtil.ascendingIntegerComparator).get();
 			List<Integer> paletteIDs = recycledPaletteIDsBySize.get(bestFit);
 			if (paletteIDs.isEmpty()) {
 				recycledPaletteIDsBySize.remove(bestFit);

@@ -3,7 +3,7 @@ package fedata.gcnwii.fe9;
 import java.util.Arrays;
 
 import fedata.general.FEModifiableData;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class FE9Character implements FEModifiableData {
 	
@@ -346,7 +346,7 @@ public class FE9Character implements FEModifiableData {
 	}
 	
 	public void setUnknown6Bytes(byte[] sixBytes) {
-		WhyDoesJavaNotHaveThese.copyBytesIntoByteArrayAtIndex(sixBytes, data, 0x30, 6);
+		YuneUtil.copyBytesIntoByteArrayAtIndex(sixBytes, data, 0x30, 6);
 		wasModified = true;
 	}
 	
@@ -355,7 +355,7 @@ public class FE9Character implements FEModifiableData {
 	}
 	
 	public void setLaguzTransformationStartingValue(int startingValue) {
-		startingValue = WhyDoesJavaNotHaveThese.clamp(startingValue, 0, 20);
+		startingValue = YuneUtil.clamp(startingValue, 0, 20);
 		data[0x34] = (byte)(startingValue & 0xFF);
 		wasModified = true;
 	}
@@ -365,20 +365,20 @@ public class FE9Character implements FEModifiableData {
 	}
 	
 	public void setUnknown13Bytes(byte[] eightBytes) {
-		WhyDoesJavaNotHaveThese.copyBytesIntoByteArrayAtIndex(eightBytes, data, 0x49, 13);
+		YuneUtil.copyBytesIntoByteArrayAtIndex(eightBytes, data, 0x49, 13);
 		wasModified = true;
 	}
 	
 	private long readPointerAtOffset(int offset) {
 		byte[] ptr = Arrays.copyOfRange(data, offset, offset + 4);
-		if (WhyDoesJavaNotHaveThese.byteArraysAreEqual(ptr, new byte[] {0, 0, 0, 0})) { return 0; }
+		if (YuneUtil.byteArraysAreEqual(ptr, new byte[] {0, 0, 0, 0})) { return 0; }
 		
-		return WhyDoesJavaNotHaveThese.longValueFromByteArray(ptr, false);
+		return YuneUtil.longValueFromByteArray(ptr, false);
 	}
 	
 	private void writePointerToOffset(long pointer, int offset) {
-		byte[] ptr = pointer == 0 ? new byte[] {0, 0, 0, 0} : WhyDoesJavaNotHaveThese.bytesFromPointer(pointer);
-		WhyDoesJavaNotHaveThese.copyBytesIntoByteArrayAtIndex(ptr, data, offset, 4);
+		byte[] ptr = pointer == 0 ? new byte[] {0, 0, 0, 0} : YuneUtil.bytesFromPointer(pointer);
+		YuneUtil.copyBytesIntoByteArrayAtIndex(ptr, data, offset, 4);
 	}
 	
 	public void resetData() {

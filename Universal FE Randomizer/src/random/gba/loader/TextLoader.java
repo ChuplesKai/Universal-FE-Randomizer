@@ -21,7 +21,7 @@ import util.DiffCompiler;
 import util.FileReadHelper;
 import util.FreeSpaceManager;
 import util.HuffmanHelper;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class TextLoader {
 	private FEBase.GameType gameType;
@@ -118,7 +118,7 @@ public class TextLoader {
 			long offset = freeSpace.setValue(newByteArray, "Text At Index 0x" + Integer.toHexString(index));
 			//if (gameType == GameType.FE6) { offset |= 0x80000000; } // Mark this as uncompressed.
 			long pointer = textArrayOffset + 4 * index;
-			byte[] addressBytes = WhyDoesJavaNotHaveThese.bytesFromAddress(offset);
+			byte[] addressBytes = YuneUtil.bytesFromAddress(offset);
 			compiler.addDiff(new Diff(pointer, 4, addressBytes, null));
 			
 			allStrings[index] = replacementWithCodes; // We can replace these now, since they both have codes on them.

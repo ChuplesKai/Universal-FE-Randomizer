@@ -11,7 +11,7 @@ import fedata.gcnwii.fe9.FE9ScriptScene;
 import io.FileHandler;
 import util.ByteArrayBuilder;
 import util.DebugPrinter;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class GCNCMBFileHandler extends GCNFileHandler {
 	
@@ -47,15 +47,15 @@ public class GCNCMBFileHandler extends GCNFileHandler {
 		
 		// Verify Header. This is the first 0x2C bytes.
 		byte[] header = readBytesAtOffset(0, 0x4);
-		if (WhyDoesJavaNotHaveThese.byteArrayHasPrefix(header, new byte[] {(byte)'c', (byte)'m', (byte)'b', 0})) {
+		if (YuneUtil.byteArrayHasPrefix(header, new byte[] {(byte)'c', (byte)'m', (byte)'b', 0})) {
 			byte[] nameBytes = continueReadingBytesUpToNextTerminator(0x2C);
-			name = WhyDoesJavaNotHaveThese.stringFromAsciiBytes(nameBytes);
+			name = YuneUtil.stringFromAsciiBytes(nameBytes);
 			
 			setNextReadOffset(0x24);
 			byte[] stringTableOffsetBytes = continueReadingBytes(4);
-			stringTableOffset = WhyDoesJavaNotHaveThese.longValueFromByteArray(stringTableOffsetBytes, true);
+			stringTableOffset = YuneUtil.longValueFromByteArray(stringTableOffsetBytes, true);
 			byte[] scriptTableOffsetBytes = continueReadingBytes(4);
-			scriptTableOffset = WhyDoesJavaNotHaveThese.longValueFromByteArray(scriptTableOffsetBytes, true);
+			scriptTableOffset = YuneUtil.longValueFromByteArray(scriptTableOffsetBytes, true);
 			
 			ByteArrayBuilder fullData = new ByteArrayBuilder();
 			setNextReadOffset(0);
@@ -70,7 +70,7 @@ public class GCNCMBFileHandler extends GCNFileHandler {
 			while (getNextReadOffset() < scriptTableOffset) {
 				long currentOffset = getNextReadOffset();
 				byte[] stringBytes = continueReadingBytesUpToNextTerminator(scriptTableOffset);
-				String stringValue = WhyDoesJavaNotHaveThese.stringFromShiftJIS(stringBytes);
+				String stringValue = YuneUtil.stringFromShiftJIS(stringBytes);
 				stringsByAddress.put(currentOffset, stringValue);
 				addressesByString.put(stringValue, currentOffset);
 			}
@@ -81,7 +81,7 @@ public class GCNCMBFileHandler extends GCNFileHandler {
 			int currentSceneIndex = 0;
 			
 			byte[] nextHeaderOffset = cmb_readBytesAtOffset(scriptTableOffset, 4);
-			int next = (int)WhyDoesJavaNotHaveThese.longValueFromByteArray(nextHeaderOffset, true);
+			int next = (int)YuneUtil.longValueFromByteArray(nextHeaderOffset, true);
 			
 			while (next != 0) {
 				DebugPrinter.log(DebugPrinter.Key.FE9_CHAPTER_SCRIPT, "Loading script " + currentSceneIndex);
@@ -110,7 +110,7 @@ public class GCNCMBFileHandler extends GCNFileHandler {
 					DebugPrinter.log(DebugPrinter.Key.FE9_CHAPTER_SCRIPT, "\t\tParameter: 0x" + Integer.toHexString(currentScene.getParams()[i]).toUpperCase());
 				}
 				
-				DebugPrinter.log(DebugPrinter.Key.FE9_CHAPTER_SCRIPT, "\tRaw script: " + WhyDoesJavaNotHaveThese.displayStringForBytes(currentScene.getScriptBytes()));
+				DebugPrinter.log(DebugPrinter.Key.FE9_CHAPTER_SCRIPT, "\tRaw script: " + YuneUtil.displayStringForBytes(currentScene.getScriptBytes()));
 			
 				DebugPrinter.log(DebugPrinter.Key.FE9_CHAPTER_SCRIPT, "\tDisassembled:\n" + String.join("", currentScene.getInstructions().stream().map( instruction -> {
 					return instruction.displayString() + "\n";
@@ -118,7 +118,7 @@ public class GCNCMBFileHandler extends GCNFileHandler {
 				
 				currentSceneIndex++;
 				nextHeaderOffset = cmb_readBytesAtOffset(scriptTableOffset + (currentSceneIndex * 4), 4);
-				next = (int)WhyDoesJavaNotHaveThese.longValueFromByteArray(nextHeaderOffset, true);
+				next = (int)YuneUtil.longValueFromByteArray(nextHeaderOffset, true);
 			}
 			
 			DebugPrinter.log(DebugPrinter.Key.FE9_CHAPTER_SCRIPT, "Finished loading scripts for " + getName());
@@ -153,7 +153,7 @@ public class GCNCMBFileHandler extends GCNFileHandler {
 		
 		long targetAddress = scriptTableOffset + newStringData.getBytesWritten();
 		
-		byte[] stringData = WhyDoesJavaNotHaveThese.shiftJISBytesFromString(string);
+		byte[] stringData = YuneUtil.shiftJISBytesFromString(string);
 		newStringData.appendBytes(stringData);
 		if (newStringData.getLastByteWritten() != 0) {
 			newStringData.appendByte((byte)0);
@@ -174,18 +174,18 @@ public class GCNCMBFileHandler extends GCNFileHandler {
 		ByteArrayBuilder builder = new ByteArrayBuilder();
 		
 		// Write the first 0x28 bytes. These will not have changed.
-		builder.appendBytes(WhyDoesJavaNotHaveThese.subArray(fullData, 0, 0x28));
+		builder.appendBytes(YuneUtil.subArray(fullData, 0, 0x28));
 		// The script table offset might have changed though.
 		// Pad the new string data to byte align.
 		while (newStringData.getBytesWritten() % 4 != 0) { newStringData.appendByte((byte)0); }
 		
 		// Update script table's offset in the header.
 		long newScriptTableOffset = scriptTableOffset + newStringData.getBytesWritten();
-		builder.appendBytes(WhyDoesJavaNotHaveThese.byteArrayFromLongValue(newScriptTableOffset, true, 4));
+		builder.appendBytes(YuneUtil.byteArrayFromLongValue(newScriptTableOffset, true, 4));
 		
 		// What immediately follows those offsets is the string table.
 		// Write the original string data first.
-		byte[] originalStringData = WhyDoesJavaNotHaveThese.subArray(fullData, (int)stringTableOffset, (int)(scriptTableOffset - stringTableOffset));
+		byte[] originalStringData = YuneUtil.subArray(fullData, (int)stringTableOffset, (int)(scriptTableOffset - stringTableOffset));
 		builder.appendBytes(originalStringData);
 		// Write the added string data.
 		builder.appendBytes(newStringData.toByteArray());
@@ -198,7 +198,7 @@ public class GCNCMBFileHandler extends GCNFileHandler {
 		for (FE9ScriptScene scene : scenes) {
 			int headerOffset = scene.getSceneHeaderOffset();
 			headerOffset += addedOffset;
-			builder.appendBytes(WhyDoesJavaNotHaveThese.byteArrayFromLongValue(headerOffset, true, 4));
+			builder.appendBytes(YuneUtil.byteArrayFromLongValue(headerOffset, true, 4));
 			
 			// Update offsets we will write later as well.
 			scene.setSceneHeaderOffset(headerOffset);
@@ -245,14 +245,14 @@ public class GCNCMBFileHandler extends GCNFileHandler {
 		
 		Long addressForString = addressesByString.get(string);
 		if (addressForString != null) {
-			return WhyDoesJavaNotHaveThese.byteArrayFromLongValue(addressForString - stringTableOffset, false, numBytes);
+			return YuneUtil.byteArrayFromLongValue(addressForString - stringTableOffset, false, numBytes);
 		}
 		
 		return null;
 	}
 	
 	public String stringForOffset(byte[] offsetBytes) {
-		long offsetValue = WhyDoesJavaNotHaveThese.longValueFromByteArray(offsetBytes, false) + stringTableOffset;
+		long offsetValue = YuneUtil.longValueFromByteArray(offsetBytes, false) + stringTableOffset;
 		return stringsByAddress.get(offsetValue);
 	}
 	
@@ -263,7 +263,7 @@ public class GCNCMBFileHandler extends GCNFileHandler {
 		
 		Long addressForString = addressesByString.get(string);
 		if (addressForString != null) {
-			return offsetsForBytes(WhyDoesJavaNotHaveThese.byteArrayFromLongValue(addressForString - stringTableOffset, false, 2));
+			return offsetsForBytes(YuneUtil.byteArrayFromLongValue(addressForString - stringTableOffset, false, 2));
 		}
 		
 		return null;

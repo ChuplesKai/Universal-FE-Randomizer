@@ -3,7 +3,7 @@ package fedata.gba;
 import java.util.Arrays;
 import java.util.List;
 
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 /**
  * Stat DAO for convenient setting / getting of the 7 Main Stats
@@ -130,13 +130,13 @@ public class GBAFEStatDto {
 	 * Clamps the stats of the current instance against the given upper and lower values
 	 */
 	public GBAFEStatDto clamp(GBAFEStatDto lower, GBAFEStatDto upper) {
-		this.hp =  WhyDoesJavaNotHaveThese.clamp(this.hp,  lower.hp , upper.hp );
-		this.str = WhyDoesJavaNotHaveThese.clamp(this.str, lower.str, upper.str);
-		this.skl = WhyDoesJavaNotHaveThese.clamp(this.skl, lower.skl, upper.skl);
-		this.spd = WhyDoesJavaNotHaveThese.clamp(this.spd, lower.spd, upper.spd);
-		this.lck = WhyDoesJavaNotHaveThese.clamp(this.lck, lower.lck, upper.lck);
-		this.def = WhyDoesJavaNotHaveThese.clamp(this.def, lower.def, upper.def);
-		this.res = WhyDoesJavaNotHaveThese.clamp(this.res, lower.res, upper.res);
+		this.hp =  YuneUtil.clamp(this.hp,  lower.hp , upper.hp );
+		this.str = YuneUtil.clamp(this.str, lower.str, upper.str);
+		this.skl = YuneUtil.clamp(this.skl, lower.skl, upper.skl);
+		this.spd = YuneUtil.clamp(this.spd, lower.spd, upper.spd);
+		this.lck = YuneUtil.clamp(this.lck, lower.lck, upper.lck);
+		this.def = YuneUtil.clamp(this.def, lower.def, upper.def);
+		this.res = YuneUtil.clamp(this.res, lower.res, upper.res);
 		
 		return this;
 	}

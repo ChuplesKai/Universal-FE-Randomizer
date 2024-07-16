@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 
 /*****************************************************************
@@ -28,7 +28,7 @@ public class PaletteColor implements Comparable<PaletteColor> {
 	public static final Comparator<PaletteColor> lowToHighBrightnessComparator = new Comparator<PaletteColor>() {
 		@Override
 		public int compare(PaletteColor o1, PaletteColor o2) {
-			return o1.brightness > o2.brightness ? WhyDoesJavaNotHaveThese.ComparatorResult.FIRST_GREATER.returnValue() : WhyDoesJavaNotHaveThese.ComparatorResult.SECOND_GREATER.returnValue();
+			return o1.brightness > o2.brightness ? YuneUtil.ComparatorResult.FIRST_GREATER.returnValue() : YuneUtil.ComparatorResult.SECOND_GREATER.returnValue();
 		}
 	};
 	
@@ -67,9 +67,9 @@ public class PaletteColor implements Comparable<PaletteColor> {
 	 * Constructor from RGB integers [0,255]
 	 ****************************************************************/
 	public PaletteColor(int r, int g, int b) {
-		red = (double)WhyDoesJavaNotHaveThese.clamp(r, 0, 255) / 255.0;
-		green = (double)WhyDoesJavaNotHaveThese.clamp(g, 0, 255) / 255.0;
-		blue = (double)WhyDoesJavaNotHaveThese.clamp(b, 0, 255) / 255.0;
+		red = (double)YuneUtil.clamp(r, 0, 255) / 255.0;
+		green = (double)YuneUtil.clamp(g, 0, 255) / 255.0;
+		blue = (double)YuneUtil.clamp(b, 0, 255) / 255.0;
 		
 		calculateValuesWithRGB();
 	}
@@ -123,9 +123,9 @@ public class PaletteColor implements Comparable<PaletteColor> {
 		String gByte = ("00".substring(byte4G.length()) + byte4G) + ("000".substring(byte1G.length()) + byte1G);
 		String bByte = ("000".substring(byte3B.length()) + byte3B) + ("00".substring(byte4B.length()) + byte4B);
 
-		red = (double) WhyDoesJavaNotHaveThese.clamp(8 * Integer.parseInt(rByte, 2), 0, 255) / 255.0;
-		green = (double) WhyDoesJavaNotHaveThese.clamp(8 * Integer.parseInt(gByte, 2), 0, 255) / 255.0;
-		blue = (double) WhyDoesJavaNotHaveThese.clamp(8 * Integer.parseInt(bByte, 2), 0, 255) / 255.0;
+		red = (double) YuneUtil.clamp(8 * Integer.parseInt(rByte, 2), 0, 255) / 255.0;
+		green = (double) YuneUtil.clamp(8 * Integer.parseInt(gByte, 2), 0, 255) / 255.0;
+		blue = (double) YuneUtil.clamp(8 * Integer.parseInt(bByte, 2), 0, 255) / 255.0;
 	}
 	
 	/*****************************************************************

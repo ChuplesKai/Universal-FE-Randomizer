@@ -1,14 +1,14 @@
 package fedata.gcnwii.fe9.scripting;
 
 import io.gcn.GCNCMBFileHandler;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class PushArrayRefItem16Instruction extends ScriptInstruction {
 
 	int pointerVariable;
 	
 	public PushArrayRefItem16Instruction(byte[] arg) {
-		pointerVariable = (int)(WhyDoesJavaNotHaveThese.longValueFromByteArray(arg, false) & 0xFFFF);
+		pointerVariable = (int)(YuneUtil.longValueFromByteArray(arg, false) & 0xFFFF);
 	}
 	
 	public PushArrayRefItem16Instruction(int pointerVariable) {

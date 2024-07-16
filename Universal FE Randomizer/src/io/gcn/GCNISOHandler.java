@@ -16,7 +16,7 @@ import io.FileHandler;
 import io.FileWriter;
 import util.DebugPrinter;
 import util.DiffCompiler;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 enum GCNFSTEntryType {
 	ROOT, FILE, DIRECTORY
@@ -45,31 +45,31 @@ public class GCNISOHandler {
 		// GCN ISOs have a DVD magic word of 0xC239F3D at address 0x1C.
 		// Check for this, and if it doesn't match, throw an exception.
 		byte[] dvdMagic = handler.readBytesAtOffset(0x1C, 4);
-		if (!WhyDoesJavaNotHaveThese.byteArraysAreEqual(dvdMagic, new byte[] {(byte)0xC2, 0x33, (byte)0x9F, 0x3D})) {
+		if (!YuneUtil.byteArraysAreEqual(dvdMagic, new byte[] {(byte)0xC2, 0x33, (byte)0x9F, 0x3D})) {
 			throw new GCNISOException("DVD Magic not found. Invalid Gamecube ISO file.");
 		}
 		
 		// Game code is found in the first 4 bytes. Maker Code is the next 2 bytes after that.
 		// We consider game code as the combination of both (ex. GFEE01 for FE9 USA).
-		gameCode = WhyDoesJavaNotHaveThese.stringFromAsciiBytes(handler.readBytesAtOffset(0, 6));
+		gameCode = YuneUtil.stringFromAsciiBytes(handler.readBytesAtOffset(0, 6));
 		
 		// Game name is a variable length string starting from 0x20. It can be a max of
 		// 0x3E0 characters, for some reason.
 		handler.setNextReadOffset(0x20);
-		gameName = WhyDoesJavaNotHaveThese.stringFromAsciiBytes(handler.continueReadingBytesUpToNextTerminator(0x3FF));
+		gameName = YuneUtil.stringFromAsciiBytes(handler.continueReadingBytesUpToNextTerminator(0x3FF));
 		
 		// fst.bin is the file that gives the metadata for the file system of the ISO.
 		// Its offset is located at 0x424 and is 4 bytes long.
-		fstOffset = WhyDoesJavaNotHaveThese.longValueFromByteArray(handler.readBytesAtOffset(0x424, 4), false);
+		fstOffset = YuneUtil.longValueFromByteArray(handler.readBytesAtOffset(0x424, 4), false);
 		// The next 4 bytes are the length of fst.bin.
-		fstSize = WhyDoesJavaNotHaveThese.longValueFromByteArray(handler.readBytesAtOffset(0x428, 4), false);
+		fstSize = YuneUtil.longValueFromByteArray(handler.readBytesAtOffset(0x428, 4), false);
 		
 		// The first entry in fst.bin is the root.
 		// Technically a directory, but different because it holds the number of entries in the FST.
 		// Each entry is 0xC in length.
 		byte[] rootEntryData = handler.readBytesAtOffset(fstOffset, 0xC);
 		byte[] numEntriesData = Arrays.copyOfRange(rootEntryData, 0x8, 0xC);
-		fstEntryCount = WhyDoesJavaNotHaveThese.longValueFromByteArray(numEntriesData, false);
+		fstEntryCount = YuneUtil.longValueFromByteArray(numEntriesData, false);
 		
 		// What follows the entries is the strings table to determine filenames.
 		fstStringTableOffset = fstEntryCount * 0xC + fstOffset;
@@ -104,7 +104,7 @@ public class GCNISOHandler {
 			byte[] flagData = handler.continueReadingBytes(0x1);
 			byte flags = flagData[0];
 			byte[] filenameData = handler.continueReadingBytes(0x3);
-			long filenameOffset = WhyDoesJavaNotHaveThese.longValueFromByteArray(filenameData, false);
+			long filenameOffset = YuneUtil.longValueFromByteArray(filenameData, false);
 			
 			if (flags == 0x00) { // This is a file entry.
 				GCNFSTFileEntry fileEntry = new GCNFSTFileEntry();
@@ -112,9 +112,9 @@ public class GCNISOHandler {
 				fileEntry.entryOffset = currentOffset;
 				fileEntry.nameOffset = filenameOffset;
 				byte[] offsetData = handler.continueReadingBytes(0x4);
-				fileEntry.fileOffset = WhyDoesJavaNotHaveThese.longValueFromByteArray(offsetData, false);
+				fileEntry.fileOffset = YuneUtil.longValueFromByteArray(offsetData, false);
 				byte[] sizeData = handler.continueReadingBytes(0x4);
-				fileEntry.fileSize = WhyDoesJavaNotHaveThese.longValueFromByteArray(sizeData, false);
+				fileEntry.fileSize = YuneUtil.longValueFromByteArray(sizeData, false);
 				
 				// Just to be safe, set the updated offsets to be the same.
 				// This is to make sure we make a distinction between where we read from and where we write to,
@@ -135,9 +135,9 @@ public class GCNISOHandler {
 				dirEntry.entryOffset = currentOffset;
 				dirEntry.nameOffset = filenameOffset;
 				byte[] parentOffsetIndex = handler.continueReadingBytes(0x4);
-				dirEntry.parentOffset = WhyDoesJavaNotHaveThese.longValueFromByteArray(parentOffsetIndex, false);
+				dirEntry.parentOffset = YuneUtil.longValueFromByteArray(parentOffsetIndex, false);
 				byte[] nextOffsetIndex = handler.continueReadingBytes(0x4);
-				dirEntry.nextOffset = WhyDoesJavaNotHaveThese.longValueFromByteArray(nextOffsetIndex, false);
+				dirEntry.nextOffset = YuneUtil.longValueFromByteArray(nextOffsetIndex, false);
 				
 				currentDirectory.childEntries.add(dirEntry);
 				dirEntry.parentEntry = currentDirectory;
@@ -474,7 +474,7 @@ public class GCNISOHandler {
 		long oldReadOffset = handler.getNextReadOffset();
 		handler.setNextReadOffset(fstStringTableOffset + nameOffset);
 		byte[] nameData = handler.continueReadingBytesUpToNextTerminator(fstOffset + fstSize);
-		String name = WhyDoesJavaNotHaveThese.stringFromAsciiBytes(nameData);
+		String name = YuneUtil.stringFromAsciiBytes(nameData);
 		handler.setNextReadOffset(oldReadOffset);
 		return name;
 	}

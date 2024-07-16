@@ -8,7 +8,7 @@ import fedata.gba.general.WeaponRank;
 import fedata.gba.general.WeaponRanks;
 import fedata.gba.general.WeaponType;
 import fedata.general.FEPrintableData;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public abstract class GBAFEClassData extends AbstractGBAData implements FEPrintableData {
 	
@@ -69,7 +69,7 @@ public abstract class GBAFEClassData extends AbstractGBAData implements FEPrinta
 	}
 
 	public void setHPGrowth(int hpGrowth) {
-		hpGrowth = WhyDoesJavaNotHaveThese.clamp(hpGrowth, 0, 255);
+		hpGrowth = YuneUtil.clamp(hpGrowth, 0, 255);
 		data[27] = (byte)(hpGrowth & 0xFF);
 		wasModified = true;
 	}
@@ -79,7 +79,7 @@ public abstract class GBAFEClassData extends AbstractGBAData implements FEPrinta
 	}
 
 	public void setSTRGrowth(int strGrowth) {
-		strGrowth = WhyDoesJavaNotHaveThese.clamp(strGrowth, 0, 255);
+		strGrowth = YuneUtil.clamp(strGrowth, 0, 255);
 		data[28] = (byte)(strGrowth & 0xFF);
 		wasModified = true;
 	}
@@ -89,7 +89,7 @@ public abstract class GBAFEClassData extends AbstractGBAData implements FEPrinta
 	}
 
 	public void setSKLGrowth(int sklGrowth) {
-		sklGrowth = WhyDoesJavaNotHaveThese.clamp(sklGrowth, 0, 255);
+		sklGrowth = YuneUtil.clamp(sklGrowth, 0, 255);
 		data[29] = (byte)(sklGrowth & 0xFF);
 		wasModified = true;
 	}
@@ -99,7 +99,7 @@ public abstract class GBAFEClassData extends AbstractGBAData implements FEPrinta
 	}
 
 	public void setSPDGrowth(int spdGrowth) {
-		spdGrowth = WhyDoesJavaNotHaveThese.clamp(spdGrowth, 0, 255);
+		spdGrowth = YuneUtil.clamp(spdGrowth, 0, 255);
 		data[30] = (byte)(spdGrowth & 0xFF);
 		wasModified = true;
 	}
@@ -109,7 +109,7 @@ public abstract class GBAFEClassData extends AbstractGBAData implements FEPrinta
 	}
 
 	public void setDEFGrowth(int defGrowth) {
-		defGrowth = WhyDoesJavaNotHaveThese.clamp(defGrowth, 0, 255);
+		defGrowth = YuneUtil.clamp(defGrowth, 0, 255);
 		data[31] = (byte)(defGrowth & 0xFF);
 		wasModified = true;
 	}
@@ -119,7 +119,7 @@ public abstract class GBAFEClassData extends AbstractGBAData implements FEPrinta
 	}
 
 	public void setRESGrowth(int resGrowth) {
-		resGrowth = WhyDoesJavaNotHaveThese.clamp(resGrowth, 0, 255);
+		resGrowth = YuneUtil.clamp(resGrowth, 0, 255);
 		data[32] = (byte)(resGrowth & 0xFF);
 		wasModified = true;
 	}
@@ -129,7 +129,7 @@ public abstract class GBAFEClassData extends AbstractGBAData implements FEPrinta
 	}
 
 	public void setLCKGrowth(int lckGrowth) {
-		lckGrowth = WhyDoesJavaNotHaveThese.clamp(lckGrowth, 0, 255);
+		lckGrowth = YuneUtil.clamp(lckGrowth, 0, 255);
 		data[33] = (byte)(lckGrowth & 0xFF);
 		wasModified = true;
 	}
@@ -420,7 +420,7 @@ public abstract class GBAFEClassData extends AbstractGBAData implements FEPrinta
 	}
 
 	public void setMOV(int newMOV) {
-		newMOV = WhyDoesJavaNotHaveThese.clamp(newMOV, 0, 15);
+		newMOV = YuneUtil.clamp(newMOV, 0, 15);
 		data[18] = (byte)(newMOV & 0xFF);
 		wasModified = true;
 	}

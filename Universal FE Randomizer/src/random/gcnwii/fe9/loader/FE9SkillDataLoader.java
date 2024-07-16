@@ -21,7 +21,7 @@ import io.gcn.GCNISOException;
 import io.gcn.GCNISOHandler;
 import util.DebugPrinter;
 import util.Diff;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class FE9SkillDataLoader {
 	
@@ -187,7 +187,7 @@ public class FE9SkillDataLoader {
 		if (pointer == 0) { return "(null)"; }
 		handler.setNextReadOffset(pointer);
 		byte[] bytes = handler.continueReadingBytesUpToNextTerminator(pointer + 0xFF);
-		String identifier = WhyDoesJavaNotHaveThese.stringFromShiftJIS(bytes);
+		String identifier = YuneUtil.stringFromShiftJIS(bytes);
 		String resolvedValue = commonTextLoader.textStringForIdentifier(identifier);
 		if (resolvedValue != null) {
 			return identifier + " (" + resolvedValue + ")";
@@ -199,7 +199,7 @@ public class FE9SkillDataLoader {
 	private long pointerAtPointer(long pointer, GCNFileHandler handler) {
 		if (pointer == 0) { return 0; }
 		handler.setNextReadOffset(pointer);
-		long nextPointer = WhyDoesJavaNotHaveThese.longValueFromByteArray(handler.continueReadingBytes(4), false);
+		long nextPointer = YuneUtil.longValueFromByteArray(handler.continueReadingBytes(4), false);
 		return nextPointer + 0x20;
 	}
 	
@@ -207,7 +207,7 @@ public class FE9SkillDataLoader {
 		if (pointer == 0) { return "(null)"; }
 		handler.setNextReadOffset(pointer);
 		byte[] bytes = handler.continueReadingBytesUpToNextTerminator(pointer + 0xFF);
-		return WhyDoesJavaNotHaveThese.displayStringForBytes(bytes) + " (" + WhyDoesJavaNotHaveThese.stringFromAsciiBytes(bytes) + ")";
+		return YuneUtil.displayStringForBytes(bytes) + " (" + YuneUtil.stringFromAsciiBytes(bytes) + ")";
 	}
 	
 	public void commit() {

@@ -11,7 +11,7 @@ import random.gcnwii.fe9.loader.FE9ItemDataLoader.WeaponEffect;
 import random.gcnwii.fe9.loader.FE9ItemDataLoader.WeaponType;
 import random.general.WeightedDistributor;
 import ui.model.WeaponEffectOptions;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class FE9WeaponRandomizer {
 	
@@ -24,7 +24,7 @@ public class FE9WeaponRandomizer {
 			if (itemData.isBlacklisted(item)) { continue; }
 			if (!itemData.isWeapon(item) || itemData.isStaff(item)) { continue; }
 			int factor = rng.nextInt(2) == 0 ? 1 : -1;
-			item.setItemMight(WhyDoesJavaNotHaveThese.clamp(item.getItemMight() + (rng.nextInt(variance + 1) * factor), min, max));
+			item.setItemMight(YuneUtil.clamp(item.getItemMight() + (rng.nextInt(variance + 1) * factor), min, max));
 			item.commitChanges();
 		}
 	}
@@ -36,7 +36,7 @@ public class FE9WeaponRandomizer {
 			if (itemData.isBlacklisted(item)) { continue; }
 			if (!itemData.isWeapon(item) || itemData.isStaff(item)) { continue; }
 			int factor = rng.nextInt(2) == 0 ? 1 : -1;
-			item.setItemAccuracy(WhyDoesJavaNotHaveThese.clamp(item.getItemAccuracy() + (rng.nextInt(variance + 1) * factor), min, max));
+			item.setItemAccuracy(YuneUtil.clamp(item.getItemAccuracy() + (rng.nextInt(variance + 1) * factor), min, max));
 			item.commitChanges();
 		}
 	}
@@ -48,7 +48,7 @@ public class FE9WeaponRandomizer {
 			if (itemData.isBlacklisted(item)) { continue; }
 			if (!itemData.isWeapon(item) || itemData.isStaff(item)) { continue; }
 			int factor = rng.nextInt(2) == 0 ? 1 : -1;
-			item.setItemWeight(WhyDoesJavaNotHaveThese.clamp(item.getItemWeight() + (rng.nextInt(variance + 1) * factor), min, max));
+			item.setItemWeight(YuneUtil.clamp(item.getItemWeight() + (rng.nextInt(variance + 1) * factor), min, max));
 			item.commitChanges();
 		}
 	}
@@ -61,7 +61,7 @@ public class FE9WeaponRandomizer {
 			if (!itemData.isWeapon(item) || itemData.isStaff(item)) { continue; }
 			if (itemData.isSiegeTome(item)) { continue; }
 			int factor = rng.nextInt(2) == 0 ? 1 : -1;
-			item.setItemDurability(WhyDoesJavaNotHaveThese.clamp(item.getItemDurability() + (rng.nextInt(variance + 1) * factor), min, max));
+			item.setItemDurability(YuneUtil.clamp(item.getItemDurability() + (rng.nextInt(variance + 1) * factor), min, max));
 			item.commitChanges();
 		}
 	}

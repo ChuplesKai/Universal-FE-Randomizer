@@ -12,7 +12,7 @@ import fedata.gcnwii.fe9.FE9TextEntry;
 import io.FileHandler;
 import util.ByteArrayBuilder;
 import util.DebugPrinter;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class GCNMessageFileHandler extends GCNFileHandler {
 	
@@ -79,8 +79,8 @@ public class GCNMessageFileHandler extends GCNFileHandler {
 		
 		builtData = rawData;
 		
-		entryStartingOffset = WhyDoesJavaNotHaveThese.longValueFromByteArray(mess_readBytesAtOffset(0x4, 4), false) + 0x20;
-		int count = (int)WhyDoesJavaNotHaveThese.longValueFromByteArray(mess_readBytesAtOffset(0xC, 4), false);
+		entryStartingOffset = YuneUtil.longValueFromByteArray(mess_readBytesAtOffset(0x4, 4), false) + 0x20;
+		int count = (int)YuneUtil.longValueFromByteArray(mess_readBytesAtOffset(0xC, 4), false);
 		
 		long idStartOffset = entryStartingOffset + (count * FE9Data.CommonTextEntrySize);
 		
@@ -91,12 +91,12 @@ public class GCNMessageFileHandler extends GCNFileHandler {
 			
 			long idOffset = textEntry.getIDOffset() + idStartOffset;
 			byte[] idBytes = mess_readUntilTerminator(idOffset);
-			String identifier = WhyDoesJavaNotHaveThese.stringFromShiftJIS(idBytes);
+			String identifier = YuneUtil.stringFromShiftJIS(idBytes);
 			long valueOffset = textEntry.getStringOffset();
 			orderedIDs.add(new StringEntry(identifier, (int)valueOffset - 0x20, (int)idOffset, i));
 			
 			byte[] stringData = mess_readUntilTerminator(valueOffset);
-			String result = WhyDoesJavaNotHaveThese.stringFromShiftJIS(stringData);
+			String result = YuneUtil.stringFromShiftJIS(stringData);
 			idToDisplayString.put(identifier, result);
 			
 			DebugPrinter.log(DebugPrinter.Key.FE9_TEXT_LOADER, "Loaded text entry: " + identifier + " (" + result + ")");
@@ -111,8 +111,8 @@ public class GCNMessageFileHandler extends GCNFileHandler {
 		orderedIDs = new ArrayList<StringEntry>();
 		idToDisplayString = new HashMap<String, String>();
 		
-		entryStartingOffset = WhyDoesJavaNotHaveThese.longValueFromByteArray(readBytesAtOffset(0x4, 4), false) + 0x20;
-		int count = (int)WhyDoesJavaNotHaveThese.longValueFromByteArray(readBytesAtOffset(0xC, 4), false);
+		entryStartingOffset = YuneUtil.longValueFromByteArray(readBytesAtOffset(0x4, 4), false) + 0x20;
+		int count = (int)YuneUtil.longValueFromByteArray(readBytesAtOffset(0xC, 4), false);
 		
 		long idStartOffset = entryStartingOffset + (count * FE9Data.CommonTextEntrySize);
 		
@@ -124,13 +124,13 @@ public class GCNMessageFileHandler extends GCNFileHandler {
 			long idOffset = textEntry.getIDOffset() + idStartOffset;
 			setNextReadOffset(idOffset);
 			byte[] idBytes = continueReadingBytesUpToNextTerminator(idOffset + 0xFF);
-			String identifier = WhyDoesJavaNotHaveThese.stringFromShiftJIS(idBytes);
+			String identifier = YuneUtil.stringFromShiftJIS(idBytes);
 			long valueOffset = textEntry.getStringOffset();
 			orderedIDs.add(new StringEntry(identifier, (int)valueOffset, (int)idOffset, i));
 			
 			setNextReadOffset(valueOffset);
 			byte[] stringData = continueReadingBytesUpToNextTerminator(valueOffset + 0xFFFF);
-			String result = WhyDoesJavaNotHaveThese.stringFromShiftJIS(stringData);
+			String result = YuneUtil.stringFromShiftJIS(stringData);
 			idToDisplayString.put(identifier, result);
 			
 			DebugPrinter.log(DebugPrinter.Key.FE9_TEXT_LOADER, "Loaded text entry: " + identifier + " (" + result + ")");
@@ -190,7 +190,7 @@ public class GCNMessageFileHandler extends GCNFileHandler {
 		
 		// The next four bytes are the number of entries.
 		long numberOfEntries = orderedIDs.size() + stringsToAdd.size();
-		builder.appendBytes(WhyDoesJavaNotHaveThese.byteArrayFromLongValue(numberOfEntries, false, 4));
+		builder.appendBytes(YuneUtil.byteArrayFromLongValue(numberOfEntries, false, 4));
 		
 		// The remaining bytes are 0 until the start of the (byte-aligned) raw strings.
 		builder.appendBytes(new byte[] {0, 0, 0, 0,
@@ -211,7 +211,7 @@ public class GCNMessageFileHandler extends GCNFileHandler {
 			while (valueBuilder.getBytesWritten() % 4 != 0) { valueBuilder.appendByte((byte)0); }
 			
 			valueOffsetsByID.put(id, valueBuilder.getBytesWritten());
-			valueBuilder.appendBytes(WhyDoesJavaNotHaveThese.shiftJISBytesFromString(idToDisplayString.get(id)));
+			valueBuilder.appendBytes(YuneUtil.shiftJISBytesFromString(idToDisplayString.get(id)));
 			valueBuilder.appendByte((byte)0);
 		}
 		
@@ -220,7 +220,7 @@ public class GCNMessageFileHandler extends GCNFileHandler {
 			String addedString = stringsToAdd.get(addedStringID);
 			while (valueBuilder.getBytesWritten() % 4 != 0) { valueBuilder.appendByte((byte)0); }
 			valueOffsetsByID.put(addedStringID, valueBuilder.getBytesWritten());
-			valueBuilder.appendBytes(WhyDoesJavaNotHaveThese.shiftJISBytesFromString(addedString));
+			valueBuilder.appendBytes(YuneUtil.shiftJISBytesFromString(addedString));
 			valueBuilder.appendByte((byte)0);
 		}
 		
@@ -232,14 +232,14 @@ public class GCNMessageFileHandler extends GCNFileHandler {
 		for (StringEntry entry : orderedIDs) {
 			String id = entry.identifier;
 			idOffsetsByID.put(id, idBuilder.getBytesWritten());
-			idBuilder.appendBytes(WhyDoesJavaNotHaveThese.shiftJISBytesFromString(id));
+			idBuilder.appendBytes(YuneUtil.shiftJISBytesFromString(id));
 			idBuilder.appendByte((byte)0);
 		}
 		
 		// Add new string IDs here.
 		for (String addedStringID : stringsToAdd.keySet()) {
 			idOffsetsByID.put(addedStringID, idBuilder.getBytesWritten());
-			idBuilder.appendBytes(WhyDoesJavaNotHaveThese.shiftJISBytesFromString(addedStringID));
+			idBuilder.appendBytes(YuneUtil.shiftJISBytesFromString(addedStringID));
 			idBuilder.appendByte((byte)0);
 		}
 		
@@ -249,14 +249,14 @@ public class GCNMessageFileHandler extends GCNFileHandler {
 		ByteArrayBuilder pointerBuilder = new ByteArrayBuilder();
 		for (StringEntry entry : orderedIDs) {
 			String identifier = entry.identifier;
-			pointerBuilder.appendBytes(WhyDoesJavaNotHaveThese.byteArrayFromLongValue(valueOffsetsByID.get(identifier), false, 4));
-			pointerBuilder.appendBytes(WhyDoesJavaNotHaveThese.byteArrayFromLongValue(idOffsetsByID.get(identifier), false, 4));
+			pointerBuilder.appendBytes(YuneUtil.byteArrayFromLongValue(valueOffsetsByID.get(identifier), false, 4));
+			pointerBuilder.appendBytes(YuneUtil.byteArrayFromLongValue(idOffsetsByID.get(identifier), false, 4));
 		}
 		
 		// Add pointers for added strings.
 		for (String addedID : stringsToAdd.keySet()) {
-			pointerBuilder.appendBytes(WhyDoesJavaNotHaveThese.byteArrayFromLongValue(valueOffsetsByID.get(addedID), false, 4));
-			pointerBuilder.appendBytes(WhyDoesJavaNotHaveThese.byteArrayFromLongValue(idOffsetsByID.get(addedID), false, 4));
+			pointerBuilder.appendBytes(YuneUtil.byteArrayFromLongValue(valueOffsetsByID.get(addedID), false, 4));
+			pointerBuilder.appendBytes(YuneUtil.byteArrayFromLongValue(idOffsetsByID.get(addedID), false, 4));
 		}
 		
 		// Compile them all together.
@@ -267,9 +267,9 @@ public class GCNMessageFileHandler extends GCNFileHandler {
 		builder.appendBytes(idBuilder.toByteArray());
 		
 		// Set the file length.
-		builder.replaceBytes(0, WhyDoesJavaNotHaveThese.byteArrayFromLongValue(builder.getBytesWritten(), false, 4));
+		builder.replaceBytes(0, YuneUtil.byteArrayFromLongValue(builder.getBytesWritten(), false, 4));
 		// Set the pointer table offset.
-		builder.replaceBytes(4, WhyDoesJavaNotHaveThese.byteArrayFromLongValue(pointerTableOffset - 0x20, false, 4));
+		builder.replaceBytes(4, YuneUtil.byteArrayFromLongValue(pointerTableOffset - 0x20, false, 4));
 		
 		builtData = builder.toByteArray();
 		

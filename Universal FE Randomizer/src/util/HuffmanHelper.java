@@ -882,7 +882,7 @@ public class HuffmanHelper {
 			encoded.add(cur);
 		}
 		
-		return WhyDoesJavaNotHaveThese.byteArrayFromByteList(encoded);
+		return YuneUtil.byteArrayFromByteList(encoded);
 	}
 	
 	private char fe6CharacterFrom83Byte(byte charByte) {

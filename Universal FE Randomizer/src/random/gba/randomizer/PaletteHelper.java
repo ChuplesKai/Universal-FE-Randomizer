@@ -15,7 +15,7 @@ import random.gba.loader.PaletteLoader;
 import util.Diff;
 import util.DiffCompiler;
 import util.FreeSpaceManager;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class PaletteHelper {
 	
@@ -76,7 +76,7 @@ public class PaletteHelper {
 		
 		long entryOffset = FE7Data.AnimationPointerTableOffset + animationID * FE7Data.AnimationPointerTableEntrySize;
 		// The palette is stored on byte 28.
-		compiler.addDiff(new Diff(entryOffset + 28, 4, WhyDoesJavaNotHaveThese.bytesFromAddress(freeAddress), null));
+		compiler.addDiff(new Diff(entryOffset + 28, 4, YuneUtil.bytesFromAddress(freeAddress), null));
 		
 		adaptedPalette.overrideOffset(freeAddress);
 		adaptedPalette.forceCommit(compiler);

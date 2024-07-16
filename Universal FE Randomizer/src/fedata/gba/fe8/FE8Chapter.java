@@ -17,7 +17,7 @@ import fedata.gba.general.CharacterNudge;
 import io.FileHandler;
 import util.DebugPrinter;
 import util.FileReadHelper;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class FE8Chapter implements GBAFEChapterData {
 	
@@ -373,10 +373,10 @@ public class FE8Chapter implements GBAFEChapterData {
 		// Unlike FE6 and FE7, FE8's commands are 2 bytes long. We'll still read 4, but we'll need to compare more than just the first byte of it to determine the command.
 		commandWord = handler.readBytesAtOffset(currentAddress, 4);
 		// The terminals in FE8 are ENDA (0x120) and ENDB(0x121). In hex, they show up in little endian, so 20 01 or 21 01.
-		while (!WhyDoesJavaNotHaveThese.byteArraysAreEqual(commandWord, new byte[] {0x20, 0x01, 0x00, 0x00}) &&
-				!WhyDoesJavaNotHaveThese.byteArraysAreEqual(commandWord, new byte[] {0x21, 0x01, 0x00, 0x00})) {
+		while (!YuneUtil.byteArraysAreEqual(commandWord, new byte[] {0x20, 0x01, 0x00, 0x00}) &&
+				!YuneUtil.byteArraysAreEqual(commandWord, new byte[] {0x21, 0x01, 0x00, 0x00})) {
 			// FE8 has a few ways of loading, so we have to cover all of them.
-			if (WhyDoesJavaNotHaveThese.byteArrayHasPrefix(commandWord, new byte[] {0x40, 0x2C})) {
+			if (YuneUtil.byteArrayHasPrefix(commandWord, new byte[] {0x40, 0x2C})) {
 				// LOAD1 and LOAD_SLOT1
 				// The address starts at byte 4 in the normal case, but LOAD_SLOT1 will have an address of 0xFFFFFFFF.
 				long bytes = FileReadHelper.readWord(handler, currentAddress + 4, false);
@@ -398,7 +398,7 @@ public class FE8Chapter implements GBAFEChapterData {
 					addressesLoaded.add(address);
 					currentAddress += 4;
 				}
-			} else if (WhyDoesJavaNotHaveThese.byteArrayHasPrefix(commandWord, new byte[] {0x41, 0x2C})) {
+			} else if (YuneUtil.byteArrayHasPrefix(commandWord, new byte[] {0x41, 0x2C})) {
 				// LOAD2
 				long address = FileReadHelper.readAddress(handler, currentAddress + 4);
 				if (address != -1) {
@@ -408,7 +408,7 @@ public class FE8Chapter implements GBAFEChapterData {
 				} else {
 					System.err.println("Invalid unit address found for LOAD2 at 0x" + Long.toHexString(currentAddress));
 				}
-			} else if (WhyDoesJavaNotHaveThese.byteArrayHasPrefix(commandWord, new byte[] {0x42, 0x2C})) {
+			} else if (YuneUtil.byteArrayHasPrefix(commandWord, new byte[] {0x42, 0x2C})) {
 				// LOAD3
 				long address = FileReadHelper.readAddress(handler, currentAddress + 4);
 				if (address != -1) {
@@ -418,7 +418,7 @@ public class FE8Chapter implements GBAFEChapterData {
 				} else {
 					System.err.println("Invalid unit address found for LOAD3 at 0x" + Long.toHexString(currentAddress));
 				}
-			} else if (WhyDoesJavaNotHaveThese.byteArrayHasPrefix(commandWord, new byte[] {0x40, 0x05})) {
+			} else if (YuneUtil.byteArrayHasPrefix(commandWord, new byte[] {0x40, 0x05})) {
 				// SETVAL - Since LOAD_SLOT1 uses this, we need to keep track of this if we ever see it set a value to memory slot 1.
 				// I say slot 1, but the events always write the address to slot 2 instead, as seen in the command word. So *shrugs*
 				// The third byte is the slot that the value is written to...
@@ -427,7 +427,7 @@ public class FE8Chapter implements GBAFEChapterData {
 				memSlots.setValue(value, slot);
 				DebugPrinter.log(DebugPrinter.Key.CHAPTER_LOADER, "Storing value 0x" + Long.toHexString(value) + " into slot " + Integer.toHexString(slot) + " for potential loading. Current Address: 0x" + Long.toHexString(currentAddress));
 				currentAddress += 4;
-			} else if (WhyDoesJavaNotHaveThese.byteArrayHasPrefix(commandWord, new byte[] {0x40, 0x0A})) {
+			} else if (YuneUtil.byteArrayHasPrefix(commandWord, new byte[] {0x40, 0x0A})) {
 				// CALL - Look for unit addresses in the jump and add them to our set.
 				long address = FileReadHelper.readAddress(handler, currentAddress + 4);
 				if (address != -1) {
@@ -491,7 +491,7 @@ public class FE8Chapter implements GBAFEChapterData {
 		long currentOffset = unitAddress;
 		byte[] unitData = handler.readBytesAtOffset(currentOffset, FE8Data.BytesPerChapterUnit);
 		while (unitData[0] != 0x00) {
-			DebugPrinter.log(DebugPrinter.Key.CHAPTER_LOADER, "Loaded unit with data " + WhyDoesJavaNotHaveThese.displayStringForBytes(unitData));
+			DebugPrinter.log(DebugPrinter.Key.CHAPTER_LOADER, "Loaded unit with data " + YuneUtil.displayStringForBytes(unitData));
 			FE8ChapterUnit unit = new FE8ChapterUnit(unitData, currentOffset);
 			
 			
@@ -575,21 +575,21 @@ public class FE8Chapter implements GBAFEChapterData {
 				new Byte((byte)0x20), new Byte((byte)0x37), null, null));
 						
 		
-		while (!WhyDoesJavaNotHaveThese.byteArraysAreEqual(commandWord, new byte[] {0x20, 0x01, 0x00, 0x00}) &&
-				!WhyDoesJavaNotHaveThese.byteArraysAreEqual(commandWord, new byte[] {0x21, 0x01, 0x00, 0x00})) {
+		while (!YuneUtil.byteArraysAreEqual(commandWord, new byte[] {0x20, 0x01, 0x00, 0x00}) &&
+				!YuneUtil.byteArraysAreEqual(commandWord, new byte[] {0x21, 0x01, 0x00, 0x00})) {
 			// Read 12 bytes.
 			byte[] full = handler.readBytesAtOffset(currentAddress, 12);
-			if (WhyDoesJavaNotHaveThese.byteArrayMatchesFormat(full, format)) {
+			if (YuneUtil.byteArrayMatchesFormat(full, format)) {
 				FE8ChapterItem chapterItem = new FE8ChapterItem(full, currentAddress);
 				allChapterRewards.add(chapterItem);
 				DebugPrinter.log(DebugPrinter.Key.CHAPTER_LOADER, "Found reward at offset 0x" + Long.toHexString(currentAddress) + " Item ID: 0x" + Integer.toHexString(chapterItem.getItemID()));
 				currentAddress += 8;
-			} else if (WhyDoesJavaNotHaveThese.byteArrayMatchesFormat(full, targetedFormat)) {
+			} else if (YuneUtil.byteArrayMatchesFormat(full, targetedFormat)) {
 				int characterID = full[10];
 				if (targetRewardRecipients.contains(characterID)) {
 					targetedChapterRewards.put(characterID, new FE8ChapterItem(full, currentAddress));
 				}
-			} else if (WhyDoesJavaNotHaveThese.byteArrayHasPrefix(commandWord, new byte[] {0x40, 0x0A})) { // I don't think this ever happens, but in case items are hiding behind CALLs, let's check anyway.
+			} else if (YuneUtil.byteArrayHasPrefix(commandWord, new byte[] {0x40, 0x0A})) { // I don't think this ever happens, but in case items are hiding behind CALLs, let's check anyway.
 				long address = FileReadHelper.readAddress(handler, currentAddress + 4);
 				if (address != -1) {
 					DebugPrinter.log(DebugPrinter.Key.CHAPTER_LOADER, "CALLing to address 0x" + Long.toHexString(address) + " to look for more rewards. Current Address: 0x" + Long.toHexString(currentAddress));

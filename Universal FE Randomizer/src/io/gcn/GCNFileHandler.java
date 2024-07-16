@@ -3,7 +3,7 @@ package io.gcn;
 import io.FileHandler;
 import util.Diff;
 import util.DiffCompiler;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class GCNFileHandler {
 	protected GCNFSTFileEntry fileEntry;
@@ -87,7 +87,7 @@ public class GCNFileHandler {
 		if (buffer.length + nextReadOffset > getMaxOffset()) {
 			int remainingBytes = (int)(getMaxOffset() - nextReadOffset);
 			byte[] actualBytes = continueReadingBytes(remainingBytes);
-			WhyDoesJavaNotHaveThese.copyBytesIntoByteArrayAtIndex(actualBytes, buffer, 0, actualBytes.length);
+			YuneUtil.copyBytesIntoByteArrayAtIndex(actualBytes, buffer, 0, actualBytes.length);
 			bytesRead = actualBytes.length;
 		} else {
 			bytesRead = handler.continueReadingBytes(buffer);

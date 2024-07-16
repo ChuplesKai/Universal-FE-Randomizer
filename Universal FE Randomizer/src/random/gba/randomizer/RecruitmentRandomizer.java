@@ -41,7 +41,7 @@ import ui.model.RecruitmentOptions.GrowthAdjustmentMode;
 import ui.model.RecruitmentOptions.StatAdjustmentMode;
 import util.DebugPrinter;
 import util.FreeSpaceManager;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class RecruitmentRandomizer {
 	

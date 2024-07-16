@@ -17,7 +17,7 @@ import util.Diff;
 import util.DiffCompiler;
 import util.FileReadHelper;
 import util.FreeSpaceManager;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class FE8SummonerModule {
 	
@@ -228,7 +228,7 @@ public class FE8SummonerModule {
 			}
 			
 			// Repoint the table.
-			byte[] addressBytes = WhyDoesJavaNotHaveThese.gbaAddressFromOffset(newTableOffset);
+			byte[] addressBytes = YuneUtil.gbaAddressFromOffset(newTableOffset);
 			Diff repointDiff = new Diff(FE8Data.SummonerTablePointer, addressBytes.length, addressBytes, null);
 			// Make sure we write the address to all three pointers.
 			Diff repointDiff2 = new Diff(FE8Data.SummonerTablePointer2, addressBytes.length, addressBytes, null);

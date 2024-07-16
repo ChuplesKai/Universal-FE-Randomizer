@@ -9,7 +9,7 @@ import random.gba.loader.TextLoader;
 import random.general.FERandom;
 import random.general.WeightedDistributor;
 import ui.model.WeaponEffectOptions;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class WeaponsRandomizer {
 	
@@ -25,7 +25,7 @@ public class WeaponsRandomizer {
 		for (GBAFEItemData weapon : allWeapons) {
 			int originalMight = weapon.getMight();
 			int newMight = originalMight + rng.sample( variance );
-			weapon.setMight(WhyDoesJavaNotHaveThese.clamp(newMight, minMT, maxMT));
+			weapon.setMight(YuneUtil.clamp(newMight, minMT, maxMT));
 		}
 		
 		itemsData.commit();
@@ -48,7 +48,7 @@ public class WeaponsRandomizer {
 		for (GBAFEItemData weapon : allWeapons) {
 			int originalHit = weapon.getHit();
 			int newHit = originalHit + mult * rng.sample( variance );
-			weapon.setHit(WhyDoesJavaNotHaveThese.clamp(newHit, minHit, maxHit));
+			weapon.setHit(YuneUtil.clamp(newHit, minHit, maxHit));
 		}
 		
 		itemsData.commit();
@@ -71,7 +71,7 @@ public class WeaponsRandomizer {
 				durVar = (int)Math.ceil( (double)variance / 4.0 ); //Drop the variance down a ton
 				minDur = 1;
 			}
-			weapon.setDurability(WhyDoesJavaNotHaveThese.clamp(originalDurability + rng.sample( durVar ), minDur, maxDurability));
+			weapon.setDurability(YuneUtil.clamp(originalDurability + rng.sample( durVar ), minDur, maxDurability));
 		}
 		
 		itemsData.commit();
@@ -87,7 +87,7 @@ public class WeaponsRandomizer {
 		for (GBAFEItemData weapon : allWeapons) {
 			int originalWeight = weapon.getWeight();
 			int newWeight = originalWeight + rng.sample( variance );
-			weapon.setWeight(WhyDoesJavaNotHaveThese.clamp(newWeight, minWT, maxWT));
+			weapon.setWeight(YuneUtil.clamp(newWeight, minWT, maxWT));
 		}
 		
 		itemsData.commit();

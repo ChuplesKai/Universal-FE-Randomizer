@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import io.FileHandler;
 import util.ByteArrayBuilder;
 import util.DebugPrinter;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 /* This is V2 of the data file handler for binary data for GCN.
  * 
@@ -78,7 +78,7 @@ public class GCNDataFileHandlerV2 extends GCNByteArrayHandler {
 		}
 		
 		public byte[] getRawData(long offset, int length) {
-			return WhyDoesJavaNotHaveThese.subArray(rawData, (int)offset, length);
+			return YuneUtil.subArray(rawData, (int)offset, length);
 		}
 		
 		private boolean addPointerOffset(long offset) {
@@ -90,7 +90,7 @@ public class GCNDataFileHandlerV2 extends GCNByteArrayHandler {
 		
 		private boolean writePointerToOffset(long offset, long pointer) {
 			if (validPointers.contains(offset)) {
-				WhyDoesJavaNotHaveThese.copyBytesIntoByteArrayAtIndex(WhyDoesJavaNotHaveThese.byteArrayFromLongValue(pointer, false, 4), rawData, (int)offset, 4);
+				YuneUtil.copyBytesIntoByteArrayAtIndex(YuneUtil.byteArrayFromLongValue(pointer, false, 4), rawData, (int)offset, 4);
 				return true;
 			} else {
 				return false;
@@ -100,13 +100,13 @@ public class GCNDataFileHandlerV2 extends GCNByteArrayHandler {
 		private boolean overwriteData(long offset, byte[] data) {
 			if (data == null) { return false; }
 			if (offset + data.length > rawData.length) { return false; }
-			WhyDoesJavaNotHaveThese.copyBytesIntoByteArrayAtIndex(data, rawData, (int)offset, data.length);
+			YuneUtil.copyBytesIntoByteArrayAtIndex(data, rawData, (int)offset, data.length);
 			return true;
 		}
 		
 		public Long getPointerAtOffset(long offset) {
 			if (validPointers.contains(offset)) {
-				return WhyDoesJavaNotHaveThese.longValueFromByteArray(WhyDoesJavaNotHaveThese.subArray(rawData, (int)offset, 4), false);
+				return YuneUtil.longValueFromByteArray(YuneUtil.subArray(rawData, (int)offset, 4), false);
 			}
 			
 			return null;
@@ -145,22 +145,22 @@ public class GCNDataFileHandlerV2 extends GCNByteArrayHandler {
 		
 		addedStringData = new ByteArrayBuilder();
 		
-		long pointerTableOffset = WhyDoesJavaNotHaveThese.longValueFromByteArray(readBytesAtOffset(0x4, 4), false);
-		long numberOfPointers = WhyDoesJavaNotHaveThese.longValueFromByteArray(readBytesAtOffset(0x8, 4), false);
+		long pointerTableOffset = YuneUtil.longValueFromByteArray(readBytesAtOffset(0x4, 4), false);
+		long numberOfPointers = YuneUtil.longValueFromByteArray(readBytesAtOffset(0x8, 4), false);
 		
 		long sectionTableOffset = pointerTableOffset + (4 * numberOfPointers) + 0x20;
-		long numberOfSections = WhyDoesJavaNotHaveThese.longValueFromByteArray(readBytesAtOffset(0xC, 4), false);
+		long numberOfSections = YuneUtil.longValueFromByteArray(readBytesAtOffset(0xC, 4), false);
 		long sectionNameTableOffset = sectionTableOffset + numberOfSections * 8;
 		
 		Map<Long, String> namesByDataPointers = new HashMap<Long, String>();
 		List<Long> orderedDataPointers = new ArrayList<Long>();
 		
 		for (long i = 0; i < numberOfSections; i++) {
-			long pointerToData = WhyDoesJavaNotHaveThese.longValueFromByteArray(readBytesAtOffset(sectionTableOffset + i * 8, 4), false) + 0x20;
-			long pointerToName = WhyDoesJavaNotHaveThese.longValueFromByteArray(readBytesAtOffset(sectionTableOffset + i * 8 + 4, 4), false);
+			long pointerToData = YuneUtil.longValueFromByteArray(readBytesAtOffset(sectionTableOffset + i * 8, 4), false) + 0x20;
+			long pointerToName = YuneUtil.longValueFromByteArray(readBytesAtOffset(sectionTableOffset + i * 8 + 4, 4), false);
 			
 			setNextReadOffset(pointerToName + sectionNameTableOffset);
-			String name = WhyDoesJavaNotHaveThese.stringFromShiftJIS(continueReadingBytesUpToNextTerminator(getNextReadOffset() + 0xFFFFL));
+			String name = YuneUtil.stringFromShiftJIS(continueReadingBytesUpToNextTerminator(getNextReadOffset() + 0xFFFFL));
 			
 			namesByDataPointers.put(pointerToData, name);
 			orderedDataPointers.add(pointerToData);
@@ -181,11 +181,11 @@ public class GCNDataFileHandlerV2 extends GCNByteArrayHandler {
 		List<Long> validPointers = new ArrayList<Long>();
 		
 		for (long i = 0; i < numberOfPointers; i++) {
-			long pointerToPointer = WhyDoesJavaNotHaveThese.longValueFromByteArray(readBytesAtOffset(pointerTableOffset + i * 4 + 0x20, 4), false);
+			long pointerToPointer = YuneUtil.longValueFromByteArray(readBytesAtOffset(pointerTableOffset + i * 4 + 0x20, 4), false);
 			validPointers.add(pointerToPointer);
-			long pointer = WhyDoesJavaNotHaveThese.longValueFromByteArray(readBytesAtOffset(pointerToPointer + 0x20, 4), false);
+			long pointer = YuneUtil.longValueFromByteArray(readBytesAtOffset(pointerToPointer + 0x20, 4), false);
 			setNextReadOffset(pointer + 0x20);
-			String dereferenced = WhyDoesJavaNotHaveThese.stringFromShiftJIS(continueReadingBytesUpToNextTerminator(getNextReadOffset() + 0xFFFFL));
+			String dereferenced = YuneUtil.stringFromShiftJIS(continueReadingBytesUpToNextTerminator(getNextReadOffset() + 0xFFFFL));
 			strings.add(dereferenced);
 			if (!orderedDataPointers.isEmpty() && pointer + 0x20 < orderedDataPointers.get(orderedDataPointers.size() - 1)) { continue; } // This isn't a string.
 			if (firstStringOffset == -1 || (firstStringOffset > pointer + 0x20)) {
@@ -217,7 +217,7 @@ public class GCNDataFileHandlerV2 extends GCNByteArrayHandler {
 				endOffset = orderedDataPointers.get(i + 1);
 			}
 			
-			GCNDataFileDataSection section = new GCNDataFileDataSection(name, WhyDoesJavaNotHaveThese.subArray(byteArray, (int)pointerToData, (int)endOffset - (int)pointerToData), pointerToData, validPointers);
+			GCNDataFileDataSection section = new GCNDataFileDataSection(name, YuneUtil.subArray(byteArray, (int)pointerToData, (int)endOffset - (int)pointerToData), pointerToData, validPointers);
 			dataSections.add(section);
 			
 			DebugPrinter.log(DebugPrinter.Key.FE9_DATA_FILE_HANDLER_V2, "Processed section \"" + name + "\" starting at file offset 0x" + Long.toHexString(pointerToData) + " up to file offset 0x" + Long.toHexString(endOffset));
@@ -272,7 +272,7 @@ public class GCNDataFileHandlerV2 extends GCNByteArrayHandler {
 		needsRebuild = true;
 		strings.add(string);
 		
-		byte[] newStringData = WhyDoesJavaNotHaveThese.shiftJISBytesFromString(string);
+		byte[] newStringData = YuneUtil.shiftJISBytesFromString(string);
 		addedStringData.appendBytes(newStringData);
 		addedStringData.appendByte((byte)0);
 		
@@ -319,8 +319,8 @@ public class GCNDataFileHandlerV2 extends GCNByteArrayHandler {
 				validPointers.addAll(section.validPointers.stream().map(pointer -> pointer + section.originalOffset).collect(Collectors.toList()));
 			}
 			
-			builder.appendBytes(WhyDoesJavaNotHaveThese.byteArrayFromLongValue(validPointers.size(), false, 4)); // Number of pointers
-			builder.appendBytes(WhyDoesJavaNotHaveThese.byteArrayFromLongValue(dataSections.size(), false, 4)); // Number of sections
+			builder.appendBytes(YuneUtil.byteArrayFromLongValue(validPointers.size(), false, 4)); // Number of pointers
+			builder.appendBytes(YuneUtil.byteArrayFromLongValue(dataSections.size(), false, 4)); // Number of sections
 			
 			// 16 bytes of zeros follow.
 			builder.appendBytes(new byte[] {0, 0, 0, 0, 
@@ -358,7 +358,7 @@ public class GCNDataFileHandlerV2 extends GCNByteArrayHandler {
 				}
 				
 				DebugPrinter.log(DebugPrinter.Key.FE9_DATA_FILE_HANDLER_V2, "Writing string " + stringForPointer(pointers.get(i)) + " at offset 0x" + Long.toHexString(builder.getBytesWritten()));
-				builder.appendBytes(WhyDoesJavaNotHaveThese.shiftJISBytesFromString(stringForPointer(pointers.get(i))));
+				builder.appendBytes(YuneUtil.shiftJISBytesFromString(stringForPointer(pointers.get(i))));
 				if (builder.getLastByteWritten() != 0) {
 					builder.appendByte((byte)0);
 				}
@@ -385,12 +385,12 @@ public class GCNDataFileHandlerV2 extends GCNByteArrayHandler {
 			
 			int pointersWritten = 0;
 			for (long pointer : validPointers) {
-				if (WhyDoesJavaNotHaveThese.longValueFromByteArray(WhyDoesJavaNotHaveThese.subArray(writtenBytes, (int)pointer, 4), false) == 0) {
+				if (YuneUtil.longValueFromByteArray(YuneUtil.subArray(writtenBytes, (int)pointer, 4), false) == 0) {
 					DebugPrinter.log(DebugPrinter.Key.FE9_DATA_FILE_HANDLER_V2, "Skipping 0 pointer at offset 0x" + Long.toHexString(pointer));
 					continue;
 				}
 				DebugPrinter.log(DebugPrinter.Key.FE9_DATA_FILE_HANDLER_V2, "Writing pointer 0x" + Long.toHexString(pointer - 0x20) + " at offset 0x" + Long.toHexString(builder.getBytesWritten()));
-				builder.appendBytes(WhyDoesJavaNotHaveThese.byteArrayFromLongValue(pointer - 0x20, false, 4));
+				builder.appendBytes(YuneUtil.byteArrayFromLongValue(pointer - 0x20, false, 4));
 				pointersWritten++;
 			}
 			
@@ -400,9 +400,9 @@ public class GCNDataFileHandlerV2 extends GCNByteArrayHandler {
 			ByteArrayBuilder sectionNames = new ByteArrayBuilder();
 			for (String name : orderedSectionNames) {
 				DebugPrinter.log(DebugPrinter.Key.FE9_DATA_FILE_HANDLER_V2, "Section name " + name + " set to offset 0x" + Long.toHexString(sectionNames.getBytesWritten()));
-				builder.appendBytes(WhyDoesJavaNotHaveThese.byteArrayFromLongValue(writtenOffsets.get(getSectionWithName(name)) - 0x20, false, 4));
-				builder.appendBytes(WhyDoesJavaNotHaveThese.byteArrayFromLongValue(sectionNames.getBytesWritten(), false, 4));
-				sectionNames.appendBytes(WhyDoesJavaNotHaveThese.shiftJISBytesFromString(name));
+				builder.appendBytes(YuneUtil.byteArrayFromLongValue(writtenOffsets.get(getSectionWithName(name)) - 0x20, false, 4));
+				builder.appendBytes(YuneUtil.byteArrayFromLongValue(sectionNames.getBytesWritten(), false, 4));
+				sectionNames.appendBytes(YuneUtil.shiftJISBytesFromString(name));
 				if (sectionNames.getLastByteWritten() != 0) {
 					sectionNames.appendByte((byte)0);
 				}
@@ -416,9 +416,9 @@ public class GCNDataFileHandlerV2 extends GCNByteArrayHandler {
 			
 			byteArray = builder.toByteArray();
 			
-			WhyDoesJavaNotHaveThese.copyBytesIntoByteArrayAtIndex(WhyDoesJavaNotHaveThese.byteArrayFromLongValue(byteArray.length, false, 4), byteArray, 0, 4); // Write the length of the file.
-			WhyDoesJavaNotHaveThese.copyBytesIntoByteArrayAtIndex(WhyDoesJavaNotHaveThese.byteArrayFromLongValue(pointerTableOffset - 0x20, false, 4), byteArray, 4, 4); // Write the offset of the pointer table.
-			WhyDoesJavaNotHaveThese.copyBytesIntoByteArrayAtIndex(WhyDoesJavaNotHaveThese.byteArrayFromLongValue(pointersWritten, false, 4), byteArray, 8, 4); // Write the number of pointers.
+			YuneUtil.copyBytesIntoByteArrayAtIndex(YuneUtil.byteArrayFromLongValue(byteArray.length, false, 4), byteArray, 0, 4); // Write the length of the file.
+			YuneUtil.copyBytesIntoByteArrayAtIndex(YuneUtil.byteArrayFromLongValue(pointerTableOffset - 0x20, false, 4), byteArray, 4, 4); // Write the offset of the pointer table.
+			YuneUtil.copyBytesIntoByteArrayAtIndex(YuneUtil.byteArrayFromLongValue(pointersWritten, false, 4), byteArray, 8, 4); // Write the number of pointers.
 		}
 	}
 	

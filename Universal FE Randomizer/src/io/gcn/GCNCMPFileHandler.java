@@ -13,7 +13,7 @@ import util.ByteArrayBuilder;
 import util.DebugPrinter;
 import util.Diff;
 import util.LZ77;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class GCNCMPFileHandler extends GCNFileHandler {
 	
@@ -24,10 +24,10 @@ public class GCNCMPFileHandler extends GCNFileHandler {
 		public long fileLength;
 		
 		public CMPFileEntry(byte[] data) {
-			headerValue = WhyDoesJavaNotHaveThese.longValueFromByteArray(Arrays.copyOfRange(data, 0, 4), false);
-			namePointer = WhyDoesJavaNotHaveThese.longValueFromByteArray(Arrays.copyOfRange(data, 4, 8), false);
-			filePointer = WhyDoesJavaNotHaveThese.longValueFromByteArray(Arrays.copyOfRange(data, 8, 12), false);
-			fileLength = WhyDoesJavaNotHaveThese.longValueFromByteArray(Arrays.copyOfRange(data, 12, 16), false);
+			headerValue = YuneUtil.longValueFromByteArray(Arrays.copyOfRange(data, 0, 4), false);
+			namePointer = YuneUtil.longValueFromByteArray(Arrays.copyOfRange(data, 4, 8), false);
+			filePointer = YuneUtil.longValueFromByteArray(Arrays.copyOfRange(data, 8, 12), false);
+			fileLength = YuneUtil.longValueFromByteArray(Arrays.copyOfRange(data, 12, 16), false);
 		}
 		
 		public byte[] toByteArray() {
@@ -57,7 +57,7 @@ public class GCNCMPFileHandler extends GCNFileHandler {
 		
 		originalCompressed = handler.readBytesAtOffset(entry.fileOffset, (int)entry.fileSize);
 		byte[] decompressed = LZ77.decompress(originalCompressed);
-		String packString = WhyDoesJavaNotHaveThese.stringFromAsciiBytes(Arrays.copyOfRange(decompressed, 0, 4));
+		String packString = YuneUtil.stringFromAsciiBytes(Arrays.copyOfRange(decompressed, 0, 4));
 		assert packString.equals("pack") : "Invalid file format for GCNCMPFileHandler.";
 		
 		filesPackaged = new ArrayList<CMPFileEntry>();
@@ -65,7 +65,7 @@ public class GCNCMPFileHandler extends GCNFileHandler {
 		fileMap = new HashMap<String, CMPFileEntry>();
 		cachedHandlers = new HashMap<String, GCNFileHandler>();
 		
-		int numberOfFiles = (int)WhyDoesJavaNotHaveThese.longValueFromByteArray(Arrays.copyOfRange(decompressed, 4, 6), false);
+		int numberOfFiles = (int)YuneUtil.longValueFromByteArray(Arrays.copyOfRange(decompressed, 4, 6), false);
 		int offset = 0x8;
 		for (int i = 0; i < numberOfFiles; i++) {
 			byte[] entryData = Arrays.copyOfRange(decompressed, offset, offset + 0x10);
@@ -94,7 +94,7 @@ public class GCNCMPFileHandler extends GCNFileHandler {
 //			
 //			pathBuilder.append("/");
 			
-			String name = WhyDoesJavaNotHaveThese.stringFromAsciiBytes(Arrays.copyOfRange(decompressed, nameStart, nameEnd));
+			String name = YuneUtil.stringFromAsciiBytes(Arrays.copyOfRange(decompressed, nameStart, nameEnd));
 			// Fully qualify names so that they're searchable later.
 //			String fullyQualified = pathBuilder.toString() + name;
 			
@@ -183,7 +183,7 @@ public class GCNCMPFileHandler extends GCNFileHandler {
 		for (String name : filenames) {
 			CMPFileEntry fileEntry = fileMap.get(name);
 			while (builder.getBytesWritten() < fileEntry.namePointer) { builder.appendByte((byte)0); }
-			builder.appendBytes(WhyDoesJavaNotHaveThese.asciiBytesFromString(name));
+			builder.appendBytes(YuneUtil.asciiBytesFromString(name));
 			builder.appendByte((byte)0);
 		}
 		

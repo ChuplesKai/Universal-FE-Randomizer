@@ -31,7 +31,7 @@ import util.DebugPrinter;
 import util.Diff;
 import util.DiffCompiler;
 import util.FileReadHelper;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 import util.recordkeeper.RecordKeeper;
 
 public class ChapterLoader {

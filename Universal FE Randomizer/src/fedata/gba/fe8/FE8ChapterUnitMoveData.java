@@ -1,7 +1,7 @@
 package fedata.gba.fe8;
 
 import fedata.gba.AbstractGBAData;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class FE8ChapterUnitMoveData extends AbstractGBAData {
 	// 8 bytes each

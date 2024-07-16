@@ -8,7 +8,7 @@ import fedata.gcnwii.fe9.scripting.ScriptInstruction;
 import io.gcn.GCNCMBFileHandler;
 import util.ByteArrayBuilder;
 import util.DebugPrinter;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class FE9ScriptScene {
 	int pointerOffset;
@@ -53,20 +53,20 @@ public class FE9ScriptScene {
 		this.pointerOffset = pointerOffset;
 		
 		byte[] headerOffset = handler.cmb_readBytesAtOffset(pointerOffset, 4);
-		sceneHeaderOffset = (int)WhyDoesJavaNotHaveThese.longValueFromByteArray(headerOffset, true);
+		sceneHeaderOffset = (int)YuneUtil.longValueFromByteArray(headerOffset, true);
 		
 		byte[] identifier = handler.cmb_readBytesAtOffset(sceneHeaderOffset, 4);
-		identifierOffset = (int)WhyDoesJavaNotHaveThese.longValueFromByteArray(identifier, true);
+		identifierOffset = (int)YuneUtil.longValueFromByteArray(identifier, true);
 		if (identifierOffset != 0) {
 			byte[] name = handler.cmb_readBytesUpToNextTerminator(identifierOffset);
-			identifierName = WhyDoesJavaNotHaveThese.stringFromAsciiBytes(name);
+			identifierName = YuneUtil.stringFromAsciiBytes(name);
 		}
 		
 		byte[] script = handler.cmb_readBytesAtOffset(sceneHeaderOffset + 4, 4);
-		scriptOffset = (int)WhyDoesJavaNotHaveThese.longValueFromByteArray(script, true);
+		scriptOffset = (int)YuneUtil.longValueFromByteArray(script, true);
 		
 		byte[] parent = handler.cmb_readBytesAtOffset(sceneHeaderOffset + 8, 4);
-		parentOffset = (int)WhyDoesJavaNotHaveThese.longValueFromByteArray(parent, true);
+		parentOffset = (int)YuneUtil.longValueFromByteArray(parent, true);
 		
 		sceneKind = handler.cmb_readBytesAtOffset(sceneHeaderOffset + 0xC, 1)[0];
 		numberOfArgs = handler.cmb_readBytesAtOffset(sceneHeaderOffset + 0xD, 1)[0];
@@ -74,10 +74,10 @@ public class FE9ScriptScene {
 		unknownByte = handler.cmb_readBytesAtOffset(sceneHeaderOffset + 0xF, 1)[0];
 		
 		byte[] index = handler.cmb_readBytesAtOffset(sceneHeaderOffset + 0x10, 2);
-		sceneIndex = (short)WhyDoesJavaNotHaveThese.longValueFromByteArray(index, true);
+		sceneIndex = (short)YuneUtil.longValueFromByteArray(index, true);
 		
 		byte[] vars = handler.cmb_readBytesAtOffset(sceneHeaderOffset + 0x12, 2);
-		varCount = (short)WhyDoesJavaNotHaveThese.longValueFromByteArray(vars, true);
+		varCount = (short)YuneUtil.longValueFromByteArray(vars, true);
 		
 		params = new short[parameterCount];
 		
@@ -85,12 +85,12 @@ public class FE9ScriptScene {
 		int paramIndex = 0;
 		while (parsingOffset < scriptOffset && paramIndex < params.length) {
 			byte[] parameter = handler.cmb_readBytesAtOffset(parsingOffset, 2);
-			params[paramIndex++] = (short)WhyDoesJavaNotHaveThese.longValueFromByteArray(parameter, true);
+			params[paramIndex++] = (short)YuneUtil.longValueFromByteArray(parameter, true);
 			parsingOffset += 2;
 		}
 		
 		byte[] nextHeaderOffset = handler.cmb_readBytesAtOffset(pointerOffset + 4, 4);
-		int nextHeader = (int)WhyDoesJavaNotHaveThese.longValueFromByteArray(nextHeaderOffset, true);
+		int nextHeader = (int)YuneUtil.longValueFromByteArray(nextHeaderOffset, true);
 		
 		int scriptLength = nextHeader - scriptOffset;
 		if (nextHeader == 0) { // This is the last script. Read to the end of the file.
@@ -151,8 +151,8 @@ public class FE9ScriptScene {
 		wasModified = true;
 	}
 	
-	public List<ScriptInstruction> getOriginalInstructions() { return WhyDoesJavaNotHaveThese.createMutableCopy(originalInstructions); }
-	public List<ScriptInstruction> getInstructions() { return WhyDoesJavaNotHaveThese.createMutableCopy(updatedInstructions != null ? updatedInstructions : instructions); }
+	public List<ScriptInstruction> getOriginalInstructions() { return YuneUtil.createMutableCopy(originalInstructions); }
+	public List<ScriptInstruction> getInstructions() { return YuneUtil.createMutableCopy(updatedInstructions != null ? updatedInstructions : instructions); }
 	public void setInstructions(List<ScriptInstruction> newInstructions) {
 		updatedInstructions = newInstructions;
 		ByteArrayBuilder newBytes = new ByteArrayBuilder();
@@ -164,8 +164,8 @@ public class FE9ScriptScene {
 		DebugPrinter.log(DebugPrinter.Key.FE9_CHAPTER_SCRIPT, "New Instructions: ");
 		DebugPrinter.log(DebugPrinter.Key.FE9_CHAPTER_SCRIPT, String.join("\n", updatedInstructions.stream().map(instruction -> { return instruction.displayString(); }).collect(Collectors.toList())));
 		
-		DebugPrinter.log(DebugPrinter.Key.FE9_CHAPTER_SCRIPT, "Old bytes: " + WhyDoesJavaNotHaveThese.displayStringForBytes(scriptBytes));
-		DebugPrinter.log(DebugPrinter.Key.FE9_CHAPTER_SCRIPT, "New Bytes: " + WhyDoesJavaNotHaveThese.displayStringForBytes(updatedBytes));
+		DebugPrinter.log(DebugPrinter.Key.FE9_CHAPTER_SCRIPT, "Old bytes: " + YuneUtil.displayStringForBytes(scriptBytes));
+		DebugPrinter.log(DebugPrinter.Key.FE9_CHAPTER_SCRIPT, "New Bytes: " + YuneUtil.displayStringForBytes(updatedBytes));
 		wasModified = true;
 	}
 	
@@ -190,7 +190,7 @@ public class FE9ScriptScene {
 		}
 		updatedBytes = null;
 		if (updatedInstructions != null) { 
-			instructions = WhyDoesJavaNotHaveThese.createMutableCopy(updatedInstructions);
+			instructions = YuneUtil.createMutableCopy(updatedInstructions);
 		}
 		updatedInstructions = null;
 		if (updatedPointerOffset != null) {
@@ -231,32 +231,32 @@ public class FE9ScriptScene {
 		
 		// We basically have to reverse the steps we used to parse the header in the first place.
 		ByteArrayBuilder builder = new ByteArrayBuilder();
-		builder.appendBytes(WhyDoesJavaNotHaveThese.byteArrayFromLongValue(identifierOffset, true, 4));
+		builder.appendBytes(YuneUtil.byteArrayFromLongValue(identifierOffset, true, 4));
 		// Remember to append the string after the proper header.
-		builder.appendBytes(WhyDoesJavaNotHaveThese.byteArrayFromLongValue(scriptOffset, true, 4));
-		builder.appendBytes(WhyDoesJavaNotHaveThese.byteArrayFromLongValue(parentOffset, true, 4));
+		builder.appendBytes(YuneUtil.byteArrayFromLongValue(scriptOffset, true, 4));
+		builder.appendBytes(YuneUtil.byteArrayFromLongValue(parentOffset, true, 4));
 		
 		builder.appendByte(sceneKind);
 		builder.appendByte(numberOfArgs);
 		builder.appendByte(parameterCount);
 		builder.appendByte(unknownByte);
 		
-		builder.appendBytes(WhyDoesJavaNotHaveThese.byteArrayFromLongValue(sceneIndex, true, 2));
-		builder.appendBytes(WhyDoesJavaNotHaveThese.byteArrayFromLongValue(varCount, true, 2));
+		builder.appendBytes(YuneUtil.byteArrayFromLongValue(sceneIndex, true, 2));
+		builder.appendBytes(YuneUtil.byteArrayFromLongValue(varCount, true, 2));
 		
 		if (builder.getBytesWritten() != 0x14) {
 			DebugPrinter.error(DebugPrinter.Key.FE9_CHAPTER_SCRIPT, "Incorrect number of bytes written for header.");
 		}
 		
 		for (short param : params) {
-			builder.appendBytes(WhyDoesJavaNotHaveThese.byteArrayFromLongValue(param, true, 2));
+			builder.appendBytes(YuneUtil.byteArrayFromLongValue(param, true, 2));
 		}
 		
 		if (identifierOffset != 0) {
 			if (builder.getBytesWritten() != identifierOffset - sceneHeaderOffset) {
 				DebugPrinter.error(DebugPrinter.Key.FE9_CHAPTER_SCRIPT, "Script identifier written at the wrong place.");
 			}
-			builder.appendBytes(WhyDoesJavaNotHaveThese.shiftJISBytesFromString(identifierName));
+			builder.appendBytes(YuneUtil.shiftJISBytesFromString(identifierName));
 			if (builder.getLastByteWritten() != 0) { builder.appendByte((byte)0); }
 		}
 

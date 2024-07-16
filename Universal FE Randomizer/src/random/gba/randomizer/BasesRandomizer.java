@@ -8,7 +8,7 @@ import random.general.WeightedDistributor;
 import random.gba.loader.CharacterDataLoader;
 import random.gba.loader.ClassDataLoader;
 import ui.model.BaseOptions;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class BasesRandomizer 
 {

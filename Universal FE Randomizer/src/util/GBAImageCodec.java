@@ -262,7 +262,7 @@ public class GBAImageCodec {
 	 */
 	public static byte[] shrinkArray(byte[] original, int newSize) {
 		byte[] newArray = new byte[newSize];
-		WhyDoesJavaNotHaveThese.copyBytesFromByteArray(original, newArray, 0, newSize);
+		YuneUtil.copyBytesFromByteArray(original, newArray, 0, newSize);
 		return newArray;
 	}
 

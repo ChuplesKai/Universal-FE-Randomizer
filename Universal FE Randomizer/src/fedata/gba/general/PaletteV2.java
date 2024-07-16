@@ -11,7 +11,7 @@ import util.DebugPrinter;
 import util.Diff;
 import util.DiffCompiler;
 import util.LZ77;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class PaletteV2 
 {
@@ -334,16 +334,16 @@ public class PaletteV2
 		for (int i = 0; i < colorArray.length; i++) {
 			ColorSet color = colorArray[i];
 			int offset = 0;
-			WhyDoesJavaNotHaveThese.copyBytesIntoByteArrayAtIndex(color.getColor(PaletteType.PLAYER).toColorTuple(), decompressedData, offset + i * 2, 2);
+			YuneUtil.copyBytesIntoByteArrayAtIndex(color.getColor(PaletteType.PLAYER).toColorTuple(), decompressedData, offset + i * 2, 2);
 			offset += 0x20;
-			WhyDoesJavaNotHaveThese.copyBytesIntoByteArrayAtIndex(color.getColor(PaletteType.ENEMY).toColorTuple(), decompressedData, offset + i * 2, 2);
+			YuneUtil.copyBytesIntoByteArrayAtIndex(color.getColor(PaletteType.ENEMY).toColorTuple(), decompressedData, offset + i * 2, 2);
 			offset += 0x20;
-			WhyDoesJavaNotHaveThese.copyBytesIntoByteArrayAtIndex(color.getColor(PaletteType.NPC).toColorTuple(), decompressedData, offset + i * 2, 2);
+			YuneUtil.copyBytesIntoByteArrayAtIndex(color.getColor(PaletteType.NPC).toColorTuple(), decompressedData, offset + i * 2, 2);
 			offset += 0x20;
-			WhyDoesJavaNotHaveThese.copyBytesIntoByteArrayAtIndex(color.getColor(PaletteType.OTHER).toColorTuple(), decompressedData, offset + i * 2, 2);
+			YuneUtil.copyBytesIntoByteArrayAtIndex(color.getColor(PaletteType.OTHER).toColorTuple(), decompressedData, offset + i * 2, 2);
 			if (color.getColor(PaletteType.LINK) != null && decompressedData.length > 0x80) {
 				offset += 0x20;
-				WhyDoesJavaNotHaveThese.copyBytesIntoByteArrayAtIndex(color.getColor(PaletteType.LINK).toColorTuple(), decompressedData, offset + i * 2, 2);
+				YuneUtil.copyBytesIntoByteArrayAtIndex(color.getColor(PaletteType.LINK).toColorTuple(), decompressedData, offset + i * 2, 2);
 			}
 		}
 	}

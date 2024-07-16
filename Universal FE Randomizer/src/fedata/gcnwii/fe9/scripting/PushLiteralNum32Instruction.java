@@ -1,14 +1,14 @@
 package fedata.gcnwii.fe9.scripting;
 
 import io.gcn.GCNCMBFileHandler;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class PushLiteralNum32Instruction extends ScriptInstruction {
 
 	int literal;
 	
 	public PushLiteralNum32Instruction(byte[] arg) {
-		literal = (int)(WhyDoesJavaNotHaveThese.longValueFromByteArray(arg, false) & 0xFFFFFFFF);
+		literal = (int)(YuneUtil.longValueFromByteArray(arg, false) & 0xFFFFFFFF);
 	}
 	
 	public PushLiteralNum32Instruction(int literal) {

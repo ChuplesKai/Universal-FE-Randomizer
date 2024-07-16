@@ -826,8 +826,8 @@ public class GBARandomizer extends Randomizer {
 				stream.close();
 				
 				long offset = freeSpace.setValue(bytes, "FE7 Hardcoded SRAM", true);
-				long pointer = freeSpace.setValue(WhyDoesJavaNotHaveThese.bytesFromAddress(offset), "FE7 Hardcoded SRAM Pointer", true);
-				diffCompiler.addDiff(new Diff(FE7Data.HardcodedSRAMHeaderOffset, 4, WhyDoesJavaNotHaveThese.bytesFromAddress(pointer), WhyDoesJavaNotHaveThese.bytesFromAddress(FE7Data.DefaultSRAMHeaderPointer)));
+				long pointer = freeSpace.setValue(YuneUtil.bytesFromAddress(offset), "FE7 Hardcoded SRAM Pointer", true);
+				diffCompiler.addDiff(new Diff(FE7Data.HardcodedSRAMHeaderOffset, 4, YuneUtil.bytesFromAddress(pointer), YuneUtil.bytesFromAddress(FE7Data.DefaultSRAMHeaderPointer)));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -947,7 +947,7 @@ public class GBARandomizer extends Randomizer {
 			textData.setStringAtIndex(0x4AB, "Promotes Tier 0 Trainees at Lv 10.[X]");
 			textData.setStringAtIndex(0x403, "Trainee Seal[X]");
 			long offset = freeSpace.setValue(new byte[] {(byte)FE8Data.CharacterClass.TRAINEE.ID, (byte)FE8Data.CharacterClass.PUPIL.ID, (byte)FE8Data.CharacterClass.RECRUIT.ID}, "TraineeSeal");
-			diffCompiler.addDiff(new Diff(FE8Data.HeavenSealPromotionPointer, 4, WhyDoesJavaNotHaveThese.bytesFromAddress(offset), WhyDoesJavaNotHaveThese.bytesFromAddress(FE8Data.HeavenSealOldAddress)));
+			diffCompiler.addDiff(new Diff(FE8Data.HeavenSealPromotionPointer, 4, YuneUtil.bytesFromAddress(offset), YuneUtil.bytesFromAddress(FE8Data.HeavenSealOldAddress)));
 			
 			for (GBAFEChapterData chapter : chapterData.allChapters()) {
 				for (GBAFEChapterUnitData chapterUnit : chapter.allUnits()) {
@@ -1247,8 +1247,8 @@ public class GBARandomizer extends Randomizer {
 			long mapSpriteTableOffset = FileReadHelper.readAddress(handler, FE6Data.ClassMapSpriteTablePointer);
 			byte[] spriteTable = handler.readBytesAtOffset(mapSpriteTableOffset, FE6Data.BytesPerMapSpriteTableEntry * FE6Data.NumberOfMapSpriteEntries);
 			long newSpriteTableOffset = freeSpace.setValue(spriteTable, "Repointed Sprite Table", true);
-			freeSpace.setValue(WhyDoesJavaNotHaveThese.subArray(spriteTable, (oldRoyClassID - 1) * 8, 8), "Roy Map Sprite Entry");
-			diffCompiler.findAndReplace(new FindAndReplace(WhyDoesJavaNotHaveThese.bytesFromAddress(mapSpriteTableOffset), WhyDoesJavaNotHaveThese.bytesFromAddress(newSpriteTableOffset), true));
+			freeSpace.setValue(YuneUtil.subArray(spriteTable, (oldRoyClassID - 1) * 8, 8), "Roy Map Sprite Entry");
+			diffCompiler.findAndReplace(new FindAndReplace(YuneUtil.bytesFromAddress(mapSpriteTableOffset), YuneUtil.bytesFromAddress(newSpriteTableOffset), true));
 		} else if (gameType == GameType.FE7) {
 			GBAFECharacterData lyn = charData.characterWithID(FE7Data.Character.LYN.ID);
 			GBAFECharacterData tutorialLyn = charData.characterWithID(FE7Data.Character.LYN_TUTORIAL.ID);
@@ -1300,10 +1300,10 @@ public class GBARandomizer extends Randomizer {
 			long mapSpriteTableOffset = FileReadHelper.readAddress(handler, FE7Data.ClassMapSpriteTablePointer);
 			byte[] spriteTable = handler.readBytesAtOffset(mapSpriteTableOffset, FE7Data.BytesPerMapSpriteTableEntry * FE7Data.NumberOfMapSpriteEntries);
 			long newSpriteTableOffset = freeSpace.setValue(spriteTable, "Repointed Sprite Table", true);
-			freeSpace.setValue(WhyDoesJavaNotHaveThese.subArray(spriteTable, (oldLynClassID - 1) * 8, 8), "Lyn Map Sprite Entry");
-			freeSpace.setValue(WhyDoesJavaNotHaveThese.subArray(spriteTable, (oldEliwoodClassID - 1) * 8, 8), "Eliwood Map Sprite Entry");
-			freeSpace.setValue(WhyDoesJavaNotHaveThese.subArray(spriteTable, (oldHectorClassID - 1) * 8, 8), "Hector Map Sprite Entry");
-			diffCompiler.findAndReplace(new FindAndReplace(WhyDoesJavaNotHaveThese.bytesFromAddress(mapSpriteTableOffset), WhyDoesJavaNotHaveThese.bytesFromAddress(newSpriteTableOffset), true));
+			freeSpace.setValue(YuneUtil.subArray(spriteTable, (oldLynClassID - 1) * 8, 8), "Lyn Map Sprite Entry");
+			freeSpace.setValue(YuneUtil.subArray(spriteTable, (oldEliwoodClassID - 1) * 8, 8), "Eliwood Map Sprite Entry");
+			freeSpace.setValue(YuneUtil.subArray(spriteTable, (oldHectorClassID - 1) * 8, 8), "Hector Map Sprite Entry");
+			diffCompiler.findAndReplace(new FindAndReplace(YuneUtil.bytesFromAddress(mapSpriteTableOffset), YuneUtil.bytesFromAddress(newSpriteTableOffset), true));
 			
 		} else if (gameType == GameType.FE8) {
 			GBAFECharacterData eirika = charData.characterWithID(FE8Data.Character.EIRIKA.ID);

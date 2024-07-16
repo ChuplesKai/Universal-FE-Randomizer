@@ -9,7 +9,7 @@ import random.gcnwii.fe9.loader.FE9CharacterDataLoader;
 import random.gcnwii.fe9.loader.FE9ClassDataLoader;
 import random.gcnwii.fe9.loader.FE9ClassDataLoader.StatBias;
 import random.general.WeightedDistributor;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class FE9BasesRandomizer {
 	
@@ -94,14 +94,14 @@ public class FE9BasesRandomizer {
 				}
 			}
 			
-			character.setBaseHP(WhyDoesJavaNotHaveThese.clamp(hpBase, charClass.getBaseHP() * -1, charClass.getMaxHP() - charClass.getBaseHP()));
-			character.setBaseSTR(WhyDoesJavaNotHaveThese.clamp(strBase, charClass.getBaseSTR() * -1, charClass.getMaxSTR() - charClass.getBaseSTR()));
-			character.setBaseMAG(WhyDoesJavaNotHaveThese.clamp(magBase, charClass.getBaseMAG() * -1, charClass.getMaxMAG() - charClass.getBaseMAG()));
-			character.setBaseSKL(WhyDoesJavaNotHaveThese.clamp(sklBase, charClass.getBaseSKL() * -1, charClass.getMaxSKL() - charClass.getBaseSKL()));
-			character.setBaseSPD(WhyDoesJavaNotHaveThese.clamp(spdBase, charClass.getBaseSPD() * -1, charClass.getMaxSPD() - charClass.getBaseSPD()));
-			character.setBaseLCK(WhyDoesJavaNotHaveThese.clamp(lckBase, charClass.getBaseLCK() * -1, charClass.getMaxLCK() - charClass.getBaseLCK()));
-			character.setBaseDEF(WhyDoesJavaNotHaveThese.clamp(defBase, charClass.getBaseDEF() * -1, charClass.getMaxDEF() - charClass.getBaseDEF()));
-			character.setBaseRES(WhyDoesJavaNotHaveThese.clamp(resBase, charClass.getBaseRES() * -1, charClass.getMaxRES() - charClass.getBaseRES()));
+			character.setBaseHP(YuneUtil.clamp(hpBase, charClass.getBaseHP() * -1, charClass.getMaxHP() - charClass.getBaseHP()));
+			character.setBaseSTR(YuneUtil.clamp(strBase, charClass.getBaseSTR() * -1, charClass.getMaxSTR() - charClass.getBaseSTR()));
+			character.setBaseMAG(YuneUtil.clamp(magBase, charClass.getBaseMAG() * -1, charClass.getMaxMAG() - charClass.getBaseMAG()));
+			character.setBaseSKL(YuneUtil.clamp(sklBase, charClass.getBaseSKL() * -1, charClass.getMaxSKL() - charClass.getBaseSKL()));
+			character.setBaseSPD(YuneUtil.clamp(spdBase, charClass.getBaseSPD() * -1, charClass.getMaxSPD() - charClass.getBaseSPD()));
+			character.setBaseLCK(YuneUtil.clamp(lckBase, charClass.getBaseLCK() * -1, charClass.getMaxLCK() - charClass.getBaseLCK()));
+			character.setBaseDEF(YuneUtil.clamp(defBase, charClass.getBaseDEF() * -1, charClass.getMaxDEF() - charClass.getBaseDEF()));
+			character.setBaseRES(YuneUtil.clamp(resBase, charClass.getBaseRES() * -1, charClass.getMaxRES() - charClass.getBaseRES()));
 		}
 		
 		charData.commit();
@@ -118,49 +118,49 @@ public class FE9BasesRandomizer {
 			int minHP = -1 * charClass.getBaseHP();
 			int maxHP = charClass.getMaxHP() - charClass.getBaseHP();
 			int randHP = character.getBaseHP() + (rng.nextInt(2) == 0 ? 1 : -1) * rng.nextInt(variance);
-			randHP = WhyDoesJavaNotHaveThese.clamp(randHP, minHP, maxHP);
+			randHP = YuneUtil.clamp(randHP, minHP, maxHP);
 			character.setBaseHP(randHP);
 			
 			int minSTR = -1 * charClass.getBaseSTR();
 			int maxSTR = charClass.getMaxSTR() - charClass.getBaseSTR();
 			int randSTR = character.getBaseSTR() + (rng.nextInt(2) == 0 ? 1 : -1) * rng.nextInt(variance);
-			randSTR = WhyDoesJavaNotHaveThese.clamp(randSTR, minSTR, maxSTR);
+			randSTR = YuneUtil.clamp(randSTR, minSTR, maxSTR);
 			character.setBaseSTR(randSTR);
 			
 			int minMAG = -1 * charClass.getBaseMAG();
 			int maxMAG = charClass.getMaxMAG() - charClass.getBaseMAG();
 			int randMAG = character.getBaseMAG() + (rng.nextInt(2) == 0 ? 1 : -1) * rng.nextInt(variance);
-			randMAG = WhyDoesJavaNotHaveThese.clamp(randMAG, minMAG, maxMAG);
+			randMAG = YuneUtil.clamp(randMAG, minMAG, maxMAG);
 			character.setBaseMAG(randMAG);
 			
 			int minSKL = -1 * charClass.getBaseSKL();
 			int maxSKL = charClass.getMaxSKL() - charClass.getBaseSKL();
 			int randSKL = character.getBaseSKL() + (rng.nextInt(2) == 0 ? 1 : -1) * rng.nextInt(variance);
-			randSKL = WhyDoesJavaNotHaveThese.clamp(randSKL, minSKL, maxSKL);
+			randSKL = YuneUtil.clamp(randSKL, minSKL, maxSKL);
 			character.setBaseSKL(randSKL);
 			
 			int minSPD = -1 * charClass.getBaseSPD();
 			int maxSPD = charClass.getMaxSPD() - charClass.getBaseSPD();
 			int randSPD = character.getBaseSPD() + (rng.nextInt(2) == 0 ? 1 : -1) * rng.nextInt(variance);
-			randSPD = WhyDoesJavaNotHaveThese.clamp(randSPD, minSPD, maxSPD);
+			randSPD = YuneUtil.clamp(randSPD, minSPD, maxSPD);
 			character.setBaseSPD(randSPD);
 			
 			int minLCK = -1 * charClass.getBaseLCK();
 			int maxLCK = charClass.getMaxLCK() - charClass.getBaseLCK();
 			int randLCK = character.getBaseLCK() + (rng.nextInt(2) == 0 ? 1 : -1) * rng.nextInt(variance);
-			randLCK = WhyDoesJavaNotHaveThese.clamp(randLCK, minLCK, maxLCK);
+			randLCK = YuneUtil.clamp(randLCK, minLCK, maxLCK);
 			character.setBaseLCK(randLCK);
 			
 			int minDEF = -1 * charClass.getBaseDEF();
 			int maxDEF = charClass.getMaxDEF() - charClass.getBaseDEF();
 			int randDEF = character.getBaseDEF() + (rng.nextInt(2) == 0 ? 1 : -1) * rng.nextInt(variance);
-			randDEF = WhyDoesJavaNotHaveThese.clamp(randDEF, minDEF, maxDEF);
+			randDEF = YuneUtil.clamp(randDEF, minDEF, maxDEF);
 			character.setBaseDEF(randDEF);
 			
 			int minRES = -1 * charClass.getBaseRES();
 			int maxRES = charClass.getMaxRES() - charClass.getBaseRES();
 			int randRES = character.getBaseRES() + (rng.nextInt(2) == 0 ? 1 : -1) * rng.nextInt(variance);
-			randRES = WhyDoesJavaNotHaveThese.clamp(randRES, minRES, maxRES);
+			randRES = YuneUtil.clamp(randRES, minRES, maxRES);
 			character.setBaseRES(randRES);
 		}
 		

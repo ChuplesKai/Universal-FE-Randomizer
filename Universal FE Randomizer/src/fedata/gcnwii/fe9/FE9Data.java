@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class FE9Data {
 	
@@ -734,7 +734,7 @@ public class FE9Data {
 		}
 		
 		public String getDisplayString() {
-			return WhyDoesJavaNotHaveThese.inCamelCase(toString()).replace("_", " ");
+			return YuneUtil.inCamelCase(toString()).replace("_", " ");
 		}
 		
 		public static Set<Skill> allValidSkills = new HashSet<Skill>(Arrays.asList(PARAGON, RENEWAL, CELERITY, RESOLVE, TEMPEST, SERENITY, SAVIOR, VANTAGE,
@@ -1377,7 +1377,7 @@ public class FE9Data {
 		}
 		
 		public String getDisplayString() {
-			return WhyDoesJavaNotHaveThese.inCamelCase(toString()).replace("_", " ");
+			return YuneUtil.inCamelCase(toString()).replace("_", " ");
 		}
 		
 		public String getDisplayNameID() {

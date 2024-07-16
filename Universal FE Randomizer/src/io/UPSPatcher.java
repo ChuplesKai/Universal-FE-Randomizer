@@ -9,7 +9,7 @@ import java.nio.file.StandardCopyOption;
 
 import util.DebugPrinter;
 import util.FileReadHelper;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class UPSPatcher {
 	
@@ -24,7 +24,7 @@ public class UPSPatcher {
 			FileHandler patchHandler = new FileHandler(temp.toString());
 			if (listener != null) { listener.onMessageUpdate("Reading Magic number..."); }
 			byte[] header = patchHandler.readBytesAtOffset(0, 4);
-			if (!WhyDoesJavaNotHaveThese.byteArraysAreEqual(header, new byte[] {0x55, 0x50, 0x53, 0x31})) {
+			if (!YuneUtil.byteArraysAreEqual(header, new byte[] {0x55, 0x50, 0x53, 0x31})) {
 				return false;
 			}
 			

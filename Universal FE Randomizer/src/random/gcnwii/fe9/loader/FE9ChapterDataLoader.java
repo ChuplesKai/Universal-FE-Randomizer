@@ -24,7 +24,7 @@ import io.gcn.GCNISOException;
 import io.gcn.GCNISOHandler;
 import io.gcn.GCNMessageFileHandler;
 import util.DebugPrinter;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 import util.recordkeeper.fe9.Base64Asset;
 import util.recordkeeper.fe9.ChangelogAsset;
 import util.recordkeeper.fe9.ChangelogBuilder;
@@ -139,7 +139,7 @@ public class FE9ChapterDataLoader {
 				DebugPrinter.log(DebugPrinter.Key.FE9_CHAPTER_LOADER, "Skill 1: " + army.getSkill1ForUnit(unit));
 				DebugPrinter.log(DebugPrinter.Key.FE9_CHAPTER_LOADER, "Skill 2: " + army.getSkill2ForUnit(unit));
 				DebugPrinter.log(DebugPrinter.Key.FE9_CHAPTER_LOADER, "Skill 3: " + army.getSkill3ForUnit(unit));
-				DebugPrinter.log(DebugPrinter.Key.FE9_CHAPTER_LOADER, "Unknown Data (0x3C ~ 0x42): " + WhyDoesJavaNotHaveThese.displayStringForBytes(unit.getPostSkillData()));
+				DebugPrinter.log(DebugPrinter.Key.FE9_CHAPTER_LOADER, "Unknown Data (0x3C ~ 0x42): " + YuneUtil.displayStringForBytes(unit.getPostSkillData()));
 				DebugPrinter.log(DebugPrinter.Key.FE9_CHAPTER_LOADER, "HP Adjustment: " + unit.getHPAdjustment());
 				DebugPrinter.log(DebugPrinter.Key.FE9_CHAPTER_LOADER, "STR Adjustment: " + unit.getSTRAdjustment());
 				DebugPrinter.log(DebugPrinter.Key.FE9_CHAPTER_LOADER, "MAG Adjustment: " + unit.getMAGAdjustment());
@@ -148,10 +148,10 @@ public class FE9ChapterDataLoader {
 				DebugPrinter.log(DebugPrinter.Key.FE9_CHAPTER_LOADER, "LCK Adjustment: " + unit.getLCKAdjustment());
 				DebugPrinter.log(DebugPrinter.Key.FE9_CHAPTER_LOADER, "DEF Adjustment: " + unit.getDEFAdjustment());
 				DebugPrinter.log(DebugPrinter.Key.FE9_CHAPTER_LOADER, "RES Adjustment: " + unit.getRESAdjustment());
-				DebugPrinter.log(DebugPrinter.Key.FE9_CHAPTER_LOADER, "Unknown Data (0x4B ~ 0x5B): " + WhyDoesJavaNotHaveThese.displayStringForBytes(unit.getPostAdjustmentData()));
+				DebugPrinter.log(DebugPrinter.Key.FE9_CHAPTER_LOADER, "Unknown Data (0x4B ~ 0x5B): " + YuneUtil.displayStringForBytes(unit.getPostAdjustmentData()));
 				DebugPrinter.log(DebugPrinter.Key.FE9_CHAPTER_LOADER, "Starting Coordinates: (" + army.getStartingXForUnit(unit) + ", " + army.getStartingYForUnit(unit) + ")");
 				DebugPrinter.log(DebugPrinter.Key.FE9_CHAPTER_LOADER, "Ending Coordinates: (" + army.getEndingXForUnit(unit) + ", " + army.getEndingYForUnit(unit) + ")");
-				DebugPrinter.log(DebugPrinter.Key.FE9_CHAPTER_LOADER, "Unknown Data (0x61 ~ 0x63): " + WhyDoesJavaNotHaveThese.displayStringForBytes(unit.getPreDropData()));
+				DebugPrinter.log(DebugPrinter.Key.FE9_CHAPTER_LOADER, "Unknown Data (0x61 ~ 0x63): " + YuneUtil.displayStringForBytes(unit.getPreDropData()));
 				DebugPrinter.log(DebugPrinter.Key.FE9_CHAPTER_LOADER, "--- Ending Character " + unitID + " ---");
 			}
 			DebugPrinter.log(DebugPrinter.Key.FE9_CHAPTER_LOADER, "===== End Chapter Army: " + army.getID() + " =====");

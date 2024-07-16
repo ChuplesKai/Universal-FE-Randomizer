@@ -27,7 +27,7 @@ import io.gcn.GCNISOHandler;
 import ui.model.MinMaxOption;
 import util.DebugPrinter;
 import util.Diff;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 import util.recordkeeper.fe9.ChangelogBuilder;
 import util.recordkeeper.fe9.ChangelogHeader;
 import util.recordkeeper.fe9.ChangelogSection;
@@ -143,7 +143,7 @@ public class FE9ItemDataLoader {
 		}
 		
 		itemDataSection = fe8databin.getSectionWithName(FE9Data.ItemDataSectionName);
-		int count = (int)WhyDoesJavaNotHaveThese.longValueFromByteArray(itemDataSection.getRawData(0, 4), false);
+		int count = (int)YuneUtil.longValueFromByteArray(itemDataSection.getRawData(0, 4), false);
 		
 		long offset = 4;
 		for (int i = 0; i < count; i++) {
@@ -1329,7 +1329,7 @@ public class FE9ItemDataLoader {
 		DebugPrinter.log(DebugPrinter.Key.FE9_ITEM_LOADER, "RES Bonus: " + item.getRESBonus());
 		
 		DebugPrinter.log(DebugPrinter.Key.FE9_ITEM_LOADER,
-				"Remaining Bytes: " + WhyDoesJavaNotHaveThese.displayStringForBytes(item.getRemainingBytes()));
+				"Remaining Bytes: " + YuneUtil.displayStringForBytes(item.getRemainingBytes()));
 		
 		DebugPrinter.log(DebugPrinter.Key.FE9_ITEM_LOADER, "===== End Printing Item =====");
 	}
@@ -1338,7 +1338,7 @@ public class FE9ItemDataLoader {
 		if (pointer == 0) { return "(null)"; }
 		handler.setNextReadOffset(pointer);
 		byte[] bytes = handler.continueReadingBytesUpToNextTerminator(pointer + 0xFF);
-		String identifier = WhyDoesJavaNotHaveThese.stringFromAsciiBytes(bytes);
+		String identifier = YuneUtil.stringFromAsciiBytes(bytes);
 		String resolvedValue = commonTextLoader.textStringForIdentifier(identifier);
 		if (resolvedValue != null) {
 			return identifier + " (" + resolvedValue + ")";

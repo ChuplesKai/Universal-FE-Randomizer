@@ -14,7 +14,7 @@ import io.gcn.GCNDataFileHandlerV2;
 import io.gcn.GCNDataFileHandlerV2.GCNDataFileDataSection;
 import util.DebugPrinter;
 import util.Diff;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class FE9ChapterArmy {
 	
@@ -37,7 +37,7 @@ public class FE9ChapterArmy {
 		}
 		
 		public List<FE9ChapterUnit> allUnitsInSection() {
-			return WhyDoesJavaNotHaveThese.createMutableCopy(units);
+			return YuneUtil.createMutableCopy(units);
 		}
 		
 		public String getName() {

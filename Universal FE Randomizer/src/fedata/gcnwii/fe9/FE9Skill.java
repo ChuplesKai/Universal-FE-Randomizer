@@ -3,7 +3,7 @@ package fedata.gcnwii.fe9;
 import java.util.Arrays;
 
 import fedata.general.FEModifiableData;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class FE9Skill implements FEModifiableData {
 
@@ -106,14 +106,14 @@ public class FE9Skill implements FEModifiableData {
 	
 	private long readPointerAtOffset(int offset) {
 		byte[] ptr = Arrays.copyOfRange(data, offset, offset + 4);
-		if (WhyDoesJavaNotHaveThese.byteArraysAreEqual(ptr, new byte[] {0, 0, 0, 0})) { return 0; }
+		if (YuneUtil.byteArraysAreEqual(ptr, new byte[] {0, 0, 0, 0})) { return 0; }
 		
-		return WhyDoesJavaNotHaveThese.longValueFromByteArray(ptr, false);
+		return YuneUtil.longValueFromByteArray(ptr, false);
 	}
 	
 	private void writePointerToOffset(long pointer, int offset) {
-		byte[] ptr = pointer == 0 ? new byte[] {0, 0, 0, 0} : WhyDoesJavaNotHaveThese.bytesFromPointer(pointer);
-		WhyDoesJavaNotHaveThese.copyBytesIntoByteArrayAtIndex(ptr, data, offset, 4);
+		byte[] ptr = pointer == 0 ? new byte[] {0, 0, 0, 0} : YuneUtil.bytesFromPointer(pointer);
+		YuneUtil.copyBytesIntoByteArrayAtIndex(ptr, data, offset, 4);
 	}
 	
 	public void resetData() {

@@ -24,7 +24,7 @@ import util.DiffCompiler;
 import util.FileReadHelper;
 import util.FindAndReplace;
 import util.FreeSpaceManager;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 import util.recordkeeper.RecordKeeper;
 
 public class ClassDataLoader {
@@ -189,7 +189,7 @@ public class ClassDataLoader {
 			}
 			
 			// Update the pointers to this table.
-			compiler.findAndReplace(new FindAndReplace(WhyDoesJavaNotHaveThese.gbaAddressFromOffset(startingOffset), WhyDoesJavaNotHaveThese.gbaAddressFromOffset(newStartingOffset), true));
+			compiler.findAndReplace(new FindAndReplace(YuneUtil.gbaAddressFromOffset(startingOffset), YuneUtil.gbaAddressFromOffset(newStartingOffset), true));
 		}
 	}
 	

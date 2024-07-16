@@ -11,7 +11,7 @@ import util.DebugPrinter;
 import util.Diff;
 import util.DiffCompiler;
 import util.FileReadHelper;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 import io.FileHandler;
 
 // FE8 uses two auxiliary tables to map palettes based on class.
@@ -286,8 +286,8 @@ public class FE8PaletteMapper {
 	}
 	
 	private Integer requestRecycledPaletteForSize(int paletteSize) {
-		if (recycledPaletteIDsByLength.keySet().stream().filter(size -> (size >= paletteSize)).min(WhyDoesJavaNotHaveThese.ascendingIntegerComparator).isPresent()) {
-			int length = recycledPaletteIDsByLength.keySet().stream().filter(size -> (size >= paletteSize)).min(WhyDoesJavaNotHaveThese.ascendingIntegerComparator).get();
+		if (recycledPaletteIDsByLength.keySet().stream().filter(size -> (size >= paletteSize)).min(YuneUtil.ascendingIntegerComparator).isPresent()) {
+			int length = recycledPaletteIDsByLength.keySet().stream().filter(size -> (size >= paletteSize)).min(YuneUtil.ascendingIntegerComparator).get();
 			List<Integer> availableIDs = recycledPaletteIDsByLength.get(length);
 			if (availableIDs.isEmpty()) {
 				recycledPaletteIDsByLength.remove(length);

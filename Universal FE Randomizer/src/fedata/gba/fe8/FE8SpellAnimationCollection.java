@@ -15,7 +15,7 @@ import util.Diff;
 import util.DiffCompiler;
 import util.FindAndReplace;
 import util.FreeSpaceManager;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class FE8SpellAnimationCollection implements GBAFESpellAnimationCollection {
 	
@@ -236,7 +236,7 @@ public class FE8SpellAnimationCollection implements GBAFESpellAnimationCollectio
 					(byte)0x1, (byte)0, (byte)0, (byte)0}, "Spell Animation Terminator", false);
 			
 			// Update the pointers
-			compiler.findAndReplace(new FindAndReplace(WhyDoesJavaNotHaveThese.gbaAddressFromOffset(originalOffset), WhyDoesJavaNotHaveThese.gbaAddressFromOffset(newTableOffset), true));
+			compiler.findAndReplace(new FindAndReplace(YuneUtil.gbaAddressFromOffset(originalOffset), YuneUtil.gbaAddressFromOffset(newTableOffset), true));
 		}
 	}
 
@@ -276,7 +276,7 @@ public class FE8SpellAnimationCollection implements GBAFESpellAnimationCollectio
 		// Then another 0.
 		entryBytes.appendByte((byte)0);
 		// Then the animation value.
-		entryBytes.appendBytes(WhyDoesJavaNotHaveThese.byteArrayFromLongValue(animation.value, true, 2));
+		entryBytes.appendBytes(YuneUtil.byteArrayFromLongValue(animation.value, true, 2));
 		// Then two 0s.
 		entryBytes.appendByte((byte)0);
 		entryBytes.appendByte((byte)0);

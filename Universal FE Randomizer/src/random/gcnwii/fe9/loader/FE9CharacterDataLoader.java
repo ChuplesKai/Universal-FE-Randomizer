@@ -24,7 +24,7 @@ import random.gcnwii.fe9.loader.FE9ItemDataLoader.WeaponRank;
 import random.gcnwii.fe9.loader.FE9ItemDataLoader.WeaponType;
 import util.DebugPrinter;
 import util.Diff;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 import util.recordkeeper.fe9.Base64Asset;
 import util.recordkeeper.fe9.ChangelogAsset;
 import util.recordkeeper.fe9.ChangelogBuilder;
@@ -76,7 +76,7 @@ public class FE9CharacterDataLoader {
 		textData = commonTextLoader;
 		
 		characterDataSection = fe8databin.getSectionWithName(FE9Data.CharacterDataSectionName);
-		int count = (int)WhyDoesJavaNotHaveThese.longValueFromByteArray(characterDataSection.getRawData(0, 4), false);
+		int count = (int)YuneUtil.longValueFromByteArray(characterDataSection.getRawData(0, 4), false);
 		
 		long offset = 4;
 		for (int i = 0; i < count; i++) {
@@ -330,7 +330,7 @@ public class FE9CharacterDataLoader {
 	}
 	
 	public void setLaguzStartingGaugeForCharacter(FE9Character character, int value) {
-		character.setLaguzTransformationStartingValue(WhyDoesJavaNotHaveThese.clamp(value, 0, 20));
+		character.setLaguzTransformationStartingValue(YuneUtil.clamp(value, 0, 20));
 	}
 	
 	public String getWeaponLevelStringForCharacter(FE9Character character) {
@@ -495,8 +495,8 @@ public class FE9CharacterDataLoader {
 		DebugPrinter.log(DebugPrinter.Key.FE9_CHARACTER_LOADER, "DEF Growth: " + character.getDEFGrowth());
 		DebugPrinter.log(DebugPrinter.Key.FE9_CHARACTER_LOADER, "RES Growth: " + character.getRESGrowth());
 		
-		DebugPrinter.log(DebugPrinter.Key.FE9_CHARACTER_LOADER, "Unknown 6: " + WhyDoesJavaNotHaveThese.displayStringForBytes(character.getUnknown6Bytes()));
-		DebugPrinter.log(DebugPrinter.Key.FE9_CHARACTER_LOADER, "Unknown 8: " + WhyDoesJavaNotHaveThese.displayStringForBytes(character.getUnknown13Bytes()));
+		DebugPrinter.log(DebugPrinter.Key.FE9_CHARACTER_LOADER, "Unknown 6: " + YuneUtil.displayStringForBytes(character.getUnknown6Bytes()));
+		DebugPrinter.log(DebugPrinter.Key.FE9_CHARACTER_LOADER, "Unknown 8: " + YuneUtil.displayStringForBytes(character.getUnknown13Bytes()));
 		
 		DebugPrinter.log(DebugPrinter.Key.FE9_CHARACTER_LOADER, "===== End Printing Character =====");
 	}
@@ -505,7 +505,7 @@ public class FE9CharacterDataLoader {
 		if (pointer == 0) { return "(null)"; }
 		handler.setNextReadOffset(pointer);
 		byte[] bytes = handler.continueReadingBytesUpToNextTerminator(pointer + 0xFF);
-		String identifier = WhyDoesJavaNotHaveThese.stringFromAsciiBytes(bytes);
+		String identifier = YuneUtil.stringFromAsciiBytes(bytes);
 		if (commonTextLoader == null) { return identifier; }
 		
 		String resolvedValue = commonTextLoader.textStringForIdentifier(identifier);

@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 import io.FileHandler;
 import util.ByteArrayBuilder;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 // GCN Data files have a header that has some information, and all address references are offset by 0x20 to account for this.
 // So any pointers used in the file have a built in +0x20 to the address they actually point to.
@@ -54,19 +54,19 @@ public class GCNDataFileHandler extends GCNByteArrayHandler {
 		addedPointersOffsets = new HashSet<Long>();
 		addedStrings = new HashSet<String>();
 		
-		pointerOffset = WhyDoesJavaNotHaveThese.longValueFromByteArray(readBytesAtOffset(0x04, 4), false);
+		pointerOffset = YuneUtil.longValueFromByteArray(readBytesAtOffset(0x04, 4), false);
 		
-		int numberOfPointers = (int)WhyDoesJavaNotHaveThese.longValueFromByteArray(readBytesAtOffset(0x08, 4), false);
+		int numberOfPointers = (int)YuneUtil.longValueFromByteArray(readBytesAtOffset(0x08, 4), false);
 		long currentOffset = pointerOffset + 0x20;
 		for (int i = 0; i < numberOfPointers; i++) {
 			// Each item is the offset of a pointer used in the data.
-			long pointerOffset = WhyDoesJavaNotHaveThese.longValueFromByteArray(readBytesAtOffset(currentOffset, 4), false);
+			long pointerOffset = YuneUtil.longValueFromByteArray(readBytesAtOffset(currentOffset, 4), false);
 			pointerOffsetList.add(pointerOffset);
 			
 			// Remember to add 0x20 when dereferencing.
-			long pointer = WhyDoesJavaNotHaveThese.longValueFromByteArray(readBytesAtOffset(pointerOffset + 0x20, 4), false);
+			long pointer = YuneUtil.longValueFromByteArray(readBytesAtOffset(pointerOffset + 0x20, 4), false);
 			setNextReadOffset(pointer + 0x20);
-			String dereferenced = WhyDoesJavaNotHaveThese.stringFromAsciiBytes(continueReadingBytesUpToNextTerminator(pointer + 0x20 + 0xFF));
+			String dereferenced = YuneUtil.stringFromAsciiBytes(continueReadingBytesUpToNextTerminator(pointer + 0x20 + 0xFF));
 			pointerToString.put(pointer + 0x20, dereferenced);
 			pointerLookup.put(dereferenced, pointer + 0x20);
 			
@@ -110,7 +110,7 @@ public class GCNDataFileHandler extends GCNByteArrayHandler {
 			// Determine bytes needed for new pointers.
 			ByteArrayBuilder pointerDataBuilder = new ByteArrayBuilder();
 			for (long newPointer : addedPointersOffsets) {
-				pointerDataBuilder.appendBytes(WhyDoesJavaNotHaveThese.byteArrayFromLongValue(newPointer, false, 4));
+				pointerDataBuilder.appendBytes(YuneUtil.byteArrayFromLongValue(newPointer, false, 4));
 			}
 						
 			// Determine bytes needed for strings. These will be added to the very end of the file.
@@ -120,7 +120,7 @@ public class GCNDataFileHandler extends GCNByteArrayHandler {
 			Map<String, Long> addedStringsToAddresses = new HashMap<String, Long>();
 			for (String newString : addedStrings) {
 				addedStringsToAddresses.put(newString, insertAddress);
-				byte[] stringBytes = WhyDoesJavaNotHaveThese.asciiBytesFromString(newString);
+				byte[] stringBytes = YuneUtil.asciiBytesFromString(newString);
 				stringDataBuilder.appendBytes(stringBytes);
 				stringDataBuilder.appendByte((byte)0);
 				insertAddress += stringBytes.length + 1;
@@ -135,9 +135,9 @@ public class GCNDataFileHandler extends GCNByteArrayHandler {
 			int newNumberOfPointers = pointerOffsetList.size() + addedPointersOffsets.size();
 			
 			ByteArrayBuilder headerDataBuilder = new ByteArrayBuilder();
-			headerDataBuilder.appendBytes(WhyDoesJavaNotHaveThese.byteArrayFromLongValue(newFileLength, false, 4));
-			headerDataBuilder.appendBytes(WhyDoesJavaNotHaveThese.byteArrayFromLongValue(pointerOffset, false, 4)); // We'll change this later once we know where the pointers end up.
-			headerDataBuilder.appendBytes(WhyDoesJavaNotHaveThese.byteArrayFromLongValue(newNumberOfPointers, false, 4));
+			headerDataBuilder.appendBytes(YuneUtil.byteArrayFromLongValue(newFileLength, false, 4));
+			headerDataBuilder.appendBytes(YuneUtil.byteArrayFromLongValue(pointerOffset, false, 4)); // We'll change this later once we know where the pointers end up.
+			headerDataBuilder.appendBytes(YuneUtil.byteArrayFromLongValue(newNumberOfPointers, false, 4));
 			// There's one last value in the header that refers to the count of something else. They're 8 byte long entries, but I"m not sure what they are.
 			// Nevertheless we have to restore it.
 			headerDataBuilder.appendBytes(readBytesAtOffset(0x0C, 4));
@@ -165,8 +165,8 @@ public class GCNDataFileHandler extends GCNByteArrayHandler {
 			byteArray = expandedFileBuilder.toByteArray();
 
 			// Write the new pointer offset (since we had to write everything before we could figure it out).
-			byte[] pointerOffsetBytes = WhyDoesJavaNotHaveThese.byteArrayFromLongValue(newPointerOffset, false, 4);
-			WhyDoesJavaNotHaveThese.copyBytesIntoByteArrayAtIndex(pointerOffsetBytes, byteArray, 0x4, 4);
+			byte[] pointerOffsetBytes = YuneUtil.byteArrayFromLongValue(newPointerOffset, false, 4);
+			YuneUtil.copyBytesIntoByteArrayAtIndex(pointerOffsetBytes, byteArray, 0x4, 4);
 			pointerOffset = newPointerOffset;
 			
 			needsExpansion = false;

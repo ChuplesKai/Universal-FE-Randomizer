@@ -3,7 +3,7 @@ package fedata.gcnwii.fe9;
 import java.util.Arrays;
 
 import fedata.general.FEModifiableData;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class FE9TextEntry implements FEModifiableData {
 	private byte[] originalData;
@@ -26,14 +26,14 @@ public class FE9TextEntry implements FEModifiableData {
 	
 	public long getIDOffset() {
 		if (cachedIDOffset == null) {
-			cachedIDOffset = WhyDoesJavaNotHaveThese.longValueFromByteArray(Arrays.copyOfRange(data, 4, 8), false); 
+			cachedIDOffset = YuneUtil.longValueFromByteArray(Arrays.copyOfRange(data, 4, 8), false); 
 		}
 		return cachedIDOffset;
 	}
 	
 	public long getStringOffset() {
 		if (cachedStringOffset == null) {
-			cachedStringOffset = WhyDoesJavaNotHaveThese.longValueFromByteArray(Arrays.copyOfRange(data, 0, 4),  false) + 0x20;
+			cachedStringOffset = YuneUtil.longValueFromByteArray(Arrays.copyOfRange(data, 0, 4),  false) + 0x20;
 		}
 		return cachedStringOffset;
 	}

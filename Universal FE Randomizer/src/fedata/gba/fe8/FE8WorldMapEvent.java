@@ -8,7 +8,7 @@ import fedata.gba.GBAFEWorldMapPortraitData;
 import fedata.gba.GBAFEWorldMapSpriteData;
 import io.FileHandler;
 import util.FileReadHelper;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class FE8WorldMapEvent implements GBAFEWorldMapData {
 	
@@ -185,26 +185,26 @@ public class FE8WorldMapEvent implements GBAFEWorldMapData {
 			byte[] opcode = handler.continueReadingBytes(4);
 			// These are the two valid terminators that we can encounter.
 			// ENDA (0x0120), ENDB(0x0121)
-			if (WhyDoesJavaNotHaveThese.byteArrayHasPrefix(opcode, new byte[] {(byte)0x20, (byte)0x01}) || WhyDoesJavaNotHaveThese.byteArrayHasPrefix(opcode, new byte[] {(byte)0x21, (byte)0x01})) {
+			if (YuneUtil.byteArrayHasPrefix(opcode, new byte[] {(byte)0x20, (byte)0x01}) || YuneUtil.byteArrayHasPrefix(opcode, new byte[] {(byte)0x21, (byte)0x01})) {
 				if (terminateOnNextEnd) { break; }
 				terminateOnNextEnd = true;
 			}
 			// This is what we came here for.
 			// WM_SHOWPORTRAIT (0xC460) - 12 bytes
-			else if (WhyDoesJavaNotHaveThese.byteArrayHasPrefix(opcode, new byte[] {(byte)0x60, (byte)0xC4})) {
+			else if (YuneUtil.byteArrayHasPrefix(opcode, new byte[] {(byte)0x60, (byte)0xC4})) {
 				long address = handler.getNextReadOffset() - 4;
 				portraitList.add(new FE8WorldMapPortrait(handler.readBytesAtOffset(address, 12), address));
 			}
 			// Will probably have to tackle this later.
 			// PUTSPRITE (0x9E60) - 12 bytes
-			else if (WhyDoesJavaNotHaveThese.byteArrayHasPrefix(opcode, new byte[] {(byte)0x60, (byte)0x9E})) {
+			else if (YuneUtil.byteArrayHasPrefix(opcode, new byte[] {(byte)0x60, (byte)0x9E})) {
 				long address = handler.getNextReadOffset() - 4;
 				spriteList.add(new FE8WorldMapSprite(handler.readBytesAtOffset(address, 12), address, SpriteType.PUTSPRITE));
 			}
 			// May be able to roll this into a universal sprite handler.
 			// I don't think these load in new sprites.
 			// WM_PUTMOVINGSPRITE (0xA8C0) - 24 bytes
-			else if (WhyDoesJavaNotHaveThese.byteArrayHasPrefix(opcode, new byte[] {(byte)0xC0, (byte)0xA8})) {
+			else if (YuneUtil.byteArrayHasPrefix(opcode, new byte[] {(byte)0xC0, (byte)0xA8})) {
 				//long address = handler.getNextReadOffset() - 4;
 				//spriteList.add(new FE8WorldMapSprite(handler.readBytesAtOffset(address, 24), address, SpriteType.WM_PUTMOVINGSPRITE));
 				handler.continueReadingBytes(20);
@@ -212,7 +212,7 @@ public class FE8WorldMapEvent implements GBAFEWorldMapData {
 			// There's a third type of sprite. o_o
 			// I don't think these load in new sprites though, they just modify existing sprites.
 			// WM_PUTSPRITE (0xA760) - 12 bytes
-			else if (WhyDoesJavaNotHaveThese.byteArrayHasPrefix(opcode, new byte[] {(byte)0x60, (byte)0xA7})) {
+			else if (YuneUtil.byteArrayHasPrefix(opcode, new byte[] {(byte)0x60, (byte)0xA7})) {
 				//long address = handler.getNextReadOffset() - 4;
 				//spriteList.add(new FE8WorldMapSprite(handler.readBytesAtOffset(address, 12), address, SpriteType.WM_PUTSPRITE));
 				handler.continueReadingBytes(8);
@@ -224,16 +224,16 @@ public class FE8WorldMapEvent implements GBAFEWorldMapData {
 			
 			// These opcodes are 4 bytes and we don't care about them (right now).
 			// EVBIT_MODIFY (0x1020), ? (0xC220), MUSCFAST (0x1322), STAL (0x0E20), MUSC (0x1220), WM_TEXTDECORATE (0xB320), WM_WAITFORTEXT (0xB120), WM_TEXTSTART (0xC720), TEXTEND (0x1D20), TEXTCONT (0x1C20), etc.
-			else if (WhyDoesJavaNotHaveThese.byteArrayHasPrefix(opcode, new byte[] {(byte)0x20, (byte)0x10}) ||
-					WhyDoesJavaNotHaveThese.byteArrayHasPrefix(opcode, new byte[] {(byte)0x20, (byte)0xC2}) ||
-					WhyDoesJavaNotHaveThese.byteArrayHasPrefix(opcode, new byte[] {(byte)0x22, (byte)0x13}) ||
-					WhyDoesJavaNotHaveThese.byteArrayHasPrefix(opcode, new byte[] {(byte)0x20, (byte)0x0E}) ||
-					WhyDoesJavaNotHaveThese.byteArrayHasPrefix(opcode, new byte[] {(byte)0x20, (byte)0x12}) ||
-					WhyDoesJavaNotHaveThese.byteArrayHasPrefix(opcode, new byte[] {(byte)0x20, (byte)0xB3}) ||
-					WhyDoesJavaNotHaveThese.byteArrayHasPrefix(opcode, new byte[] {(byte)0x20, (byte)0xB1}) ||
-					WhyDoesJavaNotHaveThese.byteArrayHasPrefix(opcode, new byte[] {(byte)0x20, (byte)0xC7}) ||
-					WhyDoesJavaNotHaveThese.byteArrayHasPrefix(opcode, new byte[] {(byte)0x20, (byte)0x1D}) ||
-					WhyDoesJavaNotHaveThese.byteArrayHasPrefix(opcode, new byte[] {(byte)0x20, (byte)0x1C}) ||
+			else if (YuneUtil.byteArrayHasPrefix(opcode, new byte[] {(byte)0x20, (byte)0x10}) ||
+					YuneUtil.byteArrayHasPrefix(opcode, new byte[] {(byte)0x20, (byte)0xC2}) ||
+					YuneUtil.byteArrayHasPrefix(opcode, new byte[] {(byte)0x22, (byte)0x13}) ||
+					YuneUtil.byteArrayHasPrefix(opcode, new byte[] {(byte)0x20, (byte)0x0E}) ||
+					YuneUtil.byteArrayHasPrefix(opcode, new byte[] {(byte)0x20, (byte)0x12}) ||
+					YuneUtil.byteArrayHasPrefix(opcode, new byte[] {(byte)0x20, (byte)0xB3}) ||
+					YuneUtil.byteArrayHasPrefix(opcode, new byte[] {(byte)0x20, (byte)0xB1}) ||
+					YuneUtil.byteArrayHasPrefix(opcode, new byte[] {(byte)0x20, (byte)0xC7}) ||
+					YuneUtil.byteArrayHasPrefix(opcode, new byte[] {(byte)0x20, (byte)0x1D}) ||
+					YuneUtil.byteArrayHasPrefix(opcode, new byte[] {(byte)0x20, (byte)0x1C}) ||
 					
 					(byte)(opcode[0] & 0xF0) == 0x20) {
 				// We've already read all 4 bytes, so we're good.
@@ -241,36 +241,36 @@ public class FE8WorldMapEvent implements GBAFEWorldMapData {
 			// These opcodes are 8 bytes and we don't care about them (right now).
 			// WM_CENTERCAMONLORD (0x8540), WM_FADEOUT (0xB240), WM_SHOWTEXTWINDOW (0xAF40), WM_TEXT (0xC640), WM_HIGHLIGHT (0xB840), WM_HIGHLIGHTCLEAR1 (0xB940), WM_HIGHLIGHTCLEAR2 (0xBA40),
 			// WM_CLEARPORTRAIT (0xC540), etc.
-			else if (WhyDoesJavaNotHaveThese.byteArrayHasPrefix(opcode, new byte[] {(byte)0x40, (byte)0x85}) ||
-					WhyDoesJavaNotHaveThese.byteArrayHasPrefix(opcode, new byte[] {(byte)0x40, (byte)0xB2}) ||
-					WhyDoesJavaNotHaveThese.byteArrayHasPrefix(opcode, new byte[] {(byte)0x40, (byte)0xAF}) ||
-					WhyDoesJavaNotHaveThese.byteArrayHasPrefix(opcode, new byte[] {(byte)0x40, (byte)0xC6}) ||
-					WhyDoesJavaNotHaveThese.byteArrayHasPrefix(opcode, new byte[] {(byte)0x40, (byte)0xB8}) ||
-					WhyDoesJavaNotHaveThese.byteArrayHasPrefix(opcode, new byte[] {(byte)0x40, (byte)0xB9}) ||
-					WhyDoesJavaNotHaveThese.byteArrayHasPrefix(opcode, new byte[] {(byte)0x40, (byte)0xBA}) ||
-					WhyDoesJavaNotHaveThese.byteArrayHasPrefix(opcode, new byte[] {(byte)0x40, (byte)0xC5}) ||
+			else if (YuneUtil.byteArrayHasPrefix(opcode, new byte[] {(byte)0x40, (byte)0x85}) ||
+					YuneUtil.byteArrayHasPrefix(opcode, new byte[] {(byte)0x40, (byte)0xB2}) ||
+					YuneUtil.byteArrayHasPrefix(opcode, new byte[] {(byte)0x40, (byte)0xAF}) ||
+					YuneUtil.byteArrayHasPrefix(opcode, new byte[] {(byte)0x40, (byte)0xC6}) ||
+					YuneUtil.byteArrayHasPrefix(opcode, new byte[] {(byte)0x40, (byte)0xB8}) ||
+					YuneUtil.byteArrayHasPrefix(opcode, new byte[] {(byte)0x40, (byte)0xB9}) ||
+					YuneUtil.byteArrayHasPrefix(opcode, new byte[] {(byte)0x40, (byte)0xBA}) ||
+					YuneUtil.byteArrayHasPrefix(opcode, new byte[] {(byte)0x40, (byte)0xC5}) ||
 					
 					(byte)(opcode[0] & 0xF0) == 0x40) {
 				handler.continueReadingBytes(4);
 			}
 			// These opcodes are 12 bytes and we don't care about them (right now).
 			// WM_SPAWNLORD (0xC360), WM_SHOWDRAWNMAP (0xB460), PLACEDOT (0xBC60), etc.
-			else if (WhyDoesJavaNotHaveThese.byteArrayHasPrefix(opcode, new byte[] {(byte)0x60, (byte)0xC3}) ||
-					WhyDoesJavaNotHaveThese.byteArrayHasPrefix(opcode, new byte[] {(byte)0x60, (byte)0xB4}) ||
-					WhyDoesJavaNotHaveThese.byteArrayHasPrefix(opcode, new byte[] {(byte)0x60, (byte)0xBC}) ||
+			else if (YuneUtil.byteArrayHasPrefix(opcode, new byte[] {(byte)0x60, (byte)0xC3}) ||
+					YuneUtil.byteArrayHasPrefix(opcode, new byte[] {(byte)0x60, (byte)0xB4}) ||
+					YuneUtil.byteArrayHasPrefix(opcode, new byte[] {(byte)0x60, (byte)0xBC}) ||
 					
 					(byte)(opcode[0] & 0xF0) == 0x60) {
 				handler.continueReadingBytes(8);
 			}
 			// These opcodes are 16 bytes and we don't care about them (right now).
 			// WM_MOVECAM2 (0xB680), etc.
-			else if (WhyDoesJavaNotHaveThese.byteArrayHasPrefix(opcode, new byte[] {(byte)0x80, (byte)0xB6}) ||
+			else if (YuneUtil.byteArrayHasPrefix(opcode, new byte[] {(byte)0x80, (byte)0xB6}) ||
 					
 					(byte)(opcode[0] & 0xF0) == (byte)0x80) {
 				handler.continueReadingBytes(12);
 			}
 			else {
-				assert false : "Unhandled world map event opcode 0x" + WhyDoesJavaNotHaveThese.displayStringForBytes(opcode);
+				assert false : "Unhandled world map event opcode 0x" + YuneUtil.displayStringForBytes(opcode);
 			}
 			
 		}

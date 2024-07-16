@@ -42,7 +42,7 @@ import util.FreeSpaceManager;
 import util.GBAImageCodec;
 import util.LZ77;
 import util.PaletteUtil;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 /**
  * Randomizer that shuffles in characters from different games into the rom
@@ -212,14 +212,14 @@ public class CharacterShuffler {
             GBASlotAdjustmentService.transferWeaponRanks(character, sourceClass, targetClass, rng);
         } else {
             // If we don't auto level transfer 1 to 1 while making sure it doesn't over or underflow
-            character.setSwordRank(WhyDoesJavaNotHaveThese.clamp(crossGameData.weaponRanks[0], 0, 255));
-            character.setLanceRank(WhyDoesJavaNotHaveThese.clamp(crossGameData.weaponRanks[1], 0, 255));
-            character.setAxeRank(WhyDoesJavaNotHaveThese.clamp(crossGameData.weaponRanks[2], 0, 255));
-            character.setBowRank(WhyDoesJavaNotHaveThese.clamp(crossGameData.weaponRanks[3], 0, 255));
-            character.setStaffRank(WhyDoesJavaNotHaveThese.clamp(crossGameData.weaponRanks[4], 0, 255));
-            character.setAnimaRank(WhyDoesJavaNotHaveThese.clamp(crossGameData.weaponRanks[5], 0, 255));
-            character.setLightRank(WhyDoesJavaNotHaveThese.clamp(crossGameData.weaponRanks[6], 0, 255));
-            character.setDarkRank(WhyDoesJavaNotHaveThese.clamp(crossGameData.weaponRanks[7], 0, 255));
+            character.setSwordRank(YuneUtil.clamp(crossGameData.weaponRanks[0], 0, 255));
+            character.setLanceRank(YuneUtil.clamp(crossGameData.weaponRanks[1], 0, 255));
+            character.setAxeRank(YuneUtil.clamp(crossGameData.weaponRanks[2], 0, 255));
+            character.setBowRank(YuneUtil.clamp(crossGameData.weaponRanks[3], 0, 255));
+            character.setStaffRank(YuneUtil.clamp(crossGameData.weaponRanks[4], 0, 255));
+            character.setAnimaRank(YuneUtil.clamp(crossGameData.weaponRanks[5], 0, 255));
+            character.setLightRank(YuneUtil.clamp(crossGameData.weaponRanks[6], 0, 255));
+            character.setDarkRank(YuneUtil.clamp(crossGameData.weaponRanks[7], 0, 255));
         }
 
 
@@ -314,7 +314,7 @@ public class CharacterShuffler {
 
         // For some reason the Portrait must be byte aligned or it really messes with the rom..
         long mainPortraitAddress = freeSpace.setValue(mainPortrait, character.getFaceID() + "_MainPortrait", true);
-        characterPortraitData.setMainPortraitPointer(WhyDoesJavaNotHaveThese.bytesFromAddress(mainPortraitAddress));
+        characterPortraitData.setMainPortraitPointer(YuneUtil.bytesFromAddress(mainPortraitAddress));
 
         // Insert and repoint Mini Portrait
         byte[] miniPortrait = GBAImageCodec.getGBAPortraitGraphicsDataForImage(chara.portraitPath, palette,
@@ -324,14 +324,14 @@ public class CharacterShuffler {
         }
 
         long miniPortraitAddress = freeSpace.setValue(miniPortrait, character.getFaceID() + "_MiniPortrait", true);
-        characterPortraitData.setMiniPortraitPointer(WhyDoesJavaNotHaveThese.bytesFromAddress(miniPortraitAddress));
+        characterPortraitData.setMiniPortraitPointer(YuneUtil.bytesFromAddress(miniPortraitAddress));
 
         // Insert and repoint Mouth Chunks
         if (targetFormat.getMouthChunksSize() != null) {
             byte[] mouthFrames = GBAImageCodec.getGBAPortraitGraphicsDataForImage(chara.portraitPath, palette,
                     targetFormat.getMouthChunks(), targetFormat.getMouthChunksSize());
             long mouthFramesAddress = freeSpace.setValue(mouthFrames, character.getFaceID() + "_MouthFramesPortrait", true);
-            characterPortraitData.setMouthFramesPointer(WhyDoesJavaNotHaveThese.bytesFromAddress(mouthFramesAddress));
+            characterPortraitData.setMouthFramesPointer(YuneUtil.bytesFromAddress(mouthFramesAddress));
         }
 
         // Update the Coordinates of the Eyes / Mouth

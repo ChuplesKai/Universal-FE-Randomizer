@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import io.FileHandler;
 import util.ByteArrayBuilder;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class GCNDBXFileHandler extends GCNByteArrayHandler {
 
@@ -27,19 +27,19 @@ public class GCNDBXFileHandler extends GCNByteArrayHandler {
 	public String getStringForKey(String key, int block) {
 		if (key == null) { return null; }
 		
-		byte[] keyBytes = WhyDoesJavaNotHaveThese.asciiBytesFromString(key);
+		byte[] keyBytes = YuneUtil.asciiBytesFromString(key);
 		
 		int blockIndex = 0;
-		int startIndex = WhyDoesJavaNotHaveThese.firstIndexOfBytesInByteArray(byteArray, WhyDoesJavaNotHaveThese.asciiBytesFromString("{"), 0, byteArray.length);
+		int startIndex = YuneUtil.firstIndexOfBytesInByteArray(byteArray, YuneUtil.asciiBytesFromString("{"), 0, byteArray.length);
 		if (startIndex == -1) { return null; } // No curly braces found.
 		while (blockIndex < block) {
 			blockIndex++;
-			startIndex = WhyDoesJavaNotHaveThese.firstIndexOfBytesInByteArray(byteArray, WhyDoesJavaNotHaveThese.asciiBytesFromString("{"), startIndex + 1, byteArray.length);
+			startIndex = YuneUtil.firstIndexOfBytesInByteArray(byteArray, YuneUtil.asciiBytesFromString("{"), startIndex + 1, byteArray.length);
 		}
 		if (startIndex == -1) { return null; } // Block index out of bounds.
-		int endIndex = WhyDoesJavaNotHaveThese.firstIndexOfBytesInByteArray(byteArray, WhyDoesJavaNotHaveThese.asciiBytesFromString("}"), startIndex, byteArray.length);
+		int endIndex = YuneUtil.firstIndexOfBytesInByteArray(byteArray, YuneUtil.asciiBytesFromString("}"), startIndex, byteArray.length);
 		
-		int keyIndex = WhyDoesJavaNotHaveThese.firstIndexOfBytesInByteArray(byteArray, keyBytes, startIndex, endIndex);
+		int keyIndex = YuneUtil.firstIndexOfBytesInByteArray(byteArray, keyBytes, startIndex, endIndex);
 		if (keyIndex == -1) { return null; } // Key not found.
 		
 		int valueIndex = keyIndex + keyBytes.length;
@@ -55,25 +55,25 @@ public class GCNDBXFileHandler extends GCNByteArrayHandler {
 			builder.appendByte(valueByte);
 		} while (valueByte > 0x20);
 		
-		return WhyDoesJavaNotHaveThese.stringFromAsciiBytes(builder.toByteArray());
+		return YuneUtil.stringFromAsciiBytes(builder.toByteArray());
 	}
 	
 	public void setStringForKey(String key, int block, String value) {
 		if (key == null || value == null) { return; }
 		
-		byte[] keyBytes = WhyDoesJavaNotHaveThese.asciiBytesFromString(key);
+		byte[] keyBytes = YuneUtil.asciiBytesFromString(key);
 		
 		int blockIndex = 0;
-		int startIndex = WhyDoesJavaNotHaveThese.firstIndexOfBytesInByteArray(byteArray, WhyDoesJavaNotHaveThese.asciiBytesFromString("{"), 0, byteArray.length);
+		int startIndex = YuneUtil.firstIndexOfBytesInByteArray(byteArray, YuneUtil.asciiBytesFromString("{"), 0, byteArray.length);
 		if (startIndex == -1) { return; } // No curly braces found.
 		while (blockIndex < block) {
 			blockIndex++;
-			startIndex = WhyDoesJavaNotHaveThese.firstIndexOfBytesInByteArray(byteArray, WhyDoesJavaNotHaveThese.asciiBytesFromString("{"), startIndex + 1, byteArray.length);
+			startIndex = YuneUtil.firstIndexOfBytesInByteArray(byteArray, YuneUtil.asciiBytesFromString("{"), startIndex + 1, byteArray.length);
 		}
 		if (startIndex == -1) { return; } // Block index out of bounds.
-		int endIndex = WhyDoesJavaNotHaveThese.firstIndexOfBytesInByteArray(byteArray, WhyDoesJavaNotHaveThese.asciiBytesFromString("}"), startIndex, byteArray.length);
+		int endIndex = YuneUtil.firstIndexOfBytesInByteArray(byteArray, YuneUtil.asciiBytesFromString("}"), startIndex, byteArray.length);
 		
-		int keyIndex = WhyDoesJavaNotHaveThese.firstIndexOfBytesInByteArray(byteArray, keyBytes, startIndex, endIndex);
+		int keyIndex = YuneUtil.firstIndexOfBytesInByteArray(byteArray, keyBytes, startIndex, endIndex);
 		if (keyIndex == -1) {
 			// This is a new key.
 			ByteArrayBuilder newData = new ByteArrayBuilder();
@@ -85,13 +85,13 @@ public class GCNDBXFileHandler extends GCNByteArrayHandler {
 			// Then another tab.
 			newData.appendByte((byte)0x9);
 			// Then the value.
-			byte[] valueBytes = WhyDoesJavaNotHaveThese.asciiBytesFromString(value);
+			byte[] valueBytes = YuneUtil.asciiBytesFromString(value);
 			newData.appendBytes(valueBytes);
 			// Then a CR (0xD) and LF (0xA)
 			newData.appendByte((byte)0xD);
 			newData.appendByte((byte)0xA);
 			// We can write the rest of the original data.
-			newData.appendBytes(WhyDoesJavaNotHaveThese.subArray(byteArray, endIndex, byteArray.length - endIndex));
+			newData.appendBytes(YuneUtil.subArray(byteArray, endIndex, byteArray.length - endIndex));
 			byteArray = newData.toByteArray();
 		} else {
 			// Replace value for existing key.
@@ -101,8 +101,8 @@ public class GCNDBXFileHandler extends GCNByteArrayHandler {
 			while (byteArray[valueEndIndex] > 0x20) { valueEndIndex++; }
 			ByteArrayBuilder newData = new ByteArrayBuilder();
 			newData.appendBytes(byteArray, valueStartIndex);
-			newData.appendBytes(WhyDoesJavaNotHaveThese.asciiBytesFromString(value));
-			newData.appendBytes(WhyDoesJavaNotHaveThese.subArray(byteArray, valueEndIndex, byteArray.length - valueEndIndex));
+			newData.appendBytes(YuneUtil.asciiBytesFromString(value));
+			newData.appendBytes(YuneUtil.subArray(byteArray, valueEndIndex, byteArray.length - valueEndIndex));
 			byteArray = newData.toByteArray();
 		}
 		

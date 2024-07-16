@@ -19,7 +19,7 @@ import io.gcn.GCNISOHandler;
 import random.gcnwii.fe9.loader.FE9ItemDataLoader.WeaponType;
 import util.DebugPrinter;
 import util.Diff;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 import util.recordkeeper.fe9.ChangelogBuilder;
 import util.recordkeeper.fe9.ChangelogHeader;
 import util.recordkeeper.fe9.ChangelogSection;
@@ -84,7 +84,7 @@ public class FE9ClassDataLoader {
 		}
 		
 		classDataSection = fe8databin.getSectionWithName(FE9Data.ClassDataSectionName);
-		int count = (int)WhyDoesJavaNotHaveThese.longValueFromByteArray(classDataSection.getRawData(0, 4), false);
+		int count = (int)YuneUtil.longValueFromByteArray(classDataSection.getRawData(0, 4), false);
 		
 		long offset = 4;
 		for (int i = 0; i < count; i++) {
@@ -542,7 +542,7 @@ public class FE9ClassDataLoader {
 		DebugPrinter.log(DebugPrinter.Key.FE9_CLASS_LOADER, 
 				"Unknown: " + stringForPointer(charClass.getMiscPointer(), handler, commonTextLoader));
 		
-		DebugPrinter.log(DebugPrinter.Key.FE9_CLASS_LOADER, "Unknown 3: " + WhyDoesJavaNotHaveThese.displayStringForBytes(charClass.getUnknown3Bytes()));
+		DebugPrinter.log(DebugPrinter.Key.FE9_CLASS_LOADER, "Unknown 3: " + YuneUtil.displayStringForBytes(charClass.getUnknown3Bytes()));
 		
 		DebugPrinter.log(DebugPrinter.Key.FE9_CLASS_LOADER, "Base HP: " + charClass.getBaseHP());
 		DebugPrinter.log(DebugPrinter.Key.FE9_CLASS_LOADER, "Base STR: " + charClass.getBaseSTR());
@@ -571,7 +571,7 @@ public class FE9ClassDataLoader {
 		DebugPrinter.log(DebugPrinter.Key.FE9_CLASS_LOADER, "DEF Growth: " + charClass.getDEFGrowth());
 		DebugPrinter.log(DebugPrinter.Key.FE9_CLASS_LOADER, "RES Growth: " + charClass.getRESGrowth());
 		
-		DebugPrinter.log(DebugPrinter.Key.FE9_CLASS_LOADER, "Unknown 8-2: " + WhyDoesJavaNotHaveThese.displayStringForBytes(charClass.getLaguzData()));
+		DebugPrinter.log(DebugPrinter.Key.FE9_CLASS_LOADER, "Unknown 8-2: " + YuneUtil.displayStringForBytes(charClass.getLaguzData()));
 		
 		DebugPrinter.log(DebugPrinter.Key.FE9_CLASS_LOADER, "===== End Printing Class =====");
 	}

@@ -31,7 +31,7 @@ import util.DiffCompiler;
 import util.FileReadHelper;
 import util.FindAndReplace;
 import util.FreeSpaceManager;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 import util.recordkeeper.RecordKeeper;
 
 public class ItemDataLoader {
@@ -281,7 +281,7 @@ public class ItemDataLoader {
 			
 			registeredByteArray.remove(firstEmptySpot);
 			registeredByteArray.add(firstEmptySpot, (byte)(classID & 0xFF));
-			byte[] updated = WhyDoesJavaNotHaveThese.byteArrayFromByteList(registeredByteArray);
+			byte[] updated = YuneUtil.byteArrayFromByteList(registeredByteArray);
 			
 			freeSpace.setValue(updated, dataName.key);
 		}
@@ -306,7 +306,7 @@ public class ItemDataLoader {
 		if (byteArray.length > 0) {
 			long offset = freeSpace.setValue(byteArray, dataName.key);
 			offsetsForAdditionalData.put(dataName, offset);
-			additionalDataMap.put(dataName, WhyDoesJavaNotHaveThese.byteArrayToByteList(byteArray));
+			additionalDataMap.put(dataName, YuneUtil.byteArrayToByteList(byteArray));
 		}
 	}
 	
@@ -749,7 +749,7 @@ public class ItemDataLoader {
 				freeSpace.setValue(item.getData(), "Added Item Data for Class 0x" + Integer.toHexString(item.getID()));
 			}
 			
-			compiler.findAndReplace(new FindAndReplace(WhyDoesJavaNotHaveThese.gbaAddressFromOffset(originalTableOffset), WhyDoesJavaNotHaveThese.gbaAddressFromOffset(newTableOffset), true));
+			compiler.findAndReplace(new FindAndReplace(YuneUtil.gbaAddressFromOffset(originalTableOffset), YuneUtil.gbaAddressFromOffset(newTableOffset), true));
 		}
 		
 		spellAnimations.compileDiffs(compiler, freeSpace);
@@ -763,7 +763,7 @@ public class ItemDataLoader {
 			bytesToWrite[bytesToWrite.length - 1] = 0;
 			
 			long offset = freeSpace.setValue(bytesToWrite, promotionItemName);
-			byte[] addressByteArray = WhyDoesJavaNotHaveThese.bytesFromAddress(offset);
+			byte[] addressByteArray = YuneUtil.bytesFromAddress(offset);
 			long targetOffset = promotionItemAddressPointers.get(promotionItemName);
 			compiler.addDiff(new Diff(targetOffset, addressByteArray.length, addressByteArray, null));
 		}

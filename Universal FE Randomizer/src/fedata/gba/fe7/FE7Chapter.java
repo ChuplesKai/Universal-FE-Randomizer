@@ -14,7 +14,7 @@ import fedata.gba.general.CharacterNudge;
 import io.FileHandler;
 import util.DebugPrinter;
 import util.FileReadHelper;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class FE7Chapter implements GBAFEChapterData {
 	
@@ -392,9 +392,9 @@ public class FE7Chapter implements GBAFEChapterData {
 		byte[] commandWord;
 		long currentAddress = eventAddress;
 		commandWord = handler.readBytesAtOffset(currentAddress, 4);
-		while (!WhyDoesJavaNotHaveThese.byteArraysAreEqual(commandWord, new byte[] {0x0A, 0x00, 0x00, 0x00}) &&
-				!WhyDoesJavaNotHaveThese.byteArraysAreEqual(commandWord, new byte[] {0x0B, 0x00, 0x00, 0x00})) {
-			if (WhyDoesJavaNotHaveThese.byteArraysAreEqual(commandWord, new byte[] {(byte)0x97, 0x00, 0x00, 0x00})) {
+		while (!YuneUtil.byteArraysAreEqual(commandWord, new byte[] {0x0A, 0x00, 0x00, 0x00}) &&
+				!YuneUtil.byteArraysAreEqual(commandWord, new byte[] {0x0B, 0x00, 0x00, 0x00})) {
+			if (YuneUtil.byteArraysAreEqual(commandWord, new byte[] {(byte)0x97, 0x00, 0x00, 0x00})) {
 				// FIGH - Always has command byte 0x97, and is always 20 length. The second word always contains attacker and defender IDs.
 				// They vary after that, but those aren't important.
 				long address = FileReadHelper.readAddress(handler, currentAddress + 12);
@@ -468,8 +468,8 @@ public class FE7Chapter implements GBAFEChapterData {
 		byte[] commandWord;
 		long currentAddress = eventAddress;
 		commandWord = handler.readBytesAtOffset(currentAddress, 4);
-		while (!WhyDoesJavaNotHaveThese.byteArraysAreEqual(commandWord, new byte[] {0x0A, 0x00, 0x00, 0x00}) &&
-				!WhyDoesJavaNotHaveThese.byteArraysAreEqual(commandWord, new byte[] {0x0B, 0x00, 0x00, 0x00})) {
+		while (!YuneUtil.byteArraysAreEqual(commandWord, new byte[] {0x0A, 0x00, 0x00, 0x00}) &&
+				!YuneUtil.byteArraysAreEqual(commandWord, new byte[] {0x0B, 0x00, 0x00, 0x00})) {
 			if (commandWord[1] == 0 && commandWord[2] == 0 && commandWord[3] == 0) {
 				if (commandWord[0] == 0x32 || commandWord[0] == 0x33 || commandWord[0] == 0x36) {
 					// LOU1 - 0x32 key. Pointer at byte 4, length 4 - total 8 bytes.
@@ -586,7 +586,7 @@ public class FE7Chapter implements GBAFEChapterData {
 		long currentOffset = unitAddress;
 		byte[] unitData = handler.readBytesAtOffset(currentOffset, FE7Data.BytesPerChapterUnit);
 		while (unitData[0] != 0x00) {
-			DebugPrinter.log(DebugPrinter.Key.CHAPTER_LOADER, "Loaded unit with data " + WhyDoesJavaNotHaveThese.displayStringForBytes(unitData));
+			DebugPrinter.log(DebugPrinter.Key.CHAPTER_LOADER, "Loaded unit with data " + YuneUtil.displayStringForBytes(unitData));
 			FE7ChapterUnit unit = new FE7ChapterUnit(unitData, currentOffset); 
 			if (!blacklistedClassIDs.contains(unit.getStartingClass())) { // Remove any characters starting as a blacklisted class from consideration.
 				allChapterUnits.add(unit);

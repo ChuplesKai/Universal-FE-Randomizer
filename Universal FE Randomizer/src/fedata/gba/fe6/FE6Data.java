@@ -23,7 +23,7 @@ import random.gba.randomizer.shuffling.GBAFEShufflingDataProvider;
 import random.gba.randomizer.shuffling.data.FE6PortraitData;
 import random.gba.randomizer.shuffling.data.GBAFEPortraitData;
 import util.AddressRange;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class FE6Data implements GBAFECharacterProvider, GBAFEClassProvider, GBAFEItemProvider, GBAFEShufflingDataProvider, GBAFETextProvider, GBAFEStatboostProvider {
 	public static final String FriendlyName = "ファイアーエムブレム　封印の剣";
@@ -849,7 +849,7 @@ public class FE6Data implements GBAFECharacterProvider, GBAFEClassProvider, GBAF
 			public static String stringOfActiveAbilities(int abilityValue, String delimiter) {
 				List<String> strings = new ArrayList<String>();
 				for (Ability1Mask mask : Ability1Mask.values()) {
-					if ((abilityValue & mask.ID) != 0) { strings.add(WhyDoesJavaNotHaveThese.stringByCapitalizingFirstLetter(mask.toString())); }
+					if ((abilityValue & mask.ID) != 0) { strings.add(YuneUtil.stringByCapitalizingFirstLetter(mask.toString())); }
 				}
 				return String.join(delimiter, strings);
 			}
@@ -877,7 +877,7 @@ public class FE6Data implements GBAFECharacterProvider, GBAFEClassProvider, GBAF
 			public static String stringOfActiveAbilities(int abilityValue, String delimiter) {
 				List<String> strings = new ArrayList<String>();
 				for (Ability2Mask mask : Ability2Mask.values()) {
-					if ((abilityValue & mask.ID) != 0) { strings.add(WhyDoesJavaNotHaveThese.stringByCapitalizingFirstLetter(mask.toString())); }
+					if ((abilityValue & mask.ID) != 0) { strings.add(YuneUtil.stringByCapitalizingFirstLetter(mask.toString())); }
 				}
 				return String.join(delimiter, strings);
 			}
@@ -904,7 +904,7 @@ public class FE6Data implements GBAFECharacterProvider, GBAFEClassProvider, GBAF
 			
 			public static String stringOfActiveEffect(int effectValue) {
 				for (WeaponEffect effect : WeaponEffect.values()) {
-					if (effectValue == effect.ID) { return WhyDoesJavaNotHaveThese.stringByCapitalizingFirstLetter(effect.toString()); }
+					if (effectValue == effect.ID) { return YuneUtil.stringByCapitalizingFirstLetter(effect.toString()); }
 				}
 				
 				return "Unknown";

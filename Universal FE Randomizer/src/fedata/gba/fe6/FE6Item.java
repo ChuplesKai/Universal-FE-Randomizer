@@ -23,7 +23,7 @@ import ui.model.MinMaxOption;
 import util.ByteArrayBuilder;
 import util.DebugPrinter;
 import util.FreeSpaceManager;
-import util.WhyDoesJavaNotHaveThese;
+import util.YuneUtil;
 
 public class FE6Item implements GBAFEItemData {
 	
@@ -145,7 +145,7 @@ public class FE6Item implements GBAFEItemData {
 			data[14] = 0;
 			data[15] = 0;
 		} else {
-			byte[] pointer = WhyDoesJavaNotHaveThese.bytesFromAddress(address);
+			byte[] pointer = YuneUtil.bytesFromAddress(address);
 			data[12] = pointer[0];
 			data[13] = pointer[1];
 			data[14] = pointer[2];
@@ -161,7 +161,7 @@ public class FE6Item implements GBAFEItemData {
 			data[18] = 0;
 			data[19] = 0;
 		} else {
-			byte[] pointer = WhyDoesJavaNotHaveThese.bytesFromAddress(address);
+			byte[] pointer = YuneUtil.bytesFromAddress(address);
 			data[16] = pointer[0];
 			data[17] = pointer[1];
 			data[18] = pointer[2];
@@ -227,37 +227,37 @@ public class FE6Item implements GBAFEItemData {
 	}
 	
 	public void setDurability(int durability) {
-		durability = WhyDoesJavaNotHaveThese.clamp(durability, 0, 255);
+		durability = YuneUtil.clamp(durability, 0, 255);
 		data[20] = (byte)(durability & 0xFF);
 		wasModified = true;
 	}
 	
 	public void setMight(int might) {
-		might = WhyDoesJavaNotHaveThese.clamp(might, 0, 255);
+		might = YuneUtil.clamp(might, 0, 255);
 		data[21] = (byte)(might & 0xFF);
 		wasModified = true;
 	}
 	
 	public void setHit(int hit) {
-		hit = WhyDoesJavaNotHaveThese.clamp(hit, 0, 255);
+		hit = YuneUtil.clamp(hit, 0, 255);
 		data[22] = (byte)(hit & 0xFF);
 		wasModified = true;
 	}
 	
 	public void setWeight(int weight) {
-		weight = WhyDoesJavaNotHaveThese.clamp(weight, 0, 255);
+		weight = YuneUtil.clamp(weight, 0, 255);
 		data[23] = (byte)(weight & 0xFF);
 		wasModified = true;
 	}
 	private void setCritical(int critical) {
-		critical = WhyDoesJavaNotHaveThese.clamp(critical, 0, 255);
+		critical = YuneUtil.clamp(critical, 0, 255);
 		data[24] = (byte)(critical & 0xFF);
 		wasModified = true;
 	}
 	
 	private void setMinRange(int minRange) {
 		int maxRange = getMaxRange();
-		minRange = WhyDoesJavaNotHaveThese.clamp(minRange, 1, maxRange);
+		minRange = YuneUtil.clamp(minRange, 1, maxRange);
 		
 		data[25] = (byte)((byte)((minRange & 0x0F) << 4) | (byte)(maxRange & 0x0F));
 		wasModified = true;
@@ -265,7 +265,7 @@ public class FE6Item implements GBAFEItemData {
 	
 	private void setMaxRange(int maxRange) {
 		int minRange = getMinRange();
-		maxRange = WhyDoesJavaNotHaveThese.clamp(maxRange, minRange, 3);
+		maxRange = YuneUtil.clamp(maxRange, minRange, 3);
 		
 		data[25] = (byte)((byte)((minRange & 0x0F) << 4) | (byte)(maxRange & 0x0F));
 		wasModified = true;
@@ -530,8 +530,8 @@ public class FE6Item implements GBAFEItemData {
 			boolean isUnbreakable, int targetWeaponWeight, GBAFEItemData referenceItem, ItemDataLoader itemData, FreeSpaceManager freeSpace) {
 		
 		// Update name and description pointers.
-		byte[] nameData = WhyDoesJavaNotHaveThese.byteArrayFromLongValue(nameIndex, true, 2);
-		byte[] descriptionData = WhyDoesJavaNotHaveThese.byteArrayFromLongValue(descriptionIndex, true, 2);
+		byte[] nameData = YuneUtil.byteArrayFromLongValue(nameIndex, true, 2);
+		byte[] descriptionData = YuneUtil.byteArrayFromLongValue(descriptionIndex, true, 2);
 		data[0] = nameData[0];
 		data[1] = nameData[1];
 		data[2] = descriptionData[0];
