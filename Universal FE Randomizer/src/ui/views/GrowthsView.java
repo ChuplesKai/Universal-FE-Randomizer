@@ -37,6 +37,12 @@ public class GrowthsView extends YuneView<GrowthOptions> {
 	private Button adjustHPGrowths;
 	private Button adjustSTRMAGSplit;
 
+	private Combo optionSelect;
+	private Label optionDescription;
+
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public GrowthsView(Composite parent, boolean hasSTRMAGSplit) {
 		super();
 		createGroup(parent);
@@ -45,18 +51,50 @@ public class GrowthsView extends YuneView<GrowthOptions> {
 	}
 
 
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	@Override
 	public String getGroupTitle() {
 		return "Growths";
 	}
 
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	@Override
 	public String getGroupTooltip() {
-		return "Randomizes the growths of all playable characters.";
+		return "Randomizes the stat growths of all playable characters.";
 	}
 
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
+	private void handleChange()
+	{
+		switch( optionSelect.getText() )
+		{
+		case "Delta":
+			setMode( GrowthOptions.Mode.DELTA );
+			break;
+		case "Absolute":
+			setMode( GrowthOptions.Mode.FULL );
+			break;
+		case "Redistribute":
+			setMode( GrowthOptions.Mode.REDISTRIBUTE );
+			break;
+		default: // Not sure what else to do here, set to full
+			setMode( GrowthOptions.Mode.FULL );
+		}		
+	}
+
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	@Override
-	protected void compose() {
+	protected void compose()
+	{
+		// First up is the enable button, whether or not we' even doing this.
 		enableButton = new Button(group, SWT.CHECK);
 		enableButton.setText("Enable Growths Randomization");
 		enableButton.addListener(SWT.Selection, new Listener() {
@@ -66,53 +104,31 @@ public class GrowthsView extends YuneView<GrowthOptions> {
 			}
 		});
 
-		growthRangeControl = new MinMaxControl(group, SWT.NONE, "Min Growth:", "Max Growth:");
-		growthRangeControl.getMinSpinner().setValues(5, 0, 255, 0, 1, 5);
-		growthRangeControl.getMaxSpinner().setValues(80, 0, 255, 0, 1, 5);
-		growthRangeControl.setEnabled(false);
-
-		FormData rangeData = new FormData();
-		rangeData.top = new FormAttachment(enableButton, 5);
-		rangeData.left = new FormAttachment(0, 5);
-		rangeData.right = new FormAttachment(100, -5);
-		growthRangeControl.setLayoutData(rangeData);
-
-		modeContainer = new Group(group, SWT.NONE);
-		modeContainer.setText("Mode");
-		modeContainer.setLayout(GuiUtil.formLayoutWithMargin());
-
-		FormData modeData = new FormData();
-		modeData.left = new FormAttachment(enableButton, 5, SWT.LEFT);
-		modeData.top = new FormAttachment(growthRangeControl, 10);
-		modeData.right = new FormAttachment(100, -5);
-		modeContainer.setLayoutData(modeData);
-
-		/////////////////////////////////////////////////////////////
-
-		redistributeOption = new Button(modeContainer, SWT.RADIO);
-		redistributeOption.setText("Redistribute");
-		redistributeOption.setToolTipText("Randomly redistrubtes a character's total growths.");
-		redistributeOption.setEnabled(false);
-		redistributeOption.setSelection(true);
-		redistributeOption.addListener(SWT.Selection, new Listener() {
+		// Going to do a drop-down instead to select - more compact, no tooltip
+		optionSelect = new Combo(group, SWT.DROP_DOWN);
+		optionSelect.add("Delta");
+		optionSelect.add("Absolute");
+		optionSelect.add("Redistribute");
+		optionSelect.select(0);
+		optionSelect.addListener(SWT.Modify, new Listener()
+		{
 			@Override
-			public void handleEvent(Event event) {
-				setMode(GrowthOptions.Mode.REDISTRIBUTE);
+			public void handleEvent(Event event) 
+			{
+				handleChange();
 			}
 		});
-
 		FormData optionData = new FormData();
-		optionData.left = new FormAttachment(0, 0);
-		optionData.top = new FormAttachment(0, 0);
-		redistributeOption.setLayoutData(optionData);
+		optionData.top = new FormAttachment(enableButton, 5);
+		optionData.left = new FormAttachment(enableButton, 5, SWT.LEFT);
+		optionData.width = 120;
+		optionSelect.setLayoutData( optionData );
 
-		Composite redistParamContainer = new Composite(modeContainer, 0);
-		redistParamContainer.setLayout(GuiUtil.formLayoutWithMargin());
+		// Then need the variance spinner & Label
+		Label redistParamLabel = new Label(group, SWT.RIGHT);
+		redistParamLabel.setText("Variance:");
 
-		Label redistParamLabel = new Label(redistParamContainer, SWT.RIGHT);
-		redistParamLabel.setText("Growth Variance:");
-
-		varianceSpinner = new Spinner(redistParamContainer, SWT.NONE);
+		varianceSpinner = new Spinner(group, SWT.NONE);
 		varianceSpinner.setValues(30, 0, 255, 0, 1, 5);
 		varianceSpinner.setEnabled(false);
 
@@ -124,87 +140,44 @@ public class GrowthsView extends YuneView<GrowthOptions> {
 
 		FormData spinnerData = new FormData();
 		spinnerData.right = new FormAttachment(100, -5);
+		spinnerData.top = new FormAttachment( optionSelect, 0, SWT.TOP );
 		varianceSpinner.setLayoutData(spinnerData);
 
-		FormData paramContainerData = new FormData();
-		paramContainerData.top = new FormAttachment(redistributeOption, 0);
-		paramContainerData.left = new FormAttachment(redistributeOption, 0, SWT.LEFT);
-		paramContainerData.right = new FormAttachment(100, -5);
-		redistParamContainer.setLayoutData(paramContainerData);
 
-		/////////////////////////////////////////////////////////////
+		// Min and Max growth ranges
+		growthRangeControl = new MinMaxControl(group, SWT.NONE, "Min Growth:", "Max Growth:");
+		growthRangeControl.getMinSpinner().setValues(5, 0, 255, 0, 1, 5);
+		growthRangeControl.getMaxSpinner().setValues(80, 0, 255, 0, 1, 5);
+		growthRangeControl.setEnabled(false);
 
-		byDeltaOption = new Button(modeContainer, SWT.RADIO);
-		byDeltaOption.setText("Randomize Delta");
-		byDeltaOption.setToolTipText("Applies a random delta between +X and -X to all growth areas.");
-		byDeltaOption.setEnabled(false);
-		byDeltaOption.setSelection(false);
-		byDeltaOption.addListener(SWT.Selection, new Listener() {
-			@Override
-			public void handleEvent(Event event) {
-				setMode(GrowthOptions.Mode.DELTA);
-			}
-		});
+		FormData rangeData = new FormData();
+		rangeData.top = new FormAttachment(optionSelect, 5);
+		rangeData.left = new FormAttachment(0, 5);
+		rangeData.right = new FormAttachment(100, -5);
+		growthRangeControl.setLayoutData(rangeData);
 
-		optionData = new FormData();
-		optionData.left = new FormAttachment(redistParamContainer, 0, SWT.LEFT);
-		optionData.top = new FormAttachment(redistParamContainer, 0);
-		byDeltaOption.setLayoutData(optionData);
 
-		Composite deltaParamContainer = new Composite(modeContainer, 0);
-		deltaParamContainer.setLayout(GuiUtil.formLayoutWithMargin());
+		// Want a label here instead of a tooltip
+		optionDescription = new Label(group, SWT.CENTER | SWT.WRAP);
+		optionDescription.setText("Description of the randomization goes here.  If it is extra long, I hope it wraps.");
 
-		Label deltaParamLabel = new Label(deltaParamContainer, SWT.RIGHT);
-		deltaParamLabel.setText("Max Delta:");
+		labelData = new FormData( 290, 60 );
+		labelData.top = new FormAttachment(growthRangeControl, 5);
+		//labelData.right = new FormAttachment(growthRangeControl, 0, SWT.RIGHT);
+		optionDescription.setLayoutData(labelData);
 
-		deltaSpinner = new Spinner(deltaParamContainer, SWT.NONE);
-		deltaSpinner.setValues(20, 0, 255, 0, 1, 5);
-		deltaSpinner.setEnabled(false);
-
-		labelData = new FormData();
-		labelData.left = new FormAttachment(0, 5);
-		labelData.right = new FormAttachment(deltaSpinner, -5);
-		labelData.top = new FormAttachment(deltaSpinner, 0, SWT.CENTER);
-		deltaParamLabel.setLayoutData(labelData);
-
-		spinnerData = new FormData();
-		spinnerData.right = new FormAttachment(100, -5);
-		deltaSpinner.setLayoutData(spinnerData);
-
-		paramContainerData = new FormData();
-		paramContainerData.top = new FormAttachment(byDeltaOption, 0);
-		paramContainerData.left = new FormAttachment(byDeltaOption, 0, SWT.LEFT);
-		paramContainerData.right = new FormAttachment(100, -5);
-		deltaParamContainer.setLayoutData(paramContainerData);
-
-		/////////////////////////////////////////////////////////////
-
-		fullRandomOption = new Button(modeContainer, SWT.RADIO);
-		fullRandomOption.setText("Randomize Absolute");
-		fullRandomOption.setToolTipText("Generates fully random growth rates between the specified minimum and maximum.");
-		fullRandomOption.setEnabled(false);
-		fullRandomOption.addListener(SWT.Selection, new Listener() {
-			@Override
-			public void handleEvent(Event event) {
-				setMode(GrowthOptions.Mode.FULL);
-			}
-		});
-
-		optionData = new FormData();
-		optionData.left = new FormAttachment(deltaParamContainer, 0, SWT.LEFT);
-		optionData.top = new FormAttachment(deltaParamContainer, 0);
-		fullRandomOption.setLayoutData(optionData);
-
+		// The button of whether to adjust HP growths
 		adjustHPGrowths = new Button(group, SWT.CHECK);
 		adjustHPGrowths.setText("Adjust HP Growths");
-		adjustHPGrowths.setToolTipText("Puts extra emphasis on HP growths relative to other stats.");
+		adjustHPGrowths.setToolTipText("Whether to include HP growths randomization.  If enabled, grants HP a fixed +25% growth above other stats.");
 		adjustHPGrowths.setEnabled(false);
 
 		optionData = new FormData();
-		optionData.left = new FormAttachment(enableButton, 10, SWT.LEFT);
-		optionData.top = new FormAttachment(modeContainer, 10);
+		optionData.left = new FormAttachment(optionDescription, 0, SWT.LEFT);
+		optionData.top = new FormAttachment(optionDescription, 5);
 		adjustHPGrowths.setLayoutData(optionData);
 
+		// If the game has a STR/MAG split, add a check box to help keep those stats randomized appropriately
 		if (hasSTRMAGSplit) {
 			adjustSTRMAGSplit = new Button(group, SWT.CHECK);
 			adjustSTRMAGSplit.setText("Adjust STR/MAG by Class");
@@ -216,66 +189,63 @@ public class GrowthsView extends YuneView<GrowthOptions> {
 			optionData.top = new FormAttachment(adjustHPGrowths, 5);
 			adjustSTRMAGSplit.setLayoutData(optionData);
 		}
+
+		setMode( GrowthOptions.Mode.DELTA ); // Make sure we set this mode as well, but only after everything is allocated
 	}
 
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public void overrideMaxGrowthAllowed(int maxGrowth) {
 		growthRangeControl.getMaxSpinner().setMaximum(maxGrowth);
 	}
 
-	private void setMode(GrowthOptions.Mode newMode) {
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
+	private void setMode(GrowthOptions.Mode newMode)
+	{
 		currentMode = newMode;
-		if (isEnabled) {
-			switch (newMode) {
+		if (isEnabled)
+		{
+			switch (newMode)
+			{
 				case REDISTRIBUTE:
 					varianceSpinner.setEnabled(true);
-					deltaSpinner.setEnabled(false);
-					growthRangeControl.setEnabled(true);
+					optionDescription.setText("Randomly redistrubtes a character's total growths, using the variance to randomly adjust the total growths of each character.");
 					break;
 				case DELTA:
-					varianceSpinner.setEnabled(false);
-					deltaSpinner.setEnabled(true);
-					growthRangeControl.setEnabled(true);
+					varianceSpinner.setEnabled(true);
+					optionDescription.setText("Applies a random delta (positive or negative) within the variance to each growth.");
 					break;
 				case FULL:
 					varianceSpinner.setEnabled(false);
-					deltaSpinner.setEnabled(false);
-					growthRangeControl.setEnabled(true);
+					optionDescription.setText("Generates fully random growth rates between the specified minimum and maximum, using the selected distribution.");
 					break;
 			}
 		}
 	}
 
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	@Override
-	public GrowthOptions getOptions() {
+	public GrowthOptions getOptions() 
+	{
 		if (!isEnabled) { return null; }
 
-		MinMaxVarOption redistributionOption = null;
-		MinMaxVarOption deltaOption = null;
-		MinMaxOption fullOption = null;
-
-		switch (currentMode) {
-			case REDISTRIBUTE:
-				redistributionOption = new MinMaxVarOption(growthRangeControl.getMinMaxOption(), varianceSpinner.getSelection());
-				break;
-			case DELTA:
-				deltaOption = new MinMaxVarOption(growthRangeControl.getMinMaxOption(), deltaSpinner.getSelection());
-				break;
-			case FULL:
-				fullOption = growthRangeControl.getMinMaxOption();
-				break;
-		}
-
+		MinMaxVarOption paramOption = new MinMaxVarOption(growthRangeControl.getMinMaxOption(), varianceSpinner.getSelection());
 		boolean adjustSTRMAG = adjustSTRMAGSplit != null ? adjustSTRMAGSplit.getSelection() : false;
 
-		return new GrowthOptions(currentMode, redistributionOption, deltaOption, fullOption, adjustHPGrowths.getSelection(), adjustSTRMAG);
+		return new GrowthOptions(currentMode, paramOption, adjustHPGrowths.getSelection(), adjustSTRMAG);
 	}
 
-	private void setEnableGrowths(Boolean enabled) {
-		redistributeOption.setEnabled(enabled);
-		byDeltaOption.setEnabled(enabled);
-		fullRandomOption.setEnabled(enabled);
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
+	private void setEnableGrowths(Boolean enabled)
+	{
 		varianceSpinner.setEnabled(enabled && currentMode == GrowthOptions.Mode.REDISTRIBUTE);
-		deltaSpinner.setEnabled(enabled && currentMode == GrowthOptions.Mode.DELTA);
 		growthRangeControl.setEnabled(enabled);
 		adjustHPGrowths.setEnabled(enabled);
 		if (adjustSTRMAGSplit != null) { adjustSTRMAGSplit.setEnabled(enabled && currentMode != GrowthOptions.Mode.DELTA); }
@@ -283,9 +253,14 @@ public class GrowthsView extends YuneView<GrowthOptions> {
 		isEnabled = enabled;
 	}
 
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	@Override
-	public void initialize(GrowthOptions options) {
-		if (options == null) {
+	public void initialize(GrowthOptions options)
+	{
+		if (options == null)
+		{
 			enableButton.setSelection(false);
 			setEnableGrowths(false);
 			return;
@@ -293,47 +268,31 @@ public class GrowthsView extends YuneView<GrowthOptions> {
 
 		enableButton.setSelection(true);
 		setEnableGrowths(true);
-		setMode(options.mode);
-
-		switch (options.mode) {
+		// I think I also need to set the text based on the mode here?
+		switch (options.mode) 
+		{
 			case REDISTRIBUTE:
-				redistributeOption.setSelection(true);
-				byDeltaOption.setSelection(false);
-				fullRandomOption.setSelection(false);
-				varianceSpinner.setSelection(options.redistributionOption.variance);
-				if (options.redistributionOption.minValue < growthRangeControl.getMinSpinner().getMaximum()) {
-					growthRangeControl.setMin(options.redistributionOption.minValue);
-					growthRangeControl.setMax(options.redistributionOption.maxValue);
-				} else {
-					growthRangeControl.setMax(options.redistributionOption.maxValue);
-					growthRangeControl.setMin(options.redistributionOption.minValue);
-				}
+				optionSelect.select(2);
 				break;
 			case DELTA:
-				redistributeOption.setSelection(false);
-				byDeltaOption.setSelection(true);
-				fullRandomOption.setSelection(false);
-				deltaSpinner.setSelection(options.deltaOption.variance);
-				if (options.deltaOption.minValue < growthRangeControl.getMinSpinner().getMaximum()) {
-					growthRangeControl.setMin(options.deltaOption.minValue);
-					growthRangeControl.setMax(options.deltaOption.maxValue);
-				} else {
-					growthRangeControl.setMax(options.deltaOption.maxValue);
-					growthRangeControl.setMin(options.deltaOption.minValue);
-				}
+				optionSelect.select(0);
 				break;
 			case FULL:
-				redistributeOption.setSelection(false);
-				byDeltaOption.setSelection(false);
-				fullRandomOption.setSelection(true);
-				if (options.fullOption.minValue < growthRangeControl.getMinSpinner().getMaximum()) {
-					growthRangeControl.setMin(options.fullOption.minValue);
-					growthRangeControl.setMax(options.fullOption.maxValue);
-				} else {
-					growthRangeControl.setMax(options.fullOption.maxValue);
-					growthRangeControl.setMin(options.fullOption.minValue);
-				}
+				optionSelect.select(1);
 				break;
+		}
+		setMode( options.mode );
+
+		varianceSpinner.setSelection( options.parameters.variance );
+		if (options.parameters.minValue < growthRangeControl.getMinSpinner().getMaximum()) 
+		{
+			growthRangeControl.setMin(options.parameters.minValue);
+			growthRangeControl.setMax(options.parameters.maxValue);
+		} 
+		else 
+		{
+			growthRangeControl.setMax(options.parameters.maxValue);
+			growthRangeControl.setMin(options.parameters.minValue);
 		}
 
 		adjustHPGrowths.setSelection(options.adjustHP);

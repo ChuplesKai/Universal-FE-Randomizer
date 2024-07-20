@@ -370,15 +370,15 @@ public class FE4Randomizer extends Randomizer {
 			Random rng = new Random(SeedGenerator.generateSeedValue(seed, FE4GrowthRandomizer.rngSalt));
 			switch (growthOptions.mode) {
 			case REDISTRIBUTE:
-				FE4GrowthRandomizer.randomizeGrowthsByRedistribution(growthOptions.redistributionOption.variance, growthOptions.redistributionOption.minValue, growthOptions.redistributionOption.maxValue, growthOptions.adjustHP, growthOptions.adjustSTRMAGSplit, charData, rng);
+				FE4GrowthRandomizer.randomizeGrowthsByRedistribution(growthOptions.parameters.variance, growthOptions.parameters.minValue, growthOptions.parameters.maxValue, growthOptions.adjustHP, growthOptions.adjustSTRMAGSplit, charData, rng);
 				charData.commit();
 				break;
 			case DELTA:
-				FE4GrowthRandomizer.randomizeGrowthsByRandomDelta(growthOptions.deltaOption.variance, growthOptions.deltaOption.minValue, growthOptions.deltaOption.maxValue, growthOptions.adjustHP, growthOptions.adjustSTRMAGSplit, charData, rng);
+				FE4GrowthRandomizer.randomizeGrowthsByRandomDelta(growthOptions.parameters.variance, growthOptions.parameters.minValue, growthOptions.parameters.maxValue, growthOptions.adjustHP, growthOptions.adjustSTRMAGSplit, charData, rng);
 				charData.commit();
 				break;
 			case FULL:
-				FE4GrowthRandomizer.fullyRandomizeGrowthsWithRange(growthOptions.fullOption.minValue, growthOptions.fullOption.maxValue, growthOptions.adjustHP, growthOptions.adjustSTRMAGSplit, charData, rng);
+				FE4GrowthRandomizer.fullyRandomizeGrowthsWithRange(growthOptions.parameters.minValue, growthOptions.parameters.maxValue, growthOptions.adjustHP, growthOptions.adjustSTRMAGSplit, charData, rng);
 				charData.commit();
 				break;
 			}
@@ -801,13 +801,13 @@ public class FE4Randomizer extends Randomizer {
 		if (growthOptions != null) {
 			switch (growthOptions.mode) {
 			case REDISTRIBUTE:
-				rk.addHeaderItem("Randomize Growths", "Redistribution (" + growthOptions.redistributionOption.variance + "% variance)");
+				rk.addHeaderItem("Randomize Growths", "Redistribution (" + growthOptions.parameters.variance + "% variance)");
 				break;
 			case DELTA:
-				rk.addHeaderItem("Randomize Growths", "Delta (+/- " + growthOptions.deltaOption.variance + "%)");
+				rk.addHeaderItem("Randomize Growths", "Delta (+/- " + growthOptions.parameters.variance + "%)");
 				break;
 			case FULL:
-				rk.addHeaderItem("Randomize Growths", "Full (" + growthOptions.fullOption.minValue + "% ~ " + growthOptions.fullOption.maxValue + "%)");
+				rk.addHeaderItem("Randomize Growths", "Full (" + growthOptions.parameters.minValue + "% ~ " + growthOptions.parameters.maxValue + "%)");
 				break;
 			}
 

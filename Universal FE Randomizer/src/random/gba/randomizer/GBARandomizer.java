@@ -495,19 +495,19 @@ public class GBARandomizer extends Randomizer {
 			case REDISTRIBUTE:
 				updateStatusString("Redistributing growths...");
 				GrowthsRandomizer.randomizeTeamGrowths(growths.mode, 
-					growths.redistributionOption.variance, growths.redistributionOption.minValue, 
-					growths.redistributionOption.maxValue, growths.adjustHP, charData, rng);
+					growths.parameters.variance, growths.parameters.minValue, 
+					growths.parameters.maxValue, growths.adjustHP, charData, rng);
 				break;
 			case DELTA:
 				updateStatusString("Applying random deltas to growths...");
-				GrowthsRandomizer.randomizeTeamGrowths(growths.mode, growths.deltaOption.variance, 
-					growths.deltaOption.minValue, growths.deltaOption.maxValue, growths.adjustHP, 
+				GrowthsRandomizer.randomizeTeamGrowths(growths.mode, growths.parameters.variance, 
+					growths.parameters.minValue, growths.parameters.maxValue, growths.adjustHP, 
 					charData, rng);
 				break;
 			case FULL:
 				updateStatusString("Randomizing growths...");
-				GrowthsRandomizer.randomizeTeamGrowths(growths.mode, 0, growths.fullOption.minValue, 
-					growths.fullOption.maxValue, growths.adjustHP, charData, rng);
+				GrowthsRandomizer.randomizeTeamGrowths(growths.mode, 0, growths.parameters.minValue, 
+					growths.parameters.maxValue, growths.adjustHP, charData, rng);
 				break;
 			}
 		}
@@ -2411,13 +2411,13 @@ public class GBARandomizer extends Randomizer {
 		if (growths != null) {
 			switch (growths.mode) {
 			case REDISTRIBUTE:
-				rk.addHeaderItem("Randomize Growths", "Redistribution (" + growths.redistributionOption.variance + "% variance)");
+				rk.addHeaderItem("Randomize Growths", "Redistribution (" + growths.parameters.variance + "% variance)");
 				break;
 			case DELTA:
-				rk.addHeaderItem("Randomize Growths", "Delta (+/- " + growths.deltaOption.variance + "%)");
+				rk.addHeaderItem("Randomize Growths", "Delta (+/- " + growths.parameters.variance + "%)");
 				break;
 			case FULL:
-				rk.addHeaderItem("Randomize Growths", "Full (" + growths.fullOption.minValue + "% ~ " + growths.fullOption.maxValue + "%)");	
+				rk.addHeaderItem("Randomize Growths", "Full (" + growths.parameters.minValue + "% ~ " + growths.parameters.maxValue + "%)");
 				break;
 			}
 			

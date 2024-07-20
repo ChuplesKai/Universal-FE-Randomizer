@@ -830,13 +830,13 @@ public class FE9Randomizer extends Randomizer {
 			Random rng = new Random(SeedGenerator.generateSeedValue(seed, FE9GrowthRandomizer.rngSalt));
 			switch (growthOptions.mode) {
 			case REDISTRIBUTE:
-				FE9GrowthRandomizer.randomizeGrowthsByRedistribution(growthOptions.redistributionOption.variance, growthOptions.redistributionOption.minValue, growthOptions.redistributionOption.maxValue, growthOptions.adjustHP, growthOptions.adjustSTRMAGSplit, charData, classData, rng);
+				FE9GrowthRandomizer.randomizeGrowthsByRedistribution(growthOptions.parameters.variance, growthOptions.parameters.minValue, growthOptions.parameters.maxValue, growthOptions.adjustHP, growthOptions.adjustSTRMAGSplit, charData, classData, rng);
 				break;
 			case DELTA:
-				FE9GrowthRandomizer.randomizeGrowthsByDelta(growthOptions.deltaOption.variance, growthOptions.deltaOption.minValue, growthOptions.deltaOption.maxValue, growthOptions.adjustSTRMAGSplit, charData, classData, rng);
+				FE9GrowthRandomizer.randomizeGrowthsByDelta(growthOptions.parameters.variance, growthOptions.parameters.minValue, growthOptions.parameters.maxValue, growthOptions.adjustSTRMAGSplit, charData, classData, rng);
 				break;
 			case FULL:
-				FE9GrowthRandomizer.randomizeGrowthsFully(growthOptions.fullOption.minValue, growthOptions.fullOption.maxValue, growthOptions.adjustHP, growthOptions.adjustSTRMAGSplit, charData, classData, rng);
+				FE9GrowthRandomizer.randomizeGrowthsFully(growthOptions.parameters.minValue, growthOptions.parameters.maxValue, growthOptions.adjustHP, growthOptions.adjustSTRMAGSplit, charData, classData, rng);
 				break;
 			}
 			charData.commit();
@@ -1012,13 +1012,13 @@ public class FE9Randomizer extends Randomizer {
 		if (growthOptions != null) {
 			switch (growthOptions.mode) {
 			case REDISTRIBUTE:
-				table.addRow(new String[] {"Randomize Growths", "Redistribute (Variance: " + growthOptions.redistributionOption.variance + "%)"});
+				table.addRow(new String[] {"Randomize Growths", "Redistribute (Variance: " + growthOptions.parameters.variance + "%)"});
 				break;
 			case FULL:
-				table.addRow(new String[] {"Randomize Growths", "Full (" + growthOptions.fullOption.minValue + "% ~ " + growthOptions.fullOption.maxValue + "%)"});
+				table.addRow(new String[] {"Randomize Growths", "Full (" + growthOptions.parameters.minValue + "% ~ " + growthOptions.parameters.maxValue + "%)"});
 				break;
 			case DELTA:
-				table.addRow(new String[] {"Randomize Growths", "Delta (+/- " + growthOptions.deltaOption.variance + "%)"});
+				table.addRow(new String[] {"Randomize Growths", "Delta (+/- " + growthOptions.parameters.variance + "%)"});
 				break;
 			}
 			table.addRow(new String[] {"Adjust HP Growths", growthOptions.adjustHP ? "YES" : "NO"});
