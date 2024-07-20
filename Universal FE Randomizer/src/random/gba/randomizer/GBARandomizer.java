@@ -610,13 +610,13 @@ public class GBARandomizer extends Randomizer {
 			//Class Movement Ranges
 			if (otherCharacterOptions.movementOptions != null) {
 				updateStatusString("Randomizing class movement ranges...");
-				Random rng = new Random(SeedGenerator.generateSeedValue(seed, ClassRandomizer.rngSalt + 4));
+				FERandom rng = new FERandom(SeedGenerator.generateSeedValue(seed, ClassRandomizer.rngSalt + 4));
 				ClassRandomizer.randomizeClassMovement(otherCharacterOptions.movementOptions.minValue, otherCharacterOptions.movementOptions.maxValue, classData, rng);
 			}
 			//Constitutions
 			if (otherCharacterOptions.constitutionOptions != null) {
 				updateStatusString("Randomizing character constitution...");
-				Random rng = new Random(SeedGenerator.generateSeedValue(seed, CharacterRandomizer.rngSalt));
+				FERandom rng = new FERandom(SeedGenerator.generateSeedValue(seed, CharacterRandomizer.rngSalt));
 				CharacterRandomizer.randomizeConstitution(otherCharacterOptions.constitutionOptions.minValue, otherCharacterOptions.constitutionOptions.variance, charData, classData, rng);
 			}
 			//Character Affinity

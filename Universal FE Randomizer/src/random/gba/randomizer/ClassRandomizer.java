@@ -20,6 +20,7 @@ import random.gba.loader.ClassDataLoader;
 import random.gba.loader.ItemDataLoader;
 import random.gba.loader.TextLoader;
 import random.gba.randomizer.service.GBASlotAdjustmentService;
+import random.general.FERandom;
 import random.general.PoolDistributor;
 import random.general.RelativeValueMapper;
 import ui.model.ClassOptions;
@@ -34,17 +35,20 @@ public class ClassRandomizer {
 	static final int rngSalt = 874;
 	static boolean hasThief = false;
 	
-	public static void randomizeClassMovement(int minMOV, int maxMOV, ClassDataLoader classData, Random rng) {
+	public static void randomizeClassMovement(int minMOV, int maxMOV, ClassDataLoader classData, FERandom rng)
+	{
 		GBAFEClassData[] allClasses = classData.allClasses();
 		List<GBAFEClassData> unpromotedClasses = Arrays.asList(allClasses).stream()
 				.filter(currentClass -> classData.isPromotedClass(currentClass.getID()) == false)
 				.sorted(GBAFEClassData.defaultComparator)
 				.collect(Collectors.toList());
-		for (GBAFEClassData currentClass : unpromotedClasses) {
-			if (currentClass.getMOV() > 0) {
+		for (GBAFEClassData currentClass : unpromotedClasses)
+		{
+			if (currentClass.getMOV() > 0)
+			{
 				// #259: Allow for maximum provided in UI
 				// Fringe benefit of allowing (min == max), i.e. every class has the same MOV
-				int randomMOV = rng.nextInt(maxMOV - minMOV + 1) + minMOV;
+				int randomMOV = rng.sampleRange( minMOV, maxMOV );
 				currentClass.setMOV(randomMOV);
 			}
 		}
