@@ -155,7 +155,6 @@ public class GrowthsView extends YuneView<GrowthOptions> {
 
 		labelData = new FormData( 290, 60 );
 		labelData.top = new FormAttachment(growthRangeControl, 5);
-		//labelData.right = new FormAttachment(growthRangeControl, 0, SWT.RIGHT);
 		optionDescription.setLayoutData(labelData);
 
 		// The button of whether to adjust HP growths

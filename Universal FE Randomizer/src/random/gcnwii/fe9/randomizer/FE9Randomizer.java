@@ -849,10 +849,10 @@ public class FE9Randomizer extends Randomizer {
 			Random rng = new Random(SeedGenerator.generateSeedValue(seed, FE9BasesRandomizer.rngSalt));
 			switch (baseOptions.mode) {
 			case REDISTRIBUTE:
-				FE9BasesRandomizer.randomizeBasesByRedistribution(baseOptions.redistributionOption.variance, baseOptions.adjustSTRMAGByClass, charData, classData, rng);
+				FE9BasesRandomizer.randomizeBasesByRedistribution(baseOptions.variance, baseOptions.adjustSTRMAGByClass, charData, classData, rng);
 				break;
 			case DELTA:
-				FE9BasesRandomizer.randomizeBasesByDelta(baseOptions.deltaOption.variance, baseOptions.adjustSTRMAGByClass, charData, classData, rng);
+				FE9BasesRandomizer.randomizeBasesByDelta(baseOptions.variance, baseOptions.adjustSTRMAGByClass, charData, classData, rng);
 				break;
 			}
 			
@@ -1029,10 +1029,10 @@ public class FE9Randomizer extends Randomizer {
 		if (baseOptions != null) {
 			switch (baseOptions.mode) {
 			case REDISTRIBUTE:
-				table.addRow(new String[] {"Randomize Bases", "Redistribute (Variance: " + baseOptions.redistributionOption.variance + ")"});
+				table.addRow(new String[] {"Randomize Bases", "Redistribute (Variance: " + baseOptions.variance + ")"});
 				break;
 			case DELTA:
-				table.addRow(new String[] {"Randomize Bases", "Delta (Variance: " + baseOptions.deltaOption.variance + ")"});
+				table.addRow(new String[] {"Randomize Bases", "Delta (Variance: " + baseOptions.variance + ")"});
 				break;
 			}
 			table.addRow(new String[] {"Adjust STR/MAG Split", baseOptions.adjustSTRMAGByClass ? "YES" : "NO"});

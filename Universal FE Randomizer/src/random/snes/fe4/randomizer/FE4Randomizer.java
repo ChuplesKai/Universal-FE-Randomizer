@@ -391,11 +391,11 @@ public class FE4Randomizer extends Randomizer {
 			Random rng = new Random(SeedGenerator.generateSeedValue(seed, FE4BasesRandomizer.rngSalt));
 			switch (basesOptions.mode) {
 			case REDISTRIBUTE:
-				FE4BasesRandomizer.randomizeBasesByRedistribution(basesOptions.redistributionOption.variance, basesOptions.adjustSTRMAGByClass, charData, rng);
+				FE4BasesRandomizer.randomizeBasesByRedistribution(basesOptions.variance, basesOptions.adjustSTRMAGByClass, charData, rng);
 				charData.commit();
 				break;
 			case DELTA:
-				FE4BasesRandomizer.randomizeBasesByDelta(basesOptions.deltaOption.variance, basesOptions.adjustSTRMAGByClass, charData, rng);
+				FE4BasesRandomizer.randomizeBasesByDelta(basesOptions.variance, basesOptions.adjustSTRMAGByClass, charData, rng);
 				charData.commit();
 				break;
 			}
@@ -820,10 +820,10 @@ public class FE4Randomizer extends Randomizer {
 		if (basesOptions != null) {
 			switch (basesOptions.mode) {
 			case REDISTRIBUTE:
-				rk.addHeaderItem("Randomize Bases", "Redistribution (" + basesOptions.redistributionOption.variance + " variance)");
+				rk.addHeaderItem("Randomize Bases", "Redistribution (" + basesOptions.variance + " variance)");
 				break;
 			case DELTA:
-				rk.addHeaderItem("Randomize Bases", "Delta (+/- " + basesOptions.deltaOption.variance + ")");
+				rk.addHeaderItem("Randomize Bases", "Delta (+/- " + basesOptions.variance + ")");
 				break;
 			}
 

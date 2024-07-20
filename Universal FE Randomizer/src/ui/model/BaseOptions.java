@@ -2,22 +2,39 @@ package ui.model;
 
 public class BaseOptions {
 	
-	public enum Mode {
+	public enum Mode
+	{
 		REDISTRIBUTE, DELTA
 	}
 	
 	public final Mode mode;
 	
-	public final VarOption redistributionOption;
-	public final VarOption deltaOption;
+	public final int variance;
 	
 	public final boolean adjustSTRMAGByClass;
 	
-	public BaseOptions(Mode mode, VarOption redistributionOption, VarOption deltaOption, boolean adjustSTRMAGByClass) {
+	public BaseOptions(Mode mode, int variance, boolean adjustSTRMAGByClass)
+	{
 		super();
 		this.mode = mode;
-		this.redistributionOption = redistributionOption;
-		this.deltaOption = deltaOption;
+		this.variance = variance;
 		this.adjustSTRMAGByClass = adjustSTRMAGByClass;
 	}
+
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
+	public static String getModeDescription( Mode mode )
+	{
+		switch(mode)
+		{
+		case REDISTRIBUTE:
+			return "Randomly redistrubtes a character's base stats, using the variance to randomly adjust the character's base stat total.";
+		case DELTA:
+			return "Applies a random delta (positive or negative) within the variance to each base stat.";
+		default:
+			return "Unknown Bases Mode Selected.";
+		}
+	}
+
 }

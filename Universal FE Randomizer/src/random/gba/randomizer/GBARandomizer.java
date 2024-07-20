@@ -524,11 +524,11 @@ public class GBARandomizer extends Randomizer {
 			{
 			case REDISTRIBUTE:
 				updateStatusString("Redistributing bases...");
-				BasesRandomizer.randomizePartyBases(bases.mode, bases.redistributionOption.variance, charData, classData, rng);
+				BasesRandomizer.randomizePartyBases(bases.mode, bases.variance, charData, classData, rng);
 				break;
 			case DELTA:
 				updateStatusString("Applying random deltas to bases...");
-				BasesRandomizer.randomizePartyBases(bases.mode, bases.deltaOption.variance, charData, classData, rng);
+				BasesRandomizer.randomizePartyBases(bases.mode, bases.variance, charData, classData, rng);
 				break;
 			}
 		}
@@ -2429,10 +2429,10 @@ public class GBARandomizer extends Randomizer {
 		if (bases != null) {
 			switch (bases.mode) {
 			case REDISTRIBUTE:
-				rk.addHeaderItem("Randomize Bases", "Redistribution (" + bases.redistributionOption.variance + " variance)");
+				rk.addHeaderItem("Randomize Bases", "Redistribution (" + bases.variance + " variance)");
 				break;
 			case DELTA:
-				rk.addHeaderItem("Randomize Bases", "Delta (+/- " + bases.deltaOption.variance + ")");
+				rk.addHeaderItem("Randomize Bases", "Delta (+/- " + bases.variance + ")");
 				break;
 			}
 		} else {
