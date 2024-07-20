@@ -509,6 +509,11 @@ public class GBARandomizer extends Randomizer {
 				GrowthsRandomizer.randomizeTeamGrowths(growths.mode, 0, growths.parameters.minValue, 
 					growths.parameters.maxValue, growths.adjustHP, charData, rng);
 				break;
+			case HYBRID:
+				updateStatusString("Hybridizing Random growths...");
+				GrowthsRandomizer.randomizeTeamGrowths(growths.mode, 0, growths.parameters.minValue, 
+					growths.parameters.maxValue, growths.adjustHP, charData, rng);
+				break;
 			}
 		}
 	}
@@ -2418,6 +2423,9 @@ public class GBARandomizer extends Randomizer {
 				break;
 			case FULL:
 				rk.addHeaderItem("Randomize Growths", "Full (" + growths.parameters.minValue + "% ~ " + growths.parameters.maxValue + "%)");
+				break;
+			case HYBRID:
+				rk.addHeaderItem("Randomize Growths", "Hybridize (" + growths.parameters.minValue + "% ~ " + growths.parameters.maxValue + "%)");
 				break;
 			}
 			

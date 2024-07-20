@@ -70,6 +70,10 @@ public class GrowthsRandomizer
 			case REDISTRIBUTE:
 				newGrowths = randomizeRedistribute( mult, variance, minGrowth, maxGrowth, adjustHP, character.getGrowths(), rng );
 				break;
+			case HYBRID:
+				newGrowths = fullRandomizeRange( mult, minGrowth, range, adjustHP, character.getGrowths(), rng );
+				newGrowths = newGrowths.hybridize( character.getGrowths(), mult );
+				break;
 			default: // If we somehow hit an unknown type, just set to old growths
 				newGrowths = new GBAFEStatDto( character.getGrowths() );
 			}

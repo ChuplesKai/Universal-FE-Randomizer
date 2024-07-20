@@ -112,7 +112,7 @@ public class GBAFEStatDto {
 	} 
 	
 	/**
-	 * Substracts the stats from the given DAO from the current instance
+	 * Subtracts the stats from the given DAO from the current instance
 	 */
 	public GBAFEStatDto subtract(GBAFEStatDto other) {
 		this.hp  -= other.hp;
@@ -139,6 +139,36 @@ public class GBAFEStatDto {
 		this.res = YuneUtil.clamp(this.res, lower.res, upper.res);
 		
 		return this;
+	}
+
+	/**
+	 * Hybridizes this DTO with an input one, calculating an average.
+	 *  If a multiplier other than 1 is given, the resulting values
+	 *  will be adjusted to the nearest multiple (with bias towards
+	 * 	the values of this/calling DTO).
+	 */
+	public GBAFEStatDto hybridize(GBAFEStatDto other, int multiplier)
+	{
+		this.hp = hybridRound(this.hp, other.hp, multiplier);
+		this.str = hybridRound(this.str, other.str, multiplier);
+		this.skl = hybridRound(this.skl, other.skl, multiplier);
+		this.spd = hybridRound(this.spd, other.spd, multiplier);
+		this.lck = hybridRound(this.lck, other.lck, multiplier);
+		this.def = hybridRound(this.def, other.def, multiplier);
+		this.res = hybridRound(this.res, other.res, multiplier);
+		return this;
+	}
+
+	private int hybridRound( int baseVal, int otherVal, int multiplier )
+	{
+		int ret = (baseVal + otherVal)/2;
+		int stmod = ret % multiplier;
+		if (stmod != 0)
+		{
+			if( baseVal < otherVal ) ret -= stmod; // Bias Down
+			else ret += (multiplier - stmod); // Bias Up
+		}
+		return ret;
 	}
 	
 	/**

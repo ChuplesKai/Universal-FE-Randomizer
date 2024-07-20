@@ -75,6 +75,9 @@ public class GrowthsView extends YuneView<GrowthOptions> {
 		case "Redistribute":
 			setMode( GrowthOptions.Mode.REDISTRIBUTE );
 			break;
+		case "Hybrid":
+			setMode( GrowthOptions.Mode.HYBRID );
+			break;
 		default: // Not sure what else to do here, set to full
 			setMode( GrowthOptions.Mode.FULL );
 		}		
@@ -101,6 +104,7 @@ public class GrowthsView extends YuneView<GrowthOptions> {
 		optionSelect.add("Delta");
 		optionSelect.add("Absolute");
 		optionSelect.add("Redistribute");
+		optionSelect.add("Hybrid");
 		optionSelect.select(0);
 		optionSelect.addListener(SWT.Modify, new Listener()
 		{
@@ -199,7 +203,7 @@ public class GrowthsView extends YuneView<GrowthOptions> {
 		currentMode = newMode;
 		if (isEnabled)
 		{
-			varianceSpinner.setEnabled( newMode != GrowthOptions.Mode.FULL );
+			varianceSpinner.setEnabled( newMode != GrowthOptions.Mode.FULL && newMode != GrowthOptions.Mode.HYBRID );
 			optionDescription.setText( GrowthOptions.getModeDescription(newMode) );
 		}
 	}
@@ -223,7 +227,8 @@ public class GrowthsView extends YuneView<GrowthOptions> {
 	 ****************************************************************/
 	private void setEnableGrowths(Boolean enabled)
 	{
-		varianceSpinner.setEnabled(enabled && currentMode != GrowthOptions.Mode.FULL);
+		boolean fullmode = (currentMode == GrowthOptions.Mode.FULL || currentMode == GrowthOptions.Mode.HYBRID);
+		varianceSpinner.setEnabled(enabled && !fullmode );
 		optionSelect.setEnabled(enabled);
 		growthRangeControl.setEnabled(enabled);
 		adjustHPGrowths.setEnabled(enabled);
@@ -258,6 +263,9 @@ public class GrowthsView extends YuneView<GrowthOptions> {
 				break;
 			case FULL:
 				optionSelect.select(1);
+				break;
+			case HYBRID:
+				optionSelect.select(3);
 				break;
 		}
 		setMode( options.mode );

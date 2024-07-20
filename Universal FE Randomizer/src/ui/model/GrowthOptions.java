@@ -4,7 +4,7 @@ public class GrowthOptions
 {
 	public enum Mode
 	{
-		REDISTRIBUTE, DELTA, FULL
+		REDISTRIBUTE, DELTA, FULL, HYBRID
 	}
 	
 	public final Mode mode;
@@ -37,7 +37,9 @@ public class GrowthOptions
 		case DELTA:
 			return "Applies a random delta (positive or negative) within the variance to each growth.";
 		case FULL:
-			return "Generates fully random growth rates between the specified minimum and maximum, using the selected distribution.";
+			return "Generates fully-random growth rates between the specified minimum and maximum, using the selected distribution.";
+		case HYBRID:
+			return "Hybridizes/averages generated fully-random growth rates with the character's original growths.";
 		default:
 			return "Unknown Growths Mode Selected.";
 		}
