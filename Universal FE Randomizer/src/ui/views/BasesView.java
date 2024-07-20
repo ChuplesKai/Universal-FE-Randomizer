@@ -51,7 +51,8 @@ public class BasesView extends YuneView<BaseOptions>
 	 * 
 	 ****************************************************************/
 	@Override
-	public String getGroupTooltip() {
+	public String getGroupTooltip()
+	{
 		return "Randomizes the base stat offsets of all playable characters, relative to their class (excluding CON).";
 	}
 
@@ -67,6 +68,9 @@ public class BasesView extends YuneView<BaseOptions>
 			break;
 		case "Redistribute":
 			setMode( BaseOptions.Mode.REDISTRIBUTE );
+			break;
+		case "Hybrid":
+			setMode( BaseOptions.Mode.HYBRID );
 			break;
 		default: // Not sure what else to do here, set to delta
 			setMode( BaseOptions.Mode.DELTA );
@@ -94,6 +98,7 @@ public class BasesView extends YuneView<BaseOptions>
 		optionSelect = new Combo(group, SWT.DROP_DOWN);
 		optionSelect.add("Delta");
 		optionSelect.add("Redistribute");
+		optionSelect.add("Hybrid");
 		optionSelect.select(0);
 		optionSelect.addListener(SWT.Modify, new Listener()
 		{
@@ -210,6 +215,11 @@ public class BasesView extends YuneView<BaseOptions>
 				case DELTA:
 					optionSelect.select(0);
 					break;
+				case HYBRID:
+					optionSelect.select(2);
+					break;
+				default:
+					optionSelect.select(0);
 			}
 			setMode(options.mode);
 			varianceSpinner.setSelection( options.variance );

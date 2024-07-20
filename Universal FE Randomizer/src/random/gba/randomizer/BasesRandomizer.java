@@ -69,6 +69,10 @@ public class BasesRandomizer
 			case DELTA: // Random delta/variance
 				newBases = deltaRandomizeBases( variance, bases, classBases, classCaps, rng );
 				break;
+			case HYBRID: // Hybridize original and redistributed stats
+				newBases = redistributeBases( variance, bases, classBases, classCaps, rng );
+				newBases = newBases.hybridize( bases, 1 );
+				break;
 			default: // If for some reason we fall through with no method, just return the bases
 				newBases = new GBAFEStatDto( bases );
 			}

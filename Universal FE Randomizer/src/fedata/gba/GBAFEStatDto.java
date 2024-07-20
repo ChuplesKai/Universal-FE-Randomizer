@@ -168,6 +168,8 @@ public class GBAFEStatDto {
 			if( baseVal < otherVal ) ret -= stmod; // Bias Down
 			else ret += (multiplier - stmod); // Bias Up
 		}
+		// Also need an explicit Bias up check when multiplier is 1
+		if( multiplier == 1 && (baseVal + otherVal) % 2 == 1 && otherVal > baseVal ) ret += 1; 
 		return ret;
 	}
 	
