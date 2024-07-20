@@ -23,16 +23,8 @@ public class GrowthsView extends YuneView<GrowthOptions> {
 
 	private Button enableButton;
 
-	private Group modeContainer;
-
-	private Button redistributeOption;
-	private Spinner varianceSpinner;
-
-	private Button byDeltaOption;
-	private Spinner deltaSpinner;
-
-	private Button fullRandomOption;
 	private MinMaxControl growthRangeControl;
+	private Spinner varianceSpinner;
 
 	private Button adjustHPGrowths;
 	private Button adjustSTRMAGSplit;
@@ -208,21 +200,8 @@ public class GrowthsView extends YuneView<GrowthOptions> {
 		currentMode = newMode;
 		if (isEnabled)
 		{
-			switch (newMode)
-			{
-				case REDISTRIBUTE:
-					varianceSpinner.setEnabled(true);
-					optionDescription.setText("Randomly redistrubtes a character's total growths, using the variance to randomly adjust the total growths of each character.");
-					break;
-				case DELTA:
-					varianceSpinner.setEnabled(true);
-					optionDescription.setText("Applies a random delta (positive or negative) within the variance to each growth.");
-					break;
-				case FULL:
-					varianceSpinner.setEnabled(false);
-					optionDescription.setText("Generates fully random growth rates between the specified minimum and maximum, using the selected distribution.");
-					break;
-			}
+			varianceSpinner.setEnabled( newMode != GrowthOptions.Mode.FULL );
+			optionDescription.setText( GrowthOptions.getModeDescription(newMode) );
 		}
 	}
 
@@ -245,7 +224,8 @@ public class GrowthsView extends YuneView<GrowthOptions> {
 	 ****************************************************************/
 	private void setEnableGrowths(Boolean enabled)
 	{
-		varianceSpinner.setEnabled(enabled && currentMode == GrowthOptions.Mode.REDISTRIBUTE);
+		varianceSpinner.setEnabled(enabled && currentMode != GrowthOptions.Mode.FULL);
+		optionSelect.setEnabled(enabled);
 		growthRangeControl.setEnabled(enabled);
 		adjustHPGrowths.setEnabled(enabled);
 		if (adjustSTRMAGSplit != null) { adjustSTRMAGSplit.setEnabled(enabled && currentMode != GrowthOptions.Mode.DELTA); }
