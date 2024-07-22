@@ -139,8 +139,11 @@ public class EnemyBuffer {
 			}
 		}
 	}
-	
-	private static void upgradeWeapons(GBAFEChapterUnitData unit, ClassDataLoader classData, ItemDataLoader itemData, Random rng) {
+
+
+	// TAG, can't we functionalize each one rather than copy/paste/
+	private static void upgradeWeapons(GBAFEChapterUnitData unit, ClassDataLoader classData, ItemDataLoader itemData, Random rng)
+	{
 		GBAFEClassData unitClass = classData.classForID(unit.getStartingClass());
 		int item1ID = unit.getItem1();
 		GBAFEItemData item1 = itemData.itemWithID(item1ID);

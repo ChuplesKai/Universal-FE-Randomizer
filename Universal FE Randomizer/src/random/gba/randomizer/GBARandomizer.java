@@ -99,7 +99,6 @@ public class GBARandomizer extends Randomizer {
 		
 		diffCompiler = diffs;
 
-		//Debug - just make one for now, until it's in the UI.
 		this.distributionOptions = dist;
 		this.growths = growths;
 		this.bases = bases;
@@ -200,11 +199,13 @@ public class GBARandomizer extends Randomizer {
 		paletteData.recordReferencePalettes(recordKeeper, charData, classData, textData);
 		if( statboosterOptions != null ) statboostData.recordInitial(recordKeeper, itemData, statboosterOptions);
 
-		//Pre-randomization adjustments		
+		// Pre-randomization adjustments		
 		makePreliminaryAdjustments();
-
+		// Other Pre-Randomization Patches/Options
+		//TAG
+		
 		//------------------------------------------------------------
-		//Then, try each of the main randomization methods in order
+		// Then, try each of the main randomization methods in order
 		//------------------------------------------------------------
 		updateStatusString("Randomizing...");
 		try { randomizeRecruitmentIfNecessary(seed); } catch (Exception e) { notifyError("Encountered error while randomizing recruitment.\n\n" + e.getClass().getSimpleName() + "\n\nStack Trace:\n\n" + String.join("\n", Arrays.asList(e.getStackTrace()).stream().map(element -> (element.toString())).limit(5).collect(Collectors.toList()))); return; }
@@ -544,8 +545,10 @@ public class GBARandomizer extends Randomizer {
 	/*****************************************************************
 	 * Class Randomization Call - handles players, enemies, and bosses
 	 ****************************************************************/
-	private void randomizeClassesIfNecessary(String seed) {
-		if (classes != null) {
+	private void randomizeClassesIfNecessary(String seed)
+	{
+		if (classes != null)
+		{
 			if (classes.randomizePCs) {
 				updateStatusString("Randomizing player classes...");
 				Random rng = new Random(SeedGenerator.generateSeedValue(seed, ClassRandomizer.rngSalt + 1));
@@ -570,7 +573,8 @@ public class GBARandomizer extends Randomizer {
 	/*****************************************************************
 	 * Weapon Randomization call
 	 ****************************************************************/
-	private void randomizeWeaponsIfNecessary(String seed) {
+	private void randomizeWeaponsIfNecessary(String seed)
+	{
 		if (weapons != null) {
 			//Weapon might (Mt.) value
 			if (weapons.mightOptions != null) {

@@ -114,7 +114,7 @@ public class FERandom extends Random
         // Draw the numbers from uniform
         int rone = nextInt( maximum - minimum + 1 );
         int rtwo = nextInt( maximum - minimum + 1 );
-        return __decide( rone - offset, rtwo - offset, maximum - offset ) + offset;
+        return __decide( rone - offset, rtwo - offset, maximum - offset ) + offset + minimum;
     }
 
 
