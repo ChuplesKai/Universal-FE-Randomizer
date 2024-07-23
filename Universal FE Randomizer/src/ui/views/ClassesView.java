@@ -18,8 +18,9 @@ import ui.model.ClassOptions.BaseTransferOption;
 import ui.model.ClassOptions.GenderRestrictionOption;
 import ui.model.ClassOptions.GrowthAdjustmentOption;
 
-public class ClassesView extends YuneView<ClassOptions> {
-	
+public class ClassesView extends YuneView<ClassOptions>
+{
+	private Button loadCustomGrowthsButton;
 
 	private Button randomizePCButton;
 	private Button randomizePCLordsButton;
@@ -67,7 +68,18 @@ public class ClassesView extends YuneView<ClassOptions> {
 	}
 
 	@Override
-	protected void compose() {
+	protected void compose() 
+	{
+		// Checkbox for whether to load custom growths from .json
+		loadCustomGrowthsButton = new Button(group, SWT.CHECK);
+		loadCustomGrowthsButton.setText("Load Custom Growths");
+		loadCustomGrowthsButton.setToolTipText("Uses custom growth rates for classes - affects re-classing characters and enemies.");
+
+		FormData customData = new FormData();
+		customData.left = new FormAttachment(0, 5);
+		customData.top = new FormAttachment(0, 5);
+		loadCustomGrowthsButton.setLayoutData(customData);
+
 		randomizePCButton = new Button(group, SWT.CHECK);
 		randomizePCButton.setText("Randomize Playable Characters");
 		randomizePCButton.addListener(SWT.Selection, new Listener() {
@@ -100,8 +112,8 @@ public class ClassesView extends YuneView<ClassOptions> {
 		});
 		
 		FormData pcFormData = new FormData();
-		pcFormData.left = new FormAttachment(0, 5);
-		pcFormData.top = new FormAttachment(0, 5);
+		pcFormData.left = new FormAttachment(loadCustomGrowthsButton, 0, SWT.LEFT);
+		pcFormData.top = new FormAttachment(loadCustomGrowthsButton, 5);
 		randomizePCButton.setLayoutData(pcFormData);
 		
 		randomizePCLordsButton = new Button(group, SWT.CHECK);
@@ -155,8 +167,8 @@ public class ClassesView extends YuneView<ClassOptions> {
 		growthAdjustmentGroup.setLayoutData(groupData);
 		
 		growthNoAdjustmentButton = new Button(growthAdjustmentGroup, SWT.RADIO);
-		growthNoAdjustmentButton.setText("No Adjustment");
-		growthNoAdjustmentButton.setToolTipText("Do not adjust growth rates.");
+		growthNoAdjustmentButton.setText("Retain Character Growths");
+		growthNoAdjustmentButton.setToolTipText("Uses the character's original growths regardless of what class they become.");
 		growthNoAdjustmentButton.setEnabled(false);
 		growthNoAdjustmentButton.setSelection(true);
 		
@@ -166,8 +178,8 @@ public class ClassesView extends YuneView<ClassOptions> {
 		growthNoAdjustmentButton.setLayoutData(noAdjustData);
 		
 		personalGrowthButton = new Button(growthAdjustmentGroup, SWT.RADIO);
-		personalGrowthButton.setText("Transfer Personal Growths");
-		personalGrowthButton.setToolTipText("Apply personal growth offsets from the old class growths to the new class growths.\n\nFor example, if a character's old SPD growth was 10% higher than the old class's SPD growth,\ntheir new SPD growth would be 10% higher than the new class's SPD growth.");
+		personalGrowthButton.setText("Adjust to New Class");
+		personalGrowthButton.setToolTipText("Adjusts character growth rates based on their new class.\n\nFor example, if a Knight character becomes a Thief,\n their SPD growth will increase, but DEF growth will decrease.");
 		personalGrowthButton.setEnabled(false);
 		personalGrowthButton.setSelection(false);
 		
@@ -350,6 +362,7 @@ public class ClassesView extends YuneView<ClassOptions> {
 
 	@Override
 	public ClassOptions getOptions() {
+		Boolean customGrowths = loadCustomGrowthsButton.getSelection();
 		Boolean pcsEnabled = randomizePCButton.getSelection();
 		Boolean lordsEnabled = false;
 		Boolean thievesEnabled = false;
@@ -373,9 +386,9 @@ public class ClassesView extends YuneView<ClassOptions> {
 //		else if (classRelativeGrowthButton.getSelection()) { growthOption = GrowthAdjustmentOption.CLASS_RELATIVE_GROWTHS; }
 		
 		if (hasMonsterOption) {
-			return new ClassOptions(pcsEnabled, lordsEnabled, thievesEnabled, specialEnabled, !mixMonsterClasses.getSelection(), forceChangeButton.getSelection(), genderOption, evenClassesButton.getSelection(), randomizeEnemiesButton.getSelection(), randomizeBossesButton.getSelection(), baseOption, growthOption);
+			return new ClassOptions(pcsEnabled, lordsEnabled, thievesEnabled, specialEnabled, !mixMonsterClasses.getSelection(), forceChangeButton.getSelection(), genderOption, evenClassesButton.getSelection(), randomizeEnemiesButton.getSelection(), randomizeBossesButton.getSelection(), baseOption, growthOption, customGrowths);
 		} else {
-			return new ClassOptions(pcsEnabled, lordsEnabled, thievesEnabled, specialEnabled, forceChangeButton.getSelection(), genderOption, evenClassesButton.getSelection(), randomizeEnemiesButton.getSelection(), randomizeBossesButton.getSelection(), baseOption, growthOption);
+			return new ClassOptions(pcsEnabled, lordsEnabled, thievesEnabled, specialEnabled, forceChangeButton.getSelection(), genderOption, evenClassesButton.getSelection(), randomizeEnemiesButton.getSelection(), randomizeBossesButton.getSelection(), baseOption, growthOption, customGrowths);
 		}
 	}
 
@@ -384,6 +397,7 @@ public class ClassesView extends YuneView<ClassOptions> {
 		if (options == null) {
 			// Shouldn't happen.
 		} else {
+			loadCustomGrowthsButton.setSelection(options.customGrowths);
 			if (options.randomizePCs) {
 				randomizePCButton.setSelection(true);
 				randomizePCLordsButton.setEnabled(true);

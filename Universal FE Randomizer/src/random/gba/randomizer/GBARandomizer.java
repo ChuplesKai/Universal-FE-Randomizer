@@ -29,13 +29,23 @@ import util.*;
 import util.recordkeeper.RecordKeeper;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Reader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import application.Main;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 public class GBARandomizer extends Randomizer {
+
+	// Seems to be necessary for Gson
+	private static final class GBAFEClassDtoType extends TypeToken<List<GBAFEClassDto>> {}
 	
 	private String sourcePath;
 	private String targetPath;
@@ -202,7 +212,7 @@ public class GBARandomizer extends Randomizer {
 		// Pre-randomization adjustments		
 		makePreliminaryAdjustments();
 		// Other Pre-Randomization Patches/Options
-		//TAG
+		preRandomizationPatches( classes.customGrowths );
 		
 		//------------------------------------------------------------
 		// Then, try each of the main randomization methods in order
@@ -782,6 +792,49 @@ public class GBARandomizer extends Randomizer {
 		// Need to prepare items for randomization?
 		itemData.prepareForRandomization();
 	}
+
+
+	/*****************************************************************
+	 * Some optional patches before core randomization occurs.
+	 ****************************************************************/
+	private void preRandomizationPatches( Boolean loadCustomGrowths )
+	{
+		if( loadCustomGrowths )
+		{
+			// Custom Growths option
+			Gson gson = new Gson();
+			try {
+				InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("GBAGrowths.json");
+				Reader r = null;
+				if (inputStream != null) {
+					r = new InputStreamReader(inputStream);
+				} else {
+					r = new FileReader(new File("GBAGrowths.json"));
+				}
+				List<GBAFEClassDto> classGrowths = gson.fromJson(r, new GBAFEClassDtoType().getType() );
+				GBAFEClassData[] allClasses = classData.allClasses();
+				for (GBAFEClassData currentClass : allClasses)
+				{
+					String classString = currentClass.displayString();
+					for( int cIdx = 0; cIdx < classGrowths.size(); cIdx++ )
+					{
+						GBAFEClassDto classDto = classGrowths.get(cIdx);
+						if( classDto.name.equals( classString ) )
+						{
+							currentClass.setGrowths( classDto.growths );
+						}
+					}
+				}
+			} catch (Exception e) {
+				System.out
+						.println("Couldn't read the custom growths file GBAGrowths.json, keeping original growths.");
+				e.printStackTrace();
+			}
+		}
+
+		// Blade -> Dagger Patch?
+	}
+
 	
 	/*****************************************************************
 	 * Final Adjustments - post randomization steps to finalize data.

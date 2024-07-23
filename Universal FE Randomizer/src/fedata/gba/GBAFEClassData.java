@@ -134,6 +134,17 @@ public abstract class GBAFEClassData extends AbstractGBAData implements FEPrinta
 		wasModified = true;
 	}
 	
+	public void setGrowths( GBAFEStatDto growths )
+	{
+		setHPGrowth( growths.hp );
+		setSTRGrowth( growths.str );
+		setSKLGrowth( growths.skl );
+		setSPDGrowth( growths.spd );
+		setLCKGrowth( growths.lck );
+		setDEFGrowth( growths.def );
+		setRESGrowth( growths.res );
+	}
+
 	public GBAFEStatDto getGrowths() {
 		return new GBAFEStatDto(getHPGrowth(), getSTRGrowth(), getSKLGrowth(), getSPDGrowth(), getLCKGrowth(), getDEFGrowth(), getRESGrowth());
 	}

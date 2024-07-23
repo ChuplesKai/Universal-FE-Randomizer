@@ -13,7 +13,8 @@ public class ClassOptions {
 	public enum GrowthAdjustmentOption {
 		NO_CHANGE, TRANSFER_PERSONAL_GROWTHS, CLASS_RELATIVE_GROWTHS
 	}
-	
+
+	public final Boolean customGrowths;	
 	public final Boolean randomizePCs;
 	public final Boolean includeLords;
 	public final Boolean includeThieves;
@@ -35,12 +36,14 @@ public class ClassOptions {
 	/**
 	 * Constructor FE6 & 7
 	 */
-	public ClassOptions(Boolean pcs, Boolean lords, Boolean thieves, Boolean special, boolean forceChange, GenderRestrictionOption genderOption, boolean assignEvenly, Boolean enemies, Boolean bosses, BaseTransferOption basesTransfer, GrowthAdjustmentOption growthOptions) {
+	public ClassOptions(Boolean pcs, Boolean lords, Boolean thieves, Boolean special, boolean forceChange, GenderRestrictionOption genderOption, boolean assignEvenly, Boolean enemies, Boolean bosses, BaseTransferOption basesTransfer, GrowthAdjustmentOption growthOptions, Boolean customGrowths)
+	{
 		randomizePCs = pcs;
 		includeLords = lords;
 		includeThieves = thieves;
 		includeSpecial = special;
 		this.assignEvenly = assignEvenly;
+		this.customGrowths = customGrowths;
 		separateMonsters = false;
 		
 		randomizeEnemies = enemies;
@@ -57,12 +60,14 @@ public class ClassOptions {
 	/**
 	 * Constructor FE8 (due to monster classes)
 	 */
-	public ClassOptions(Boolean pcs, Boolean lords, Boolean thieves, Boolean special, Boolean separateMonsters, boolean forceChange, GenderRestrictionOption genderOption, boolean assignEvenly, Boolean enemies, Boolean bosses, BaseTransferOption basesTransfer, GrowthAdjustmentOption growthOptions) {
+	public ClassOptions(Boolean pcs, Boolean lords, Boolean thieves, Boolean special, Boolean separateMonsters, boolean forceChange, GenderRestrictionOption genderOption, boolean assignEvenly, Boolean enemies, Boolean bosses, BaseTransferOption basesTransfer, GrowthAdjustmentOption growthOptions, Boolean customGrowths)
+	{
 		randomizePCs = pcs;
 		includeLords = lords;
 		includeThieves = thieves;
 		includeSpecial = special;
 		this.assignEvenly = assignEvenly;
+		this.customGrowths = customGrowths;
 		this.separateMonsters = separateMonsters;
 		
 		randomizeEnemies = enemies;

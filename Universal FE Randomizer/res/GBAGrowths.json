@@ -1,97 +1,376 @@
 [
-  {
-    "EIRIKA_LORD":[70,40,45,45,45,20,20],
-    "EIRIKA_MASTER_LORD":[65,35,40,40,40,15,20],
-    "EPHRAIM_LORD":[75,45,40,35,35,25,15],
-    "EPHRAIM_MASTER_LORD":[70,40,35,30,30,20,15],
-    "TRAINEE":[75,55,35,30,40,20,15],
-    "TRAINEE_2":[75,55,35,30,40,20,15],
-    "SUPER_TRAINEE":[70,50,30,25,40,15,10],
-    "PUPIL":[55,50,40,35,45,10,35],
-    "PUPIL_2":[55,50,40,35,45,10,35],
-    "SUPER_PUPIL":[50,45,35,30,45,5,30],
-    "RECRUIT":[65,40,40,40,50,25,10],
-    "RECRUIT_2":[65,40,40,40,50,25,10],
-    "SUPER_RECRUIT":[65,40,40,40,50,25,10],
-    "ARCHER_F":[60,40,45,35,45,10,25],
-    "ARCHER":[60,40,45,35,45,10,25],
-    "BRIGAND":[90,55,25,50,20,10,5],
-    "CAVALIER_F":[85,45,35,35,20,15,15],
-    "CAVALIER":[85,45,35,35,20,15,15],
-    "CLERIC":[50,45,30,15,55,5,50],
-    "DANCER":[60,15,15,55,60,10,50],
-    "FIGHTER":[75,50,40,25,25,20,15],
-    "KNIGHT":[85,45,20,20,20,45,15],
-    "MAGE":[60,50,15,40,30,15,40],
-    "MAGE_F":[60,50,15,40,30,15,40],
-    "MANAKETE":[110,85,80,55,35,120,25],
-    "MERCENARY":[70,45,35,35,25,25,15],
-    "MONK":[55,35,50,40,30,5,40],
-    "MYRMIDON_F":[70,40,40,45,35,10,10],
-    "MYRMIDON":[70,40,40,45,35,10,10],
-    "NOMAD_F":[65,40,40,35,40,10,20],
-    "NOMAD_F":[65,40,40,35,40,10,20],
-    "PEGASUS_KNIGHT":[55,30,35,45,35,15,35],
-    "PIRATE":[80,50,30,40,30,20,10],
-    "PRIEST":[55,40,40,25,40,5,45],
-    "SOLDIER":[85,45,30,30,25,35,15],
-    "SHAMAN":[70,55,35,25,20,10,40],
-    "THIEF":[70,30,35,50,40,10,15],
-    "TROUBADOUR":[55,40,35,35,45,5,40],
-    "WYVERN_RIDER":[85,45,35,30,20,25,10],
+    {
+        "name":"EIRIKA_LORD",
+        "growths":{"hp":70, "str":40, "skl":45, "spd":45, "lck":45, "def":20, "res":20}
+    },
+    {
+        "name":"EIRIKA_MASTER_LORD",
+        "growths":{"hp":65, "str":35, "skl":40, "spd":40, "lck":40, "def":15, "res":20}
+    },
+    {
+        "name":"EPHRAIM_LORD",
+        "growths":{"hp":75, "str":45, "skl":40, "spd":35, "lck":35, "def":25, "res":15}
+    },
+    {
+        "name":"EPHRAIM_MASTER_LORD",
+        "growths":{"hp":70, "str":40, "skl":35, "spd":30, "lck":30, "def":20, "res":15}
+    },
+    {
+        "name":"TRAINEE",
+        "growths":{"hp":75, "str":55, "skl":35, "spd":30, "lck":40, "def":20, "res":15}
+    },
+    {
+        "name":"TRAINEE_2",
+        "growths":{"hp":75, "str":55, "skl":35, "spd":30, "lck":40, "def":20, "res":15}
+    },
+    {
+        "name":"SUPER_TRAINEE",
+        "growths":{"hp":70, "str":50, "skl":30, "spd":25, "lck":40, "def":15, "res":10}
+    },
+    {
+        "name":"PUPIL",
+        "growths":{"hp":55, "str":50, "skl":40, "spd":35, "lck":45, "def":10, "res":35}
+    },
+    {
+        "name":"PUPIL_2",
+        "growths":{"hp":55, "str":50, "skl":40, "spd":35, "lck":45, "def":10, "res":35}
+    },
+    {
+        "name":"SUPER_PUPIL",
+        "growths":{"hp":50, "str":45, "skl":35, "spd":30, "lck":45, "def":5, "res":30}
+    },
+    {
+        "name":"RECRUIT",
+        "growths":{"hp":65, "str":40, "skl":40, "spd":40, "lck":50, "def":25, "res":10}
+    },
+    {
+        "name":"RECRUIT_2",
+        "growths":{"hp":65, "str":40, "skl":40, "spd":40, "lck":50, "def":25, "res":10}
+    },
+    {
+        "name":"SUPER_RECRUIT",
+        "growths":{"hp":60, "str":35, "skl":35, "spd":35, "lck":50, "def":20, "res":5}
+    },
+    {
+        "name":"ARCHER_F",
+        "growths":{"hp":60, "str":40, "skl":45, "spd":35, "lck":45, "def":10, "res":25}
+    },
+    {
+        "name":"ARCHER",
+        "growths":{"hp":60, "str":40, "skl":45, "spd":35, "lck":45, "def":10, "res":25}
+    },
+    {
+        "name":"BRIGAND",
+        "growths":{"hp":90, "str":55, "skl":25, "spd":50, "lck":20, "def":10, "res":5}
+    },
+    {
+        "name":"CAVALIER_F",
+        "growths":{"hp":85, "str":45, "skl":35, "spd":35, "lck":20, "def":15, "res":15}
+    },
+    {
+        "name":"CAVALIER",
+        "growths":{"hp":85, "str":45, "skl":35, "spd":35, "lck":20, "def":15, "res":15}
+    },
+    {
+        "name":"CLERIC",
+        "growths":{"hp":50, "str":45, "skl":30, "spd":15, "lck":55, "def":5, "res":50}
+    },
+    {
+        "name":"DANCER",
+        "growths":{"hp":60, "str":15, "skl":15, "spd":55, "lck":60, "def":10, "res":50}
+    },
+    {
+        "name":"FIGHTER",
+        "growths":{"hp":75, "str":50, "skl":40, "spd":25, "lck":25, "def":20, "res":15}
+    },
+    {
+        "name":"KNIGHT_F",
+        "growths":{"hp":85, "str":45, "skl":20, "spd":20, "lck":20, "def":45, "res":15}
+    },
+    {
+        "name":"KNIGHT",
+        "growths":{"hp":85, "str":45, "skl":20, "spd":20, "lck":20, "def":45, "res":15}
+    },
+    {
+        "name":"MAGE",
+        "growths":{"hp":60, "str":50, "skl":15, "spd":40, "lck":30, "def":15, "res":40}
+    },
+    {
+        "name":"MAGE_F",
+        "growths":{"hp":60, "str":50, "skl":15, "spd":40, "lck":30, "def":15, "res":40}
+    },
+    {
+        "name":"MANAKETE",
+        "growths":{"hp":110, "str":85, "skl":80, "spd":55, "lck":35, "def":120, "res":25}
+    },
+    {
+        "name":"MERCENARY",
+        "growths":{"hp":70, "str":45, "skl":35, "spd":35, "lck":25, "def":25, "res":15}
+    },
+    {
+        "name":"MONK",
+        "growths":{"hp":55, "str":35, "skl":50, "spd":40, "lck":30, "def":5, "res":40}
+    },
+    {
+        "name":"MYRMIDON_F",
+        "growths":{"hp":70, "str":40, "skl":40, "spd":45, "lck":35, "def":10, "res":10}
+    },
+    {
+        "name":"MYRMIDON",
+        "growths":{"hp":70, "str":40, "skl":40, "spd":45, "lck":35, "def":10, "res":10}
+    },
+    {
+        "name":"NOMAD_F",
+        "growths":{"hp":65, "str":40, "skl":40, "spd":35, "lck":40, "def":10, "res":20}
+    },
+    {
+        "name":"NOMAD_F",
+        "growths":{"hp":65, "str":40, "skl":40, "spd":35, "lck":40, "def":10, "res":20}
+    },
+    {
+        "name":"PEGASUS_KNIGHT",
+        "growths":{"hp":55, "str":30, "skl":35, "spd":45, "lck":35, "def":15, "res":35}
+    },
+    {
+        "name":"PIRATE",
+        "growths":{"hp":80, "str":50, "skl":30, "spd":40, "lck":30, "def":20, "res":10}
+    },
+    {
+        "name":"PRIEST",
+        "growths":{"hp":55, "str":40, "skl":40, "spd":25, "lck":40, "def":5, "res":45}
+    },
+    {
+        "name":"SOLDIER",
+        "growths":{"hp":85, "str":45, "skl":30, "spd":30, "lck":25, "def":35, "res":15}
+    },
+    {
+        "name":"SHAMAN",
+        "growths":{"hp":70, "str":55, "skl":35, "spd":25, "lck":20, "def":10, "res":40}
+    },
+    {
+        "name":"THIEF",
+        "growths":{"hp":70, "str":30, "skl":35, "spd":50, "lck":40, "def":10, "res":15}
+    },
+    {
+        "name":"TROUBADOUR",
+        "growths":{"hp":55, "str":40, "skl":35, "spd":35, "lck":45, "def":5, "res":40}
+    },
+    {
+        "name":"WYVERN_RIDER",
+        "growths":{"hp":85, "str":45, "skl":35, "spd":30, "lck":20, "def":25, "res":10}
+    },
     // Promoted Classes
-    "SNIPER_F":[60,35,40,30,40,5,20],
-    "SNIPER":[60,35,40,30,40,5,20],
-    "RANGER_F":[55,35,40,35,35,10,15],
-    "RANGER":[55,35,40,35,35,10,15],
-    "BERSERKER":[80,50,25,40,20,10,5],
-    "WARRIOR":[75,45,30,25,25,15,10],
-    "PALADIN_F":[80,40,25,30,20,15,15],
-    "PALADIN":[80,40,25,30,20,15,15],
-    "GREAT_KNIGHT_F":[80,40,25,15,20,30,10],
-    "GREAT_KNIGHT":[80,40,25,15,20,30,10],
-    "BISHOP_F":[50,40,30,15,40,5,40],
-    "BISHOP":[50,40,30,15,40,5,40],
-    "VALKYRIE":[50,40,30,25,40,5,35],
-    "GENERAL_F":[80,40,20,15,15,40,10],
-    "GENERAL":[80,40,20,15,15,40,10],
-    "SAGE_F":[55,35,25,30,30,10,35],
-    "SAGE":[55,35,25,30,30,10,35],
-    "MAGE_KNIGHT_F":[55,40,15,35,30,5,40],
-    "MAGE_KNIGHT":[55,40,15,35,30,5,40],
-    "HERO":[65,40,35,25,25,15,15],
-    "SWORDMASTER_F":[70,35,35,40,30,5,5],
-    "SWORDMASTER":[70,35,35,40,30,5,5],
-    "ASSASSIN_F":[70,30,30,40,30,10,10],
-    "ASSASSIN":[70,30,30,40,30,10,10],
-    "FALCON_KNIGHT":[50,30,30,40,30,10,30],
-    "WYVERN_KNIGHT_F":[65,35,35,40,20,15,10],
-    "WYVERN_KNIGHT":[65,35,35,40,20,15,10],
-    "WYVERN_LORD":[80,40,30,30,15,15,10],
-    "SUMMONER":[65,40,30,20,15,10,35],
-    "DRUID":[65,40,30,20,15,5,40],
+    {
+        "name":"SNIPER_F",
+        "growths":{"hp":60, "str":35, "skl":40, "spd":30, "lck":40, "def":5, "res":20}
+    },
+    {
+        "name":"SNIPER",
+        "growths":{"hp":60, "str":35, "skl":40, "spd":30, "lck":40, "def":5, "res":20}
+    },
+    {
+        "name":"RANGER_F",
+        "growths":{"hp":55, "str":35, "skl":40, "spd":35, "lck":35, "def":10, "res":15}
+    },
+    {
+        "name":"RANGER",
+        "growths":{"hp":55, "str":35, "skl":40, "spd":35, "lck":35, "def":10, "res":15}
+    },
+    {
+        "name":"BERSERKER",
+        "growths":{"hp":80, "str":50, "skl":25, "spd":40, "lck":20, "def":10, "res":5}
+    },
+    {
+        "name":"WARRIOR",
+        "growths":{"hp":75, "str":45, "skl":30, "spd":25, "lck":25, "def":15, "res":10}
+    },
+    {
+        "name":"PALADIN_F",
+        "growths":{"hp":80, "str":40, "skl":25, "spd":30, "lck":20, "def":15, "res":15}
+    },
+    {
+        "name":"PALADIN",
+        "growths":{"hp":80, "str":40, "skl":25, "spd":30, "lck":20, "def":15, "res":15}
+    },
+    {
+        "name":"GREAT_KNIGHT_F",
+        "growths":{"hp":80, "str":40, "skl":25, "spd":15, "lck":20, "def":30, "res":10}
+    },
+    {
+        "name":"GREAT_KNIGHT",
+        "growths":{"hp":80, "str":40, "skl":25, "spd":15, "lck":20, "def":30, "res":10}
+    },
+    {
+        "name":"BISHOP_F",
+        "growths":{"hp":50, "str":40, "skl":30, "spd":15, "lck":40, "def":5, "res":40}
+    },
+    {
+        "name":"BISHOP",
+        "growths":{"hp":50, "str":40, "skl":30, "spd":15, "lck":40, "def":5, "res":40}
+    },
+    {
+        "name":"VALKYRIE",
+        "growths":{"hp":50, "str":40, "skl":30, "spd":25, "lck":40, "def":5, "res":35}
+    },
+    {
+        "name":"GENERAL_F",
+        "growths":{"hp":80, "str":40, "skl":20, "spd":15, "lck":15, "def":40, "res":10}
+    },
+    {
+        "name":"GENERAL",
+        "growths":{"hp":80, "str":40, "skl":20, "spd":15, "lck":15, "def":40, "res":10}
+    },
+    {
+        "name":"SAGE_F",
+        "growths":{"hp":55, "str":35, "skl":25, "spd":30, "lck":30, "def":10, "res":35}
+    },
+    {
+        "name":"SAGE",
+        "growths":{"hp":55, "str":35, "skl":25, "spd":30, "lck":30, "def":10, "res":35}
+    },
+    {
+        "name":"MAGE_KNIGHT_F",
+        "growths":{"hp":55, "str":40, "skl":15, "spd":35, "lck":30, "def":5, "res":40}
+    },
+    {
+        "name":"MAGE_KNIGHT",
+        "growths":{"hp":55, "str":40, "skl":15, "spd":35, "lck":30, "def":5, "res":40}
+    },
+    {
+        "name":"HERO",
+        "growths":{"hp":65, "str":40, "skl":35, "spd":25, "lck":25, "def":15, "res":15}
+    },
+    {
+        "name":"SWORDMASTER_F",
+        "growths":{"hp":70, "str":35, "skl":35, "spd":40, "lck":30, "def":5, "res":5}
+    },
+    {
+        "name":"SWORDMASTER",
+        "growths":{"hp":70, "str":35, "skl":35, "spd":40, "lck":30, "def":5, "res":5}
+    },
+    {
+        "name":"ASSASSIN_F",
+        "growths":{"hp":70, "str":30, "skl":30, "spd":40, "lck":30, "def":10, "res":10}
+    },
+    {
+        "name":"ASSASSIN",
+        "growths":{"hp":70, "str":30, "skl":30, "spd":40, "lck":30, "def":10, "res":10}
+    },
+    {
+        "name":"ROGUE",
+        "growths":{"hp":65, "str":25, "skl":30, "spd":45, "lck":35, "def":10, "res":10}
+    },
+    {
+        "name":"FALCON_KNIGHT",
+        "growths":{"hp":50, "str":30, "skl":30, "spd":40, "lck":30, "def":10, "res":30}
+    },
+    {
+        "name":"WYVERN_KNIGHT_F",
+        "growths":{"hp":65, "str":35, "skl":35, "spd":40, "lck":20, "def":15, "res":10}
+    },
+    {
+        "name":"WYVERN_KNIGHT",
+        "growths":{"hp":65, "str":35, "skl":35, "spd":40, "lck":20, "def":15, "res":10}
+    },
+    {
+        "name":"WYVERN_LORD",
+        "growths":{"hp":80, "str":40, "skl":30, "spd":30, "lck":15, "def":15, "res":10}
+    },
+    {
+        "name":"SUMMONER",
+        "growths":{"hp":65, "str":40, "skl":30, "spd":20, "lck":15, "def":10, "res":35}
+    },
+    {
+        "name":"DRUID",
+        "growths":{"hp":65, "str":40, "skl":30, "spd":20, "lck":15, "def":5, "res":40}
+    },
     // Monster Classes
-    "REVENANT":[100,55,35,25,15,10,20],
-    "ENTOMBED":[90,45,25,15,40,5,10],
-    "BONEWALKER":[85,55,40,25,20,25,15],
-    "WIGHT":[80,50,35,20,20,20,10],
-    "BONEWALKER_BOW":[75,45,55,30,20,25,15],
-    "WIGHT_BOW":[70,40,50,25,20,20,10],
-    "BAEL":[80,55,50,20,20,25,20],
-    "ELDER_BAEL":[75,50,45,20,15,20,15],
-    "ELDER_BAEL_2":[75,50,45,20,15,20,15],
-    "CYCLOPS":[95,35,40,25,15,30,30],
-    "CYCLOPS_2":[95,35,40,25,15,30,30],
-    "MAUTHE_DOOG":[70,35,50,50,30,15,20],
-    "GWYLLGI":[65,30,45,45,25,15,15],
-    "TARVOS":[80,50,40,45,15,25,15],
-    "MAELDUIN":[75,45,35,40,15,20,10],
-    "MOGALL":[60,55,30,45,35,15,30],
-    "ARCH_MOGALL":[55,50,30,40,30,10,25],
-    "GORGON":[55,60,40,25,30,20,45],
-    "GARGOYLE":[80,45,35,45,15,35,15],
-    "DEATHGOYLE":[75,40,30,40,15,30,10],
-    "DRACOZOMBIE":[105,40,30,20,25,35,20],
-    "DEMON_KING":[100,45,35,25,30,40,25]
-  }
+    {
+        "name":"REVENANT",
+        "growths":{"hp":100, "str":55, "skl":35, "spd":25, "lck":15, "def":10, "res":20}
+    },
+    {
+        "name":"ENTOMBED",
+        "growths":{"hp":90, "str":45, "skl":25, "spd":15, "lck":40, "def":5, "res":10}
+    },
+    {
+        "name":"BONEWALKER",
+        "growths":{"hp":85, "str":55, "skl":40, "spd":25, "lck":20, "def":25, "res":15}
+    },
+    {
+        "name":"WIGHT",
+        "growths":{"hp":80, "str":50, "skl":35, "spd":20, "lck":20, "def":20, "res":10}
+    },
+    {
+        "name":"BONEWALKER_BOW",
+        "growths":{"hp":75, "str":45, "skl":55, "spd":30, "lck":20, "def":25, "res":15}
+    },
+    {
+        "name":"WIGHT_BOW",
+        "growths":{"hp":70, "str":40, "skl":50, "spd":25, "lck":20, "def":20, "res":10}
+    },
+    {
+        "name":"BAEL",
+        "growths":{"hp":80, "str":55, "skl":50, "spd":20, "lck":20, "def":25, "res":20}
+    },
+    {
+        "name":"ELDER_BAEL",
+        "growths":{"hp":75, "str":50, "skl":45, "spd":20, "lck":15, "def":20, "res":15}
+    },
+    {
+        "name":"ELDER_BAEL_2",
+        "growths":{"hp":75, "str":50, "skl":45, "spd":20, "lck":15, "def":20, "res":15}
+    },
+    {
+        "name":"CYCLOPS",
+        "growths":{"hp":95, "str":35, "skl":40, "spd":25, "lck":15, "def":30, "res":30}
+    },
+    {
+        "name":"CYCLOPS_2",
+        "growths":{"hp":95, "str":35, "skl":40, "spd":25, "lck":15, "def":30, "res":30}
+    },
+    {
+        "name":"MAUTHE_DOOG",
+        "growths":{"hp":70, "str":35, "skl":50, "spd":50, "lck":30, "def":15, "res":20}
+    },
+    {
+        "name":"GWYLLGI",
+        "growths":{"hp":65, "str":30, "skl":45, "spd":45, "lck":25, "def":15, "res":15}
+    },
+    {
+        "name":"TARVOS",
+        "growths":{"hp":80, "str":50, "skl":40, "spd":45, "lck":15, "def":25, "res":15}
+    },
+    {
+        "name":"MAELDUIN",
+        "growths":{"hp":75, "str":45, "skl":35, "spd":40, "lck":15, "def":20, "res":10}
+    },
+    {
+        "name":"MOGALL",
+        "growths":{"hp":60, "str":55, "skl":30, "spd":45, "lck":35, "def":15, "res":30}
+    },
+    {
+        "name":"ARCH_MOGALL",
+        "growths":{"hp":55, "str":50, "skl":30, "spd":40, "lck":30, "def":10, "res":25}
+    },
+    {
+        "name":"GORGON",
+        "growths":{"hp":55, "str":60, "skl":40, "spd":25, "lck":30, "def":20, "res":45}
+    },
+    {
+        "name":"GARGOYLE",
+        "growths":{"hp":80, "str":45, "skl":35, "spd":45, "lck":15, "def":35, "res":15}
+    },
+    {
+        "name":"DEATHGOYLE",
+        "growths":{"hp":75, "str":40, "skl":30, "spd":40, "lck":15, "def":30, "res":10}
+    },
+    {
+        "name":"DRACOZOMBIE",
+        "growths":{"hp":105, "str":40, "skl":30, "spd":20, "lck":25, "def":35, "res":20}
+    },
+    {
+        "name":"DEMON_KING",
+        "growths":{"hp":100, "str":45, "skl":35, "spd":25, "lck":30, "def":40, "res":20}
+    }
 ]
