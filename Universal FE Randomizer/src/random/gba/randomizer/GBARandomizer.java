@@ -46,6 +46,7 @@ public class GBARandomizer extends Randomizer {
 
 	// Seems to be necessary for Gson
 	private static final class GBAFEClassDtoType extends TypeToken<List<GBAFEClassDto>> {}
+	private static final class GBAFEWeaponDtoType extends TypeToken<List<GBAFEWeaponDto>> {}
 	
 	private String sourcePath;
 	private String targetPath;
@@ -799,10 +800,11 @@ public class GBARandomizer extends Randomizer {
 	 ****************************************************************/
 	private void preRandomizationPatches( Boolean loadCustomGrowths )
 	{
+		Gson gson;
+		// Custom Growths option
 		if( loadCustomGrowths )
 		{
-			// Custom Growths option
-			Gson gson = new Gson();
+			gson = new Gson();
 			try {
 				InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("GBAGrowths.json");
 				Reader r = null;
@@ -833,6 +835,44 @@ public class GBARandomizer extends Randomizer {
 		}
 
 		// Blade -> Dagger Patch?
+		//if( loadCustomWeapons )
+		if( true )
+		{
+			gson = new Gson();
+			try {
+				InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("GBACustomWeapon.json");
+				Reader r = null;
+				if (inputStream != null) {
+					r = new InputStreamReader(inputStream);
+				} else {
+					r = new FileReader(new File("GBACustomWeapon.json"));
+				}
+				List<GBAFEWeaponDto> customWeapons = gson.fromJson(r, new GBAFEWeaponDtoType().getType() );
+				GBAFEItemData[] allWeapons = itemData.getAllWeapons();
+				for (GBAFEItemData weapon : allWeapons) 
+				{
+					String weaponString = textData.getStringAtIndex( weapon.getNameIndex(), true).trim();
+					for( int wIdx = 0; wIdx < customWeapons.size(); wIdx++ )
+					{
+						GBAFEWeaponDto customWeapon = customWeapons.get(wIdx);
+						if( customWeapon.targetName.equals( weaponString ) )
+						{
+							weapon.setMight( customWeapon.newMt );
+							weapon.setWeight( customWeapon.newWt );
+							weapon.setHit( customWeapon.newHit );
+							weapon.setCritical( customWeapon.newCrt );
+							weapon.setDurability( customWeapon.newDurability );
+							weapon.setRange( customWeapon.newMinRange, customWeapon.newMaxRange, itemData.spellAnimations );
+							textData.setStringAtIndex( weapon.getNameIndex(), customWeapon.newDisplayName );
+						}
+					}
+				}
+			} catch (Exception e) {
+				System.out
+						.println("Couldn't read the custom weapons file GBACustomWeapon.json, keeping original weapons.");
+				e.printStackTrace();
+			}
+		}
 	}
 
 	

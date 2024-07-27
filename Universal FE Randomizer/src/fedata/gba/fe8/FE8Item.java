@@ -254,7 +254,7 @@ public class FE8Item implements GBAFEItemData {
 		data[23] = (byte)(weight & 0xFF);
 		wasModified = true;
 	}
-	private void setCritical(int critical) {
+	public void setCritical(int critical) {
 		critical = YuneUtil.clamp(critical, 0, 255);
 		data[24] = (byte)(critical & 0xFF);
 		wasModified = true;
@@ -274,6 +274,24 @@ public class FE8Item implements GBAFEItemData {
 		
 		data[25] = (byte)((byte)((minRange & 0x0F) << 4) | (byte)(maxRange & 0x0F));
 		wasModified = true;
+	}
+
+	public void setRange( int minRange, int maxRange, GBAFESpellAnimationCollection spellAnimations )
+	{
+		int currentMaxRange = getMaxRange(); // Get the current max range
+		if( maxRange > 1 && currentMaxRange == 1 ) // If we are extending a melee weapon's range
+		{
+			// Need to give it an appropriate animation
+			if (getType() == WeaponType.LANCE) {
+				spellAnimations.setAnimationValueForID(getID(), FE8SpellAnimationCollection.Animation.JAVELIN.value);
+			} else if (getType() == WeaponType.AXE) {
+				spellAnimations.setAnimationValueForID(getID(), FE8SpellAnimationCollection.Animation.THROWN_AXE.value);
+			} else {
+				spellAnimations.setAnimationValueForID(getID(), FE8SpellAnimationCollection.Animation.ARROW.value);
+			}
+		}
+		setMinRange( minRange );
+		setMaxRange( maxRange );
 	}
 	
 	public void applyRandomEffect(WeightedDistributor<WeaponEffects> allowedEffects, ItemDataLoader itemData, TextLoader textData, GBAFESpellAnimationCollection spellAnimations, Random rng) {
@@ -393,16 +411,8 @@ public class FE8Item implements GBAFEItemData {
 				maxRange = 3;
 			} else { // Melee weapons.
 				maxRange = 2;
-				if (getType() == WeaponType.LANCE) {
-					spellAnimations.setAnimationValueForID(getID(), FE8SpellAnimationCollection.Animation.JAVELIN.value);
-				} else if (getType() == WeaponType.AXE) {
-					spellAnimations.setAnimationValueForID(getID(), FE8SpellAnimationCollection.Animation.THROWN_AXE.value);
-				} else {
-					spellAnimations.setAnimationValueForID(getID(), FE8SpellAnimationCollection.Animation.ARROW.value);
-				}
 			}
-			setMinRange(minRange);
-			setMaxRange(maxRange);
+			setRange(minRange, maxRange, spellAnimations);
 			break;
 		case UNBREAKABLE:
 			int ability1 = getAbility1();

@@ -1,0 +1,35 @@
+[
+  {
+    "targetName":"Iron Blade",
+    "newDisplayName":"Iron Dagger",
+    "newMt":2,
+    "newWt":5,
+    "newHit":80,
+    "newCrt":10,
+    "newMinRange":1,
+    "newMaxRange":2,
+    "newDurability":35
+  },
+  {
+    "targetName":"Steel Blade",
+    "newDisplayName":"Steel Dagger",
+    "newMt":4,
+    "newWt":7,
+    "newHit":70,
+    "newCrt":15,
+    "newMinRange":1,
+    "newMaxRange":2,
+    "newDurability":30
+  },
+  {
+    "targetName":"Silver Blade",
+    "newDisplayName":"Silver Dagger",
+    "newMt":6,
+    "newWt":9,
+    "newHit":60,
+    "newCrt":20,
+    "newMinRange":1,
+    "newMaxRange":2,
+    "newDurability":25
+  }
+]

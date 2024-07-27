@@ -65,6 +65,9 @@ public interface GBAFEItemData extends FEModifiableData, FEPrintableData {
 	public void setMight(int might);
 	public void setHit(int hit);
 	public void setWeight(int weight);
+
+	public void setCritical(int critical);
+	public void setRange( int minRange, int maxRange, GBAFESpellAnimationCollection spellAnimations );
 	
 	public void applyRandomEffect(WeightedDistributor<WeaponEffects> allowedEffects, ItemDataLoader itemData, TextLoader textData, GBAFESpellAnimationCollection spellAnimations, Random rng);
 
