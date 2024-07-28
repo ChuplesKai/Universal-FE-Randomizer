@@ -23,6 +23,8 @@ public class WeaponsView extends YuneView<WeaponOptions> {
 
 	private int numberColumns;
 
+	private Button customButton;
+
 	private Button enableMightButton;
 	private Spinner mightVarianceSpinner;
 	private MinMaxControl mightRangeControl;
@@ -48,6 +50,9 @@ public class WeaponsView extends YuneView<WeaponOptions> {
 	private Spinner effectChanceSpinner;
 	private WeaponEffectSelectionView effectsSelectionView;
 	
+	/*****************************************************************
+	 *
+	 ****************************************************************/
 	public WeaponsView(Composite parent, GameType type, int numberColumns) {
 		super();
 		createGroup(parent);
@@ -56,19 +61,46 @@ public class WeaponsView extends YuneView<WeaponOptions> {
 		compose();
 	}
 
+	/*****************************************************************
+	 *
+	 ****************************************************************/
 	@Override
 	public String getGroupTitle() {
 		return "Weapons";
 	}
 
-	protected void compose() {
+	/*****************************************************************
+	 * compose - creation of the elements and adding listeners
+	 ****************************************************************/
+	protected void compose()
+	{
+		if (type.isGBA()) 
+		{
+			customButton = new Button(group, SWT.CHECK);
+			customButton.setText("Load Customized Weapons");
+			customButton.setToolTipText("Loads customized weapon stat overrides from .json input.  For example, blades become 1-2 range daggers.");
+
+			FormData custData = new FormData();
+			custData.left = new FormAttachment(0, 5);
+			custData.top = new FormAttachment(0, 5);
+			customButton.setLayoutData(custData);
+		}
+
 		enableMightButton = new Button(group, SWT.CHECK);
 		enableMightButton.setText("Randomize Power (MT)");
 		enableMightButton.setToolTipText("Applies a random delta +/- Variance to all weapons' MT stat. All weapons are then clamped to the min and max specified.");
 
 		FormData mtData = new FormData();
-		mtData.left = new FormAttachment(0, 5);
-		mtData.top = new FormAttachment(0, 5);
+		if( type.isGBA() )
+		{
+			mtData.left = new FormAttachment(customButton, 0, SWT.LEFT);
+			mtData.top = new FormAttachment(customButton, 5);
+		}
+		else
+		{
+			mtData.left = new FormAttachment(0, 5);
+			mtData.top = new FormAttachment(0, 5);
+		}
 		enableMightButton.setLayoutData(mtData);
 
 		Composite mtParamContainer = new Composite(group, SWT.NONE);
@@ -324,7 +356,8 @@ public class WeaponsView extends YuneView<WeaponOptions> {
 
 		Control lastControl = noEffectsForIronButton;
 
-		if (type.isGBA()) {
+		if (type.isGBA()) 
+		{
 			noEffectsForSteelButton = new Button(group, SWT.CHECK);
 			noEffectsForSteelButton.setText("Safe Steel Weapons");
 			noEffectsForSteelButton.setToolTipText("Steel Weapons (and Thunder) remain unchanged.");
@@ -393,7 +426,11 @@ public class WeaponsView extends YuneView<WeaponOptions> {
 		updateWeaponEffectSelectionViewForGame(type);
 	}
 	
-	public void updateWeaponEffectSelectionViewForGame(GameType type) {
+	/*****************************************************************
+	 *
+	 ****************************************************************/
+	public void updateWeaponEffectSelectionViewForGame(GameType type)
+	{
 		if (effectsSelectionView != null) { effectsSelectionView.dispose(); }
 		
 		effectsSelectionView = new WeaponEffectSelectionView(group, type);
@@ -452,8 +489,12 @@ public class WeaponsView extends YuneView<WeaponOptions> {
 		});
 	}
 
+	/*****************************************************************
+	 *
+	 ****************************************************************/
 	@Override
 	public WeaponOptions getOptions() {
+		boolean loadCustom = type.isGBA() ? customButton.getSelection() : false;
 		MinMaxVarOption mightOptions = null;
 		MinMaxVarOption hitOptions = null;
 		MinMaxVarOption weightOptions = null;
@@ -472,19 +513,24 @@ public class WeaponsView extends YuneView<WeaponOptions> {
 			durabilityOptions = new MinMaxVarOption(durabilityRangeControl.getMinMaxOption(), durabilityVarianceSpinner.getSelection());
 		}
 		
-		return new WeaponOptions(mightOptions, hitOptions, weightOptions, durabilityOptions, enableRandomEffectsButton.getSelection(), effectChanceSpinner.getSelection(), effectsSelectionView.getOptions(), 
+		return new WeaponOptions( loadCustom, mightOptions, hitOptions, weightOptions, durabilityOptions, enableRandomEffectsButton.getSelection(), effectChanceSpinner.getSelection(), effectsSelectionView.getOptions(), 
 				noEffectsForIronButton.getSelection(),
 				noEffectsForIronButton.getSelection() ? (noEffectsForSteelButton != null ? noEffectsForSteelButton.getSelection() : false) : false,
 				noEffectsForIronButton.getSelection() ? (noEffectsForBasicThrownButton != null ? noEffectsForBasicThrownButton.getSelection() : false) : false, 
 				includeLaguzButton != null ? includeLaguzButton.getSelection() : false);
 	}
 
+	/*****************************************************************
+	 *
+	 ****************************************************************/
 	@Override
 	public void initialize(WeaponOptions options) {
 		if (options == null) {
 			// Shouldn't happen.
 			return;
 		}
+
+		if( type.isGBA() ) { customButton.setSelection( options.loadCustom ); }
 
 		if (options.mightOptions != null) {
 			enableMightButton.setSelection(true);

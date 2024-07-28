@@ -1,7 +1,8 @@
 package ui.model;
 
-public class WeaponOptions {
-
+public class WeaponOptions 
+{
+	public final boolean loadCustom;
 	public final MinMaxVarOption mightOptions;
 	public final MinMaxVarOption hitOptions;
 //	public final MinMaxVarOption critOptions;
@@ -16,7 +17,8 @@ public class WeaponOptions {
 	public final int effectChance;
 	public final WeaponEffectOptions effectsList;
 	
-	public WeaponOptions(MinMaxVarOption mightOptions, 
+	public WeaponOptions(boolean loadCustom,
+			MinMaxVarOption mightOptions, 
 			MinMaxVarOption hitOptions, 
 //			MinMaxVarOption critOptions,
 			MinMaxVarOption weightOptions, 
@@ -30,6 +32,7 @@ public class WeaponOptions {
 			Boolean includeLaguzWeapons) {
 		super();
 		
+		this.loadCustom = loadCustom;
 		this.mightOptions = mightOptions;
 		this.hitOptions = hitOptions;
 //		this.critOptions = critOptions;

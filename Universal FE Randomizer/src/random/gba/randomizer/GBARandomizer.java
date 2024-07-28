@@ -213,7 +213,7 @@ public class GBARandomizer extends Randomizer {
 		// Pre-randomization adjustments		
 		makePreliminaryAdjustments();
 		// Other Pre-Randomization Patches/Options
-		preRandomizationPatches( classes.customGrowths );
+		preRandomizationPatches( classes.customGrowths, weapons.loadCustom );
 		
 		//------------------------------------------------------------
 		// Then, try each of the main randomization methods in order
@@ -798,7 +798,7 @@ public class GBARandomizer extends Randomizer {
 	/*****************************************************************
 	 * Some optional patches before core randomization occurs.
 	 ****************************************************************/
-	private void preRandomizationPatches( Boolean loadCustomGrowths )
+	private void preRandomizationPatches( boolean loadCustomGrowths, boolean loadCustomWeapons )
 	{
 		Gson gson;
 		// Custom Growths option
@@ -835,8 +835,7 @@ public class GBARandomizer extends Randomizer {
 		}
 
 		// Blade -> Dagger Patch?
-		//if( loadCustomWeapons )
-		if( true )
+		if( loadCustomWeapons )
 		{
 			gson = new Gson();
 			try {
