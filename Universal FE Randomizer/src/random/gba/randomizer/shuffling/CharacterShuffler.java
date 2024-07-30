@@ -110,7 +110,11 @@ public class CharacterShuffler {
         }
     }
 
-    private void shuffleRandomly(List<GBACrossGameData> availableChars, Set<Integer> forcedSlots) {
+    /*****************************************************************
+     * 
+     ****************************************************************/
+    private void shuffleRandomly(List<GBACrossGameData> availableChars, Set<Integer> forcedSlots)
+    {
         PoolDistributor<GBACrossGameData> distributor = new PoolDistributor<>();
         distributor.addAll(availableChars);
 
@@ -140,7 +144,11 @@ public class CharacterShuffler {
         }
     }
 
-    private void shuffleImpl(GBAFECharacterData slot, GBACrossGameData crossGameData) {
+    /*****************************************************************
+     * 
+     ****************************************************************/
+    private void shuffleImpl(GBAFECharacterData slot, GBACrossGameData crossGameData)
+    {
         DebugPrinter.log(DebugPrinter.Key.GBA_CHARACTER_SHUFFLING, String.format("Shuffling Character %s into Slot %d, which was originally %s", crossGameData.name, slot.getID(), slot.displayString()));
 
         // (a) Get a valid class in the target game for what was configured for the character
@@ -294,18 +302,22 @@ public class CharacterShuffler {
      *                     replaced
      * @param chara        - the Character that will get randomized into the rom
      */
-    private void changePortrait(GBAFECharacterData character, GBACrossGameData chara) throws IOException {
+    private void changePortrait(GBAFECharacterData character, GBACrossGameData chara) throws IOException 
+    {
         // Grab the Portrait Data (Pointers)
         GBAFEPortraitData characterPortraitData = portraitData.getPortraitDataByFaceId(character.getFaceID());
 
         // Get the Portrait Format depending on the game
         PortraitFormat targetFormat = PortraitFormat.getPortraitFormatForGame(type);
 
+        // Perform the Palette String correction
+        String updatedPaletteString = GBAImageCodec.fixPaletteString( chara.paletteString, chara.portraitPath, type );
+
         // Get the Palette from the Json
-        PaletteColor[] palette = GBAImageCodec.getArrayFromPaletteString(chara.paletteString);
+        PaletteColor[] origPalette = GBAImageCodec.getArrayFromPaletteString(chara.paletteString);
 
         // Insert and repoint Main Portrait
-        byte[] mainPortrait = GBAImageCodec.getGBAPortraitGraphicsDataForImage(chara.portraitPath, palette,
+        byte[] mainPortrait = GBAImageCodec.getGBAPortraitGraphicsDataForImage(chara.portraitPath, origPalette,
                 targetFormat.getMainPortraitChunks(), targetFormat.getMainPortraitSize(),
                 targetFormat.getMainPortraitPrefix());
         if (targetFormat.isMainPortraitCompressed()) {
@@ -317,7 +329,7 @@ public class CharacterShuffler {
         characterPortraitData.setMainPortraitPointer(YuneUtil.bytesFromAddress(mainPortraitAddress));
 
         // Insert and repoint Mini Portrait
-        byte[] miniPortrait = GBAImageCodec.getGBAPortraitGraphicsDataForImage(chara.portraitPath, palette,
+        byte[] miniPortrait = GBAImageCodec.getGBAPortraitGraphicsDataForImage(chara.portraitPath, origPalette,
                 targetFormat.getMiniPortraitChunks(), targetFormat.getMiniPortraitSize());
         if (targetFormat.isMiniCompressed()) {
             miniPortrait = LZ77.compress(miniPortrait);
@@ -328,7 +340,7 @@ public class CharacterShuffler {
 
         // Insert and repoint Mouth Chunks
         if (targetFormat.getMouthChunksSize() != null) {
-            byte[] mouthFrames = GBAImageCodec.getGBAPortraitGraphicsDataForImage(chara.portraitPath, palette,
+            byte[] mouthFrames = GBAImageCodec.getGBAPortraitGraphicsDataForImage(chara.portraitPath, origPalette,
                     targetFormat.getMouthChunks(), targetFormat.getMouthChunksSize());
             long mouthFramesAddress = freeSpace.setValue(mouthFrames, character.getFaceID() + "_MouthFramesPortrait", true);
             characterPortraitData.setMouthFramesPointer(YuneUtil.bytesFromAddress(mouthFramesAddress));
@@ -346,8 +358,6 @@ public class CharacterShuffler {
         characterPortraitData.setFacialFeatureCoordinates(facialFeaturesCoordinates);
 
         // Write the Palette of the image
-        characterPortraitData.setNewPalette(PaletteUtil.getByteArrayFromString(chara.paletteString));
-
+        characterPortraitData.setNewPalette(PaletteUtil.getByteArrayFromString(updatedPaletteString));
     }
-
 }

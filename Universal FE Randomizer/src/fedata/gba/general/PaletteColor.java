@@ -145,13 +145,40 @@ public class PaletteColor implements Comparable<PaletteColor> {
 	/*****************************************************************
 	 * Returns the Hex-formatted string representing the color.
 	 ****************************************************************/
-	public String toHexString() {
+	public String toHexString() 
+	{
 		return String.format("#%s%s%s", 
 				getRedValue() < 16 ? "0" + Integer.toHexString(getRedValue()) : Integer.toHexString(getRedValue()),
 				getGreenValue() < 16 ? "0" + Integer.toHexString(getGreenValue()) : Integer.toHexString(getGreenValue()),
 				getBlueValue() < 16 ? "0" + Integer.toHexString(getBlueValue()) : Integer.toHexString(getBlueValue()));
 	}
-	
+
+	/**
+	 * 4 Hex Bytes per Color <br>
+	 * 1st Byte = 0-F -> GG GR <br>
+	 * 2nd Byte = 0-F -> RR RR <br>
+	 * 3rd Byte = 0-7 -> 0B BB <br>
+	 * 4th Byte = 0-F -> BB GG <br>
+	 * 
+	 * Binary: (5 Bits each)<br>
+	 * 
+	 * R = 1 | 2222 <br>
+	 * G = 44 | 111 <br>
+	 * B = 333 | 44 <br>
+	 */
+	public String toGBAString()
+	{
+		int rawR = getRedValue() >> 3;
+		int rawG = getGreenValue() >> 3;
+		int rawB = getBlueValue() >> 3;
+		int first = ((rawG & 0x07) << 1) + ((rawR & 0x10) >> 4);
+		int second = rawR & 0x0F;
+		int third = (rawB & 0x1C) >> 2;
+		int fourth = ((rawG & 0x18) >> 3) + ((rawB & 0x03) << 2);
+		return Integer.toHexString( first ) + Integer.toHexString( second ) + Integer.toHexString( third ) + Integer.toHexString( fourth );
+	}
+
+
 	/*****************************************************************
 	 * Static - Attempts to take a palette of colors and make a particular 
 	 * number of them (either removing colors or adding new ones).
