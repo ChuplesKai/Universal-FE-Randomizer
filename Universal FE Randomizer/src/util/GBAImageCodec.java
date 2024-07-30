@@ -296,6 +296,7 @@ public class GBAImageCodec
 				return null;
 			}
 		}
+		// Then, depending on the game, replace the outline with a similar color
 		String toColorHex = GameType.FE8.equals(type) ? "#382040" : "#584060";
 		PaletteColor outOutlineColor = PaletteColor.colorFromHex(toColorHex);
 		String toColorGBA = outOutlineColor.toGBAString().toUpperCase();
@@ -306,6 +307,7 @@ public class GBAImageCodec
 	        PaletteColor[] palette = GBAImageCodec.getArrayFromPaletteString(paletteString);
 			String olHex = "#"; // Outline color, in full RGB Hex
 			String olGBA = ""; // Outline color, in GBA Hex
+			// Perform a diagonal march until we find a non-background pixel
 			int sx = 0;
 			int sy = 0;
 			for(int sIdx = 0; sIdx < 100 && olGBA == ""; sIdx++)
@@ -318,7 +320,7 @@ public class GBAImageCodec
 					olGBA = pixel.toGBAString().toUpperCase(); // Hopefully this works
 				}
 				// march in a rough diagonal to try to find the outline
-				if(sIdx % 2 == 0)  sx++;
+				if(sIdx % 2 == 0) sx++;
 				else sy++;
 			}
 			// Now, replace the old outline color with the new
@@ -329,22 +331,10 @@ public class GBAImageCodec
 			DebugPrinter.log(DebugPrinter.Key.GBA_CHARACTER_SHUFFLING, "Couldn't open the image file.");
 			return null;
 		}
-
-		return outPaletteString;
 		// At some point, I should be able to map to the custom palette here?
 
-		// if (prefix.isPresent()) // FE8
-		// {
-		// 	fromColor = "#584060";
-		// 	//toColor = "#382040";
-		// 	toColor = "#E828F8";
-		// }
-		// else // FE6/7
-		// {
-		// 	fromColor = "#382040";			
-		// 	toColor = "#584060";
-		// }
-
+		// Return the string we've made - this is what actually gets loaded into the ROM
+		return outPaletteString;
 	}
 
 	/**

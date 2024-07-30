@@ -113,18 +113,18 @@ public class ClassRandomizer {
 			
 			boolean isFemale = charactersData.isFemale(character.getID());
 			
-			if (determinedClasses.containsKey(character.getID())) {
-				continue;
-			} else {
+			if (determinedClasses.containsKey(character.getID())) { continue; }
+			else
+			{
 				GBAFEClassData[] possibleClasses = hasMonsters ? classData.potentialClasses(originalClass, charactersData.isEnemyAtAnyPoint(character.getID()), !includeLords, !includeThieves, !includeSpecial, separateMonsters, forceChange, isLordCharacter, characterRequiresRange, characterRequiresMelee, character.isClassRestricted(), options.genderOption, null) :
 					classData.potentialClasses(originalClass, charactersData.isEnemyAtAnyPoint(character.getID()), !includeLords, !includeThieves, !includeSpecial, forceChange, isLordCharacter, characterRequiresRange, characterRequiresMelee, character.isClassRestricted(), options.genderOption, null);
-				if (possibleClasses.length == 0) {
-					continue;
-				}
+				if (possibleClasses.length == 0) { continue; }
 				
-				if (options.assignEvenly) {
+				if (options.assignEvenly)
+				{
 					Set<GBAFEClassData> classSet = new HashSet<GBAFEClassData>(Arrays.asList(possibleClasses));
-					if (Collections.disjoint(classDistributor.possibleResults(), classSet)) {
+					if (Collections.disjoint(classDistributor.possibleResults(), classSet))
+					{
 						Arrays.asList(classData.allClasses()).stream().forEach(charClass -> {
 							classDistributor.addItem(charClass);
 						});
@@ -132,33 +132,33 @@ public class ClassRandomizer {
 					classSet.retainAll(classDistributor.possibleResults());
 					List<GBAFEClassData> classList = classSet.stream().sorted(GBAFEClassData.defaultComparator).collect(Collectors.toList());
 					PoolDistributor<GBAFEClassData> pool = new PoolDistributor<GBAFEClassData>();
-					for (GBAFEClassData charClass : classList) {
+					for (GBAFEClassData charClass : classList) 
+					{
 						pool.addItem(charClass, classDistributor.itemCount(charClass));
 					}
 					targetClass = pool.getRandomItem(rng, true);
 					classDistributor.removeItem(targetClass, false);
-				} else {
+				}
+				else
+				{
 					int randomIndex = rng.nextInt(possibleClasses.length);
 					targetClass = possibleClasses[randomIndex];
 				}
 				
-				if (options.genderOption == GenderRestrictionOption.LOOSE) {
-					if (isFemale) {
-						targetClass = classData.correspondingFemaleClass(targetClass);
-					} else {
-						targetClass = classData.correspondingMaleClass(targetClass);
-					}
+				if (options.genderOption == GenderRestrictionOption.LOOSE)
+				{
+					if (isFemale) {	targetClass = classData.correspondingFemaleClass(targetClass); }
+					else { targetClass = classData.correspondingMaleClass(targetClass); }
 				}
 			}
 			
-			if (targetClass == null) {
-				continue;
-			}
+			if (targetClass == null) { continue; }
 			
 			String targetClassName = textData.getStringAtIndex(targetClass.getNameIndex(), true).toUpperCase();
 			DebugPrinter.log(DebugPrinter.Key.CLASS_RANDOMIZER, "Assigning character 0x" + Integer.toHexString(character.getID()).toUpperCase() + " (" + textData.getStringAtIndex(character.getNameIndex(), true) + ") to class 0x" + Integer.toHexString(targetClass.getID()) + " (" + targetClassName + ")");
 
-			for (GBAFECharacterData linked : charactersData.linkedCharactersForCharacter(character)) {
+			for (GBAFECharacterData linked : charactersData.linkedCharactersForCharacter(character))
+			{
 				determinedClasses.put(linked.getID(), targetClass);
 				updateCharacterToClass(options, inventoryOptions, linked, originalClass, targetClass, characterRequiresRange, characterRequiresMelee, charactersData, classData, chapterData, itemData, textData, false, rng);
 				linked.setIsLord(isLordCharacter);
@@ -172,7 +172,8 @@ public class ClassRandomizer {
 		}
 	}
 	
-	public static void randomizeBossCharacterClasses(ClassOptions options, ItemAssignmentOptions inventoryOptions, GameType type, CharacterDataLoader charactersData, ClassDataLoader classData, ChapterLoader chapterData, ItemDataLoader itemData, TextLoader textData, Random rng) {
+	public static void randomizeBossCharacterClasses(ClassOptions options, ItemAssignmentOptions inventoryOptions, GameType type, CharacterDataLoader charactersData, ClassDataLoader classData, ChapterLoader chapterData, ItemDataLoader itemData, TextLoader textData, Random rng)
+	{
 		GBAFECharacterData[] allBossCharacters = charactersData.bossCharacters();
 		
 		Boolean includeLords = false;
@@ -273,8 +274,9 @@ public class ClassRandomizer {
 		// Somehow, some enemies, despite all signs of them only being able to use up to C rank weapons,
 		// are able to use A rank somehow in some cases. Since I don't know why this is,
 		// we're going to modify all classes to have A rank in all areas. Characters with lower ranks will override it
-		// which includes all playable characters.
-		for (GBAFEClassData charClass : classData.allClasses()) {
+		// which includes all playable characters.  // Okay, but are we sure that's working for promotions?
+		for (GBAFEClassData charClass : classData.allClasses())
+		{
 			if (charClass.getSwordRank() > 0) { charClass.setSwordRank(WeaponRank.A); }
 			if (charClass.getLanceRank() > 0) { charClass.setLanceRank(WeaponRank.A); }
 			if (charClass.getAxeRank() > 0) { charClass.setAxeRank(WeaponRank.A); }
@@ -438,16 +440,30 @@ public class ClassRandomizer {
 		}
 	}
 
-	private static void updateCharacterToClass(ClassOptions classOptions, ItemAssignmentOptions inventoryOptions, GBAFECharacterData character, GBAFEClassData sourceClass, GBAFEClassData targetClass, Boolean ranged, Boolean melee, CharacterDataLoader charData, ClassDataLoader classData, ChapterLoader chapterData, ItemDataLoader itemData, TextLoader textData, Boolean forceBasicWeapons, Random rng) {
-		
+	private static void updateCharacterToClass(ClassOptions classOptions, ItemAssignmentOptions inventoryOptions, GBAFECharacterData character, GBAFEClassData sourceClass, GBAFEClassData targetClass, Boolean ranged, Boolean melee, CharacterDataLoader charData, ClassDataLoader classData, ChapterLoader chapterData, ItemDataLoader itemData, TextLoader textData, Boolean forceBasicWeapons, Random rng)
+	{
 		character.prepareForClassRandomization();
 		character.setClassID(targetClass.getID());
-		if (charData.isBossCharacterID(character.getID())) {
+		if (charData.isBossCharacterID(character.getID()))
+		{
 			transferBossWeaponLevels(character, sourceClass, targetClass);
-		} else {
+		}
+		else
+		{
 			GBASlotAdjustmentService.transferWeaponRanks(character, sourceClass, targetClass, rng);
 		}
-		switch (classOptions.basesTransfer) {
+
+		// Small nudge - Soldiers are way too weak, so bump up anyone switching into one.
+		if( !sourceClass.displayString().equals("SOLDIER") && targetClass.displayString().equals("SOLDIER") )
+		{
+			character.setBaseSTR( character.getBaseSTR() + 1 );
+			character.setBaseSKL( character.getBaseSKL() + 2 );
+			character.setBaseDEF( character.getBaseDEF() + 3 );
+		}
+
+
+		switch (classOptions.basesTransfer)
+		{
 		case ADJUST_TO_MATCH:
 			applyBaseCorrectionForCharacter(character, sourceClass, targetClass);
 			break;
@@ -466,7 +482,8 @@ public class ClassRandomizer {
 			break;
 		}
 		
-		switch (classOptions.growthOptions) {
+		switch (classOptions.growthOptions)
+		{
 		case TRANSFER_PERSONAL_GROWTHS:
 			int hpOffset = character.getHPGrowth() - sourceClass.getHPGrowth();
 			int strOffset = character.getSTRGrowth() - sourceClass.getSTRGrowth();
@@ -491,9 +508,11 @@ public class ClassRandomizer {
 			break;
 		}
 		
-		for (GBAFEChapterData chapter : chapterData.allChapters()) {
+		for (GBAFEChapterData chapter : chapterData.allChapters())
+		{
 			GBAFEChapterItemData reward = chapter.chapterItemGivenToCharacter(character.getID());
-			if (reward != null) {
+			if (reward != null)
+			{
 				GBAFEItemData item = itemData.getRandomWeaponForCharacter(character, ranged, melee, false, inventoryOptions.assignPromoWeapons, inventoryOptions.assignPoisonWeapons, rng); 
 				
 				// If this character has a prf weapon, use that instead.

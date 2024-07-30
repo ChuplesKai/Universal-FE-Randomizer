@@ -163,7 +163,7 @@ public class GBASlotAdjustmentService {
 
 		DebugPrinter.log(key, String.format("Original Bases: %s%n", newBases.toString()) );
 
-		//First, we'll add/subtract promotion bonuses to adjust for that
+		// First, we'll add/subtract promotion bonuses to adjust for that
 		if (!promoBonuses.isEmpty())
 		{
 			GBAFEStatDto totalPromoChanges = new GBAFEStatDto(promoBonuses);
