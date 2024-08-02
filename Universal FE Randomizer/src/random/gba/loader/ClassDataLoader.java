@@ -113,6 +113,17 @@ public class ClassDataLoader {
 	public GBAFEClassData[] allClasses() {
 		return feClassesFromSet(provider.allValidClasses());
 	}
+
+	public GBAFEClassData[] allClassesInData() 
+	{
+		GBAFEClass[] allClasses = provider.allClasses();
+		GBAFEClassData[] classList = new GBAFEClassData[allClasses.length];
+		for (int i = 0; i < allClasses.length; i++) 
+		{
+			classList[i] = classForID( allClasses[i].getID() );
+		}
+		return classList;
+	}
 	
 	public GBAFEClassData classForID(int classID) {
 		if (classMap.containsKey(classID)) {

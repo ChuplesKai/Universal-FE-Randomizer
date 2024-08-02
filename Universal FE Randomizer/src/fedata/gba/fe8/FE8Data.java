@@ -2980,8 +2980,9 @@ public class FE8Data implements GBAFECharacterProvider, GBAFEClassProvider, GBAF
 	}
 
 	public GBAFEClass[] allClasses() {
-		return CharacterClass.values();
+	 	return CharacterClass.values();
 	}
+
 
 	public Set<GBAFEClass> allValidClasses() {
 		return new HashSet<GBAFEClass>(CharacterClass.allValidClasses);

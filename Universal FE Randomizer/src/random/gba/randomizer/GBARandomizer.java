@@ -558,6 +558,12 @@ public class GBARandomizer extends Randomizer {
 	 ****************************************************************/
 	private void randomizeClassesIfNecessary(String seed)
 	{
+		// for (GBAFEClassData feclass : classData.allClassesInData() )
+		// {
+		// 	GBAFEStatDto promoBonuses = feclass.getPromoBonuses();
+		// 	System.out.println( String.format( "%s[%d]<%d>", feclass.displayString(), feclass.getID(), feclass.getSpriteIndex() ) );
+		// 	System.out.println( promoBonuses.toString() );
+		// }
 		if (classes != null)
 		{
 			if (classes.randomizePCs) {
@@ -1329,7 +1335,7 @@ public class GBARandomizer extends Randomizer {
 			GBAFECharacterData roy = charData.characterWithID(FE6Data.Character.ROY.ID);
 			
 			int oldRoyClassID = roy.getClassID();
-			GBAFEClassData newRoyClass = classData.createLordClassBasedOnClass(classData.classForID(oldRoyClassID));	
+			GBAFEClassData newRoyClass = classData.createLordClassBasedOnClass(classData.classForID(oldRoyClassID));
 			roy.setClassID(newRoyClass.getID());
 			
 			// Add his new class to any effectiveness tables.

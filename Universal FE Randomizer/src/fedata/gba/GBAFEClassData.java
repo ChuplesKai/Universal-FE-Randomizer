@@ -298,13 +298,13 @@ public abstract class GBAFEClassData extends AbstractGBAData implements FEPrinta
 	public int getPromoRES() {
 		return data[39] & 0xFF;
 	}
-
-	public int getSwordRank() {
-		return data[44] & 0xFF;
-	}
 	
 	public GBAFEStatDto getPromoBonuses() {
 		return new GBAFEStatDto(getPromoHP(), getPromoSTR(), getPromoSKL(), getPromoSPD(), 0, getPromoDEF(), getPromoRES());
+	}
+
+	public int getSwordRank() {
+		return data[44] & 0xFF;
 	}
 
 	public void setSwordRank(WeaponRank rank) {
