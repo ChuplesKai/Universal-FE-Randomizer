@@ -15,6 +15,7 @@ import fedata.gba.GBAFECharacterData;
 import fedata.gba.GBAFEClassData;
 import fedata.gba.GBAFEItemData;
 import fedata.gba.GBAFESpellAnimationCollection;
+import fedata.gba.GBAFEStatDto;
 import fedata.gba.general.*;
 import fedata.gba.GBAFECharacterData.Affinity;
 import random.gba.loader.ItemDataLoader.AdditionalData;
@@ -451,8 +452,8 @@ public class FE8Data implements GBAFECharacterProvider, GBAFEClassProvider, GBAF
 		public static Set<CharacterClass> allMaleClasses = new HashSet<CharacterClass>(Arrays.asList(TRAINEE, PUPIL, EPHRAIM_LORD, CAVALIER, KNIGHT, THIEF, MERCENARY, MYRMIDON, ARCHER, WYVERN_RIDER, MAGE, SHAMAN, 
 				FIGHTER, BRIGAND, PIRATE, MONK, PRIEST, SOLDIER, TRAINEE_2, PUPIL_2, EPHRAIM_MASTER_LORD, PALADIN, GENERAL, HERO, SWORDMASTER, ASSASSIN, SNIPER, RANGER, WYVERN_LORD, WYVERN_KNIGHT, SAGE, 
 				MAGE_KNIGHT, BISHOP, DRUID, SUMMONER, ROGUE, GREAT_KNIGHT, SUPER_TRAINEE, SUPER_PUPIL, WARRIOR, BERSERKER));
-		public static Set<CharacterClass> allFemaleClasses = new HashSet<CharacterClass>(Arrays.asList(RECRUIT, EIRIKA_LORD, CAVALIER_F, KNIGHT_F, MYRMIDON_F, ARCHER_F, MAGE_F, PEGASUS_KNIGHT, CLERIC, TROUBADOUR, DANCER,
-				RECRUIT_2, EIRIKA_MASTER_LORD, PALADIN_F, GENERAL_F, SWORDMASTER_F, ASSASSIN_F, SNIPER_F, RANGER_F, WYVERN_KNIGHT_F, SAGE_F, MAGE_KNIGHT_F, BISHOP_F,
+		public static Set<CharacterClass> allFemaleClasses = new HashSet<CharacterClass>(Arrays.asList(RECRUIT, EIRIKA_LORD, CAVALIER_F, KNIGHT_F, MYRMIDON_F, ARCHER_F, MAGE_F, SHAMAN_F, PEGASUS_KNIGHT, CLERIC, TROUBADOUR, DANCER,
+				RECRUIT_2, EIRIKA_MASTER_LORD, PALADIN_F, GENERAL_F, SWORDMASTER_F, ASSASSIN_F, SNIPER_F, RANGER_F, WYVERN_KNIGHT_F, SAGE_F, MAGE_KNIGHT_F, BISHOP_F, DRUID_F, SUMMONER_F,
 				GREAT_KNIGHT_F, SUPER_RECRUIT, MANAKETE_F, FALCON_KNIGHT, VALKYRIE));
 		public static Set<CharacterClass> allMonsterClasses = new HashSet<CharacterClass>(Arrays.asList(REVENANT, BONEWALKER, BONEWALKER_BOW, BAEL, MAUTHE_DOOG, TARVOS, MOGALL, GARGOYLE,
 		ENTOMBED, WIGHT, WIGHT_BOW, ELDER_BAEL, CYCLOPS, GWYLLGI, MAELDUIN, ARCH_MOGALL, GORGON, DEATHGOYLE, CYCLOPS_2, ELDER_BAEL_2));
@@ -463,11 +464,11 @@ public class FE8Data implements GBAFECharacterProvider, GBAFEClassProvider, GBAF
 		public static Set<CharacterClass> allSpecialClasses = new HashSet<CharacterClass>(Arrays.asList(DANCER, MANAKETE_F));
 		
 		public static Set<CharacterClass> allTraineeClasses = new HashSet<CharacterClass>(Arrays.asList(TRAINEE, PUPIL, RECRUIT));
-		public static Set<CharacterClass> allUnpromotedClasses = new HashSet<CharacterClass>(Arrays.asList(EPHRAIM_LORD, CAVALIER, KNIGHT, THIEF, MERCENARY, MYRMIDON, ARCHER, WYVERN_RIDER, MAGE, SHAMAN, RECRUIT_2, 
+		public static Set<CharacterClass> allUnpromotedClasses = new HashSet<CharacterClass>(Arrays.asList(EPHRAIM_LORD, CAVALIER, KNIGHT, THIEF, MERCENARY, MYRMIDON, ARCHER, WYVERN_RIDER, MAGE, SHAMAN, SHAMAN_F, RECRUIT_2, 
 				FIGHTER, BRIGAND, PIRATE, MONK, PRIEST, SOLDIER, TRAINEE_2, PUPIL_2, EIRIKA_LORD, CAVALIER_F, KNIGHT_F, MYRMIDON_F, ARCHER_F, MAGE_F, PEGASUS_KNIGHT, CLERIC, TROUBADOUR, DANCER, REVENANT, BONEWALKER, 
 				BONEWALKER_BOW, BAEL, MAUTHE_DOOG, TARVOS, MOGALL, GARGOYLE));
 		public static Set<CharacterClass> allPromotedClasses = new HashSet<CharacterClass>(Arrays.asList(EPHRAIM_MASTER_LORD, PALADIN, GENERAL, HERO, SWORDMASTER, ASSASSIN, SNIPER, RANGER, WYVERN_LORD, WYVERN_KNIGHT, 
-				SAGE, MAGE_KNIGHT, BISHOP, DRUID, SUMMONER, ROGUE, GREAT_KNIGHT, SUPER_TRAINEE, SUPER_PUPIL, WARRIOR, BERSERKER, EIRIKA_MASTER_LORD, PALADIN_F, GENERAL_F, SWORDMASTER_F, ASSASSIN_F, SNIPER_F, RANGER_F, 
+				SAGE, MAGE_KNIGHT, BISHOP, DRUID, SUMMONER, DRUID_F, SUMMONER_F, ROGUE, GREAT_KNIGHT, SUPER_TRAINEE, SUPER_PUPIL, WARRIOR, BERSERKER, EIRIKA_MASTER_LORD, PALADIN_F, GENERAL_F, SWORDMASTER_F, ASSASSIN_F, SNIPER_F, RANGER_F, 
 				 WYVERN_LORD_F, WYVERN_KNIGHT_F, SAGE_F, MAGE_KNIGHT_F, BISHOP_F, GREAT_KNIGHT_F, SUPER_RECRUIT, MANAKETE_F, FALCON_KNIGHT, VALKYRIE, ENTOMBED, WIGHT, WIGHT_BOW, ELDER_BAEL, CYCLOPS, GWYLLGI, MAELDUIN, ARCH_MOGALL, 
 				GORGON, DEATHGOYLE, CYCLOPS_2, ELDER_BAEL_2));
 		
@@ -476,10 +477,10 @@ public class FE8Data implements GBAFECharacterProvider, GBAFEClassProvider, GBAF
 				GWYLLGI, REVENANT, ENTOMBED));
 		public static Set<CharacterClass> allRangeLockedClasses = new HashSet<CharacterClass>(Arrays.asList(ARCHER, ARCHER_F, SNIPER, SNIPER_F, BONEWALKER_BOW, WIGHT_BOW));
 		
-		public static Set<CharacterClass> allValidClasses = new HashSet<CharacterClass>(Arrays.asList(EPHRAIM_LORD, CAVALIER, KNIGHT, THIEF, MERCENARY, MYRMIDON, ARCHER, WYVERN_RIDER, MAGE, SHAMAN,  
-				FIGHTER, BRIGAND, PIRATE, MONK, PRIEST, SOLDIER, TRAINEE_2, PUPIL_2, EPHRAIM_MASTER_LORD, PALADIN, GENERAL, HERO, SWORDMASTER, ASSASSIN, SNIPER, RANGER, WYVERN_LORD, WYVERN_KNIGHT, SAGE, 
-				MAGE_KNIGHT, BISHOP, DRUID, SUMMONER, ROGUE, GREAT_KNIGHT, SUPER_TRAINEE, SUPER_PUPIL, WARRIOR, BERSERKER, EIRIKA_LORD, CAVALIER_F, KNIGHT_F, MYRMIDON_F, ARCHER_F, MAGE_F, PEGASUS_KNIGHT, CLERIC, 
-				TROUBADOUR, DANCER, RECRUIT_2, EIRIKA_MASTER_LORD, PALADIN_F, GENERAL_F, SWORDMASTER_F, ASSASSIN_F, SNIPER_F, RANGER_F, WYVERN_KNIGHT_F, SAGE_F, MAGE_KNIGHT_F, BISHOP_F,
+		public static Set<CharacterClass> allValidClasses = new HashSet<CharacterClass>(Arrays.asList(EPHRAIM_LORD, CAVALIER, KNIGHT, THIEF, MERCENARY, MYRMIDON, ARCHER, WYVERN_RIDER, MAGE, SHAMAN,
+				FIGHTER, BRIGAND, PIRATE, MONK, PRIEST, SOLDIER, TRAINEE_2, PUPIL_2, EPHRAIM_MASTER_LORD, PALADIN, GENERAL, HERO, SWORDMASTER, ASSASSIN, SNIPER, RANGER, WYVERN_LORD, WYVERN_KNIGHT, SAGE,
+				MAGE_KNIGHT, BISHOP, DRUID, SUMMONER, ROGUE, GREAT_KNIGHT, SUPER_TRAINEE, SUPER_PUPIL, WARRIOR, BERSERKER, EIRIKA_LORD, CAVALIER_F, KNIGHT_F, MYRMIDON_F, ARCHER_F, MAGE_F, SHAMAN_F, PEGASUS_KNIGHT, CLERIC,
+				TROUBADOUR, DANCER, RECRUIT_2, EIRIKA_MASTER_LORD, PALADIN_F, GENERAL_F, SWORDMASTER_F, ASSASSIN_F, SNIPER_F, RANGER_F, WYVERN_KNIGHT_F, SAGE_F, MAGE_KNIGHT_F, BISHOP_F, DRUID_F, SUMMONER_F,
 				GREAT_KNIGHT_F, SUPER_RECRUIT, /*MANAKETE_F,*/ FALCON_KNIGHT, VALKYRIE, REVENANT, BONEWALKER, BONEWALKER_BOW, BAEL, MAUTHE_DOOG, TARVOS, MOGALL, GARGOYLE,
 				ENTOMBED, WIGHT, WIGHT_BOW, ELDER_BAEL, CYCLOPS, GWYLLGI, MAELDUIN, ARCH_MOGALL, GORGON, DEATHGOYLE, CYCLOPS_2, ELDER_BAEL_2));
 		
@@ -523,6 +524,7 @@ public class FE8Data implements GBAFECharacterProvider, GBAFEClassProvider, GBAF
 			map.put(MYRMIDON_F, new HashSet<CharacterClass>(Arrays.asList(SWORDMASTER_F, ASSASSIN_F)));
 			map.put(ARCHER_F, new HashSet<CharacterClass>(Arrays.asList(SNIPER_F, RANGER_F)));
 			map.put(MAGE_F, new HashSet<CharacterClass>(Arrays.asList(SAGE_F, MAGE_KNIGHT_F)));
+			map.put(SHAMAN_F, new HashSet<CharacterClass>(Arrays.asList(SUMMONER_F, DRUID_F)));
 			map.put(PEGASUS_KNIGHT, new HashSet<CharacterClass>(Arrays.asList(FALCON_KNIGHT, WYVERN_KNIGHT_F)));
 			map.put(CLERIC, new HashSet<CharacterClass>(Arrays.asList(BISHOP_F, VALKYRIE)));
 			map.put(TROUBADOUR, new HashSet<CharacterClass>(Arrays.asList(VALKYRIE, MAGE_KNIGHT_F)));
@@ -583,6 +585,7 @@ public class FE8Data implements GBAFECharacterProvider, GBAFEClassProvider, GBAF
 			}
 			case MONK: {
 				classList.add(SHAMAN);
+				classList.add(SHAMAN_F);
 				classList.add(KNIGHT);
 				classList.add(SOLDIER);
 				break;
@@ -594,7 +597,8 @@ public class FE8Data implements GBAFECharacterProvider, GBAFEClassProvider, GBAF
 				classList.add(SOLDIER);
 				break;
 			}
-			case SHAMAN: {
+			case SHAMAN:
+			case SHAMAN_F: {
 				classList.add(MAGE);
 				classList.add(MAGE_F);
 				classList.add(KNIGHT);
@@ -2486,8 +2490,11 @@ public class FE8Data implements GBAFECharacterProvider, GBAFEClassProvider, GBAF
 			defaultPaletteForClass.put(CharacterClass.MAGE_KNIGHT.ID, MAGE_KNIGHT_EWAN.info);
 			defaultPaletteForClass.put(CharacterClass.MAGE_KNIGHT_F.ID, MAGE_KNIGHT_LARACHEL.info);
 			defaultPaletteForClass.put(CharacterClass.SHAMAN.ID, SHAMAN_KNOLL.info);
+			defaultPaletteForClass.put(CharacterClass.SHAMAN_F.ID, SHAMAN_KNOLL.info);
 			defaultPaletteForClass.put(CharacterClass.DRUID.ID, DRUID_KNOLL.info);
+			defaultPaletteForClass.put(CharacterClass.DRUID_F.ID, DRUID_KNOLL.info);
 			defaultPaletteForClass.put(CharacterClass.SUMMONER.ID, SUMMONER_EWAN.info);
+			defaultPaletteForClass.put(CharacterClass.SUMMONER_F.ID, SUMMONER_EWAN.info);
 			defaultPaletteForClass.put(CharacterClass.BISHOP.ID, BISHOP_MOULDER.info);
 			defaultPaletteForClass.put(CharacterClass.BISHOP_F.ID, BISHOP_NATASHA.info);
 			defaultPaletteForClass.put(CharacterClass.TROUBADOUR.ID, TROUBADOUR_LARACHEL.info);
@@ -2672,9 +2679,12 @@ public class FE8Data implements GBAFECharacterProvider, GBAFEClassProvider, GBAF
 					break;
 				case SHAMAN:
 				case DRUID:
+				case SHAMAN_F:
+				case DRUID_F:
 					this.info = new PaletteInfo(classID, charID, offset, new int[] {8, 9, 10}, new int[] {11, 12, 13, 14}, new int[] {});
 					break;
 				case SUMMONER:
+				case SUMMONER_F:
 					this.info = new PaletteInfo(classID, charID, offset, new int[] {7, 8}, new int[] {12, 13, 14}, new int[] {9, 10, 11});
 					break;
 				case BISHOP:
@@ -3097,6 +3107,7 @@ public class FE8Data implements GBAFECharacterProvider, GBAFEClassProvider, GBAF
 		case MYRMIDON_F: return FE8Data.CharacterClass.MYRMIDON;
 		case ARCHER_F: return FE8Data.CharacterClass.ARCHER;
 		case MAGE_F: return FE8Data.CharacterClass.MAGE;
+		case SHAMAN_F: return FE8Data.CharacterClass.SHAMAN;
 		case CLERIC: return FE8Data.CharacterClass.PRIEST;
 		case RECRUIT_2: return FE8Data.CharacterClass.TRAINEE_2;
 		case EIRIKA_MASTER_LORD: return FE8Data.CharacterClass.EPHRAIM_MASTER_LORD;
@@ -3109,6 +3120,8 @@ public class FE8Data implements GBAFECharacterProvider, GBAFEClassProvider, GBAF
 		case WYVERN_KNIGHT_F: return FE8Data.CharacterClass.WYVERN_KNIGHT;
 		case SAGE_F: return FE8Data.CharacterClass.SAGE;
 		case MAGE_KNIGHT_F: return FE8Data.CharacterClass.MAGE_KNIGHT;
+		case DRUID_F: return FE8Data.CharacterClass.DRUID;
+		case SUMMONER_F: return FE8Data.CharacterClass.SUMMONER;
 		case BISHOP_F: return FE8Data.CharacterClass.BISHOP;
 		case GREAT_KNIGHT_F: return FE8Data.CharacterClass.GREAT_KNIGHT;
 		case SUPER_RECRUIT: return FE8Data.CharacterClass.SUPER_TRAINEE;
@@ -3126,6 +3139,7 @@ public class FE8Data implements GBAFECharacterProvider, GBAFEClassProvider, GBAF
 		case MYRMIDON: return FE8Data.CharacterClass.MYRMIDON_F;
 		case ARCHER: return FE8Data.CharacterClass.ARCHER_F;
 		case MAGE: return FE8Data.CharacterClass.MAGE_F;
+		case SHAMAN: return FE8Data.CharacterClass.SHAMAN_F;
 		case PRIEST: return FE8Data.CharacterClass.CLERIC;
 		case TRAINEE_2:
 		case PUPIL_2: return FE8Data.CharacterClass.RECRUIT_2;
@@ -3139,6 +3153,8 @@ public class FE8Data implements GBAFECharacterProvider, GBAFEClassProvider, GBAF
 		case WYVERN_KNIGHT: return FE8Data.CharacterClass.WYVERN_KNIGHT_F;
 		case SAGE: return FE8Data.CharacterClass.SAGE_F;
 		case MAGE_KNIGHT: return FE8Data.CharacterClass.MAGE_KNIGHT_F;
+		case DRUID: return FE8Data.CharacterClass.DRUID_F;
+		case SUMMONER: return FE8Data.CharacterClass.SUMMONER_F;
 		case BISHOP: return FE8Data.CharacterClass.BISHOP_F;
 		case GREAT_KNIGHT: return FE8Data.CharacterClass.GREAT_KNIGHT_F;
 		case SUPER_TRAINEE:
@@ -3147,8 +3163,12 @@ public class FE8Data implements GBAFECharacterProvider, GBAFEClassProvider, GBAF
 		}
 	}
 
-	public void prepareForClassRandomization(Map<Integer, GBAFEClassData> classMap) {
+	public void prepareForClassRandomization(Map<Integer, GBAFEClassData> classMap)
+	{
 		// This is handled by a separate helper.
+		// Okay, but I think I can use this as a way to insert missing promotion bonuses
+		classMap.get( FE8Data.CharacterClass.DRUID_F.getID() ).setPromoBonuses( new GBAFEStatDto( 3, 1, 1, 3, 0, 1, 2 ) );
+		classMap.get( FE8Data.CharacterClass.SUMMONER_F.getID() ).setPromoBonuses( new GBAFEStatDto( 2, 0, 2, 3, 0, 1, 3 ) );
 	}
 
 	public GBAFEClassData classDataWithData(byte[] data, long offset, GBAFEClassData demotedClass) {
@@ -3800,6 +3820,7 @@ public class FE8Data implements GBAFECharacterProvider, GBAFEClassProvider, GBAF
 		return PromotionItem.values();
 	}
 
+	//TAG: Are the fem classes already handled by promotion items?
 	public List<GBAFEClass> additionalClassesForPromotionItem(GBAFEPromotionItem promotionItem,
 			List<Byte> existingClassIDs) {
 		if (promotionItem == PromotionItem.KNIGHT_CREST) {

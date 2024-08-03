@@ -279,28 +279,81 @@ public abstract class GBAFEClassData extends AbstractGBAData implements FEPrinta
 		return data[34] & 0xFF;
 	}
 
+	public void setPromoHP(int promoHP)
+	{
+		promoHP = YuneUtil.clamp(promoHP, 0, 5);
+		data[34] = (byte)(promoHP & 0xFF);
+		wasModified = true;
+	}
+
 	public int getPromoSTR() {
 		return data[35] & 0xFF;
+	}
+
+	public void setPromoSTR(int promoSTR)
+	{
+		promoSTR = YuneUtil.clamp(promoSTR, 0, 5);
+		data[35] = (byte)(promoSTR & 0xFF);
+		wasModified = true;
 	}
 
 	public int getPromoSKL() {
 		return data[36] & 0xFF;
 	}
 
+	public void setPromoSKL(int promoSKL)
+	{
+		promoSKL = YuneUtil.clamp(promoSKL, 0, 5);
+		data[36] = (byte)(promoSKL & 0xFF);
+		wasModified = true;
+	}
+
 	public int getPromoSPD() {
 		return data[37] & 0xFF;
+	}
+
+	public void setPromoSPD(int promoSPD)
+	{
+		promoSPD = YuneUtil.clamp(promoSPD, 0, 5);
+		data[37] = (byte)(promoSPD & 0xFF);
+		wasModified = true;
 	}
 
 	public int getPromoDEF() {
 		return data[38] & 0xFF;
 	}
 
+	public void setPromoDEF(int promoDEF)
+	{
+		promoDEF = YuneUtil.clamp(promoDEF, 0, 5);
+		data[38] = (byte)(promoDEF & 0xFF);
+		wasModified = true;
+	}
+
 	public int getPromoRES() {
 		return data[39] & 0xFF;
 	}
-	
-	public GBAFEStatDto getPromoBonuses() {
+
+	public void setPromoRES(int promoRES)
+	{
+		promoRES = YuneUtil.clamp(promoRES, 0, 5);
+		data[39] = (byte)(promoRES & 0xFF);
+		wasModified = true;
+	}
+
+	public GBAFEStatDto getPromoBonuses()
+	{
 		return new GBAFEStatDto(getPromoHP(), getPromoSTR(), getPromoSKL(), getPromoSPD(), 0, getPromoDEF(), getPromoRES());
+	}
+
+	public void setPromoBonuses( GBAFEStatDto promoBonuses )
+	{
+		setPromoHP( promoBonuses.hp );
+		setPromoSTR( promoBonuses.str );
+		setPromoSKL( promoBonuses.skl );
+		setPromoSPD( promoBonuses.spd );
+		setPromoDEF( promoBonuses.def );
+		setPromoRES( promoBonuses.res );
 	}
 
 	public int getSwordRank() {

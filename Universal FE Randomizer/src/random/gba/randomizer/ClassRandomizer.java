@@ -274,18 +274,19 @@ public class ClassRandomizer {
 		// Somehow, some enemies, despite all signs of them only being able to use up to C rank weapons,
 		// are able to use A rank somehow in some cases. Since I don't know why this is,
 		// we're going to modify all classes to have A rank in all areas. Characters with lower ranks will override it
-		// which includes all playable characters.  // Okay, but are we sure that's working for promotions?
-		for (GBAFEClassData charClass : classData.allClasses())
-		{
-			if (charClass.getSwordRank() > 0) { charClass.setSwordRank(WeaponRank.A); }
-			if (charClass.getLanceRank() > 0) { charClass.setLanceRank(WeaponRank.A); }
-			if (charClass.getAxeRank() > 0) { charClass.setAxeRank(WeaponRank.A); }
-			if (charClass.getBowRank() > 0) { charClass.setBowRank(WeaponRank.A); }
-			if (charClass.getAnimaRank() > 0) { charClass.setAnimaRank(WeaponRank.A); }
-			if (charClass.getLightRank() > 0) { charClass.setLightRank(WeaponRank.A); }
-			if (charClass.getDarkRank() > 0) { charClass.setDarkRank(WeaponRank.A); }
-			if (charClass.getStaffRank() > 0) { charClass.setStaffRank(WeaponRank.A); }
-		}
+		// which includes all playable characters.  
+		// Okay, but are we sure that's not messing up promotions?  Time to find out!
+		// for (GBAFEClassData charClass : classData.allClasses())
+		// {
+		// 	if (charClass.getSwordRank() > 0) { charClass.setSwordRank(WeaponRank.A); }
+		// 	if (charClass.getLanceRank() > 0) { charClass.setLanceRank(WeaponRank.A); }
+		// 	if (charClass.getAxeRank() > 0) { charClass.setAxeRank(WeaponRank.A); }
+		// 	if (charClass.getBowRank() > 0) { charClass.setBowRank(WeaponRank.A); }
+		// 	if (charClass.getAnimaRank() > 0) { charClass.setAnimaRank(WeaponRank.A); }
+		// 	if (charClass.getLightRank() > 0) { charClass.setLightRank(WeaponRank.A); }
+		// 	if (charClass.getDarkRank() > 0) { charClass.setDarkRank(WeaponRank.A); }
+		// 	if (charClass.getStaffRank() > 0) { charClass.setStaffRank(WeaponRank.A); }
+		// }
 		
 		for (GBAFEChapterData chapter : chapterData.allChapters()) {
 			int maxEnemyClassLimit = chapter.getMaxEnemyClassLimit();

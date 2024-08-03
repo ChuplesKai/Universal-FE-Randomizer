@@ -105,18 +105,19 @@ public class EnemyBuffer {
 				}
 			}
 		}
-		
-		GBAFEClassData[] allClasses = classData.allClasses();
-		for (GBAFEClassData currentClass : allClasses) {
-			if (currentClass.getSwordRank() > 0) { currentClass.setSwordRank(WeaponRank.A); }
-			if (currentClass.getLanceRank() > 0) { currentClass.setLanceRank(WeaponRank.A); }
-			if (currentClass.getAxeRank() > 0) { currentClass.setAxeRank(WeaponRank.A); }
-			if (currentClass.getBowRank() > 0) { currentClass.setBowRank(WeaponRank.A); }
-			if (currentClass.getAnimaRank() > 0) { currentClass.setAnimaRank(WeaponRank.A); }
-			if (currentClass.getDarkRank() > 0) { currentClass.setDarkRank(WeaponRank.A); }
-			if (currentClass.getLightRank() > 0) { currentClass.setLightRank(WeaponRank.A); }
-			if (currentClass.getStaffRank() > 0) { currentClass.setStaffRank(WeaponRank.A); }
-		}
+
+		// Similarly, why are we setting this across the board, and does it mess up promotion?
+		// GBAFEClassData[] allClasses = classData.allClasses();
+		// for (GBAFEClassData currentClass : allClasses) {
+		// 	if (currentClass.getSwordRank() > 0) { currentClass.setSwordRank(WeaponRank.A); }
+		// 	if (currentClass.getLanceRank() > 0) { currentClass.setLanceRank(WeaponRank.A); }
+		// 	if (currentClass.getAxeRank() > 0) { currentClass.setAxeRank(WeaponRank.A); }
+		// 	if (currentClass.getBowRank() > 0) { currentClass.setBowRank(WeaponRank.A); }
+		// 	if (currentClass.getAnimaRank() > 0) { currentClass.setAnimaRank(WeaponRank.A); }
+		// 	if (currentClass.getDarkRank() > 0) { currentClass.setDarkRank(WeaponRank.A); }
+		// 	if (currentClass.getLightRank() > 0) { currentClass.setLightRank(WeaponRank.A); }
+		// 	if (currentClass.getStaffRank() > 0) { currentClass.setStaffRank(WeaponRank.A); }
+		// }
 	}
 	
 	public static void improveBossWeapons(int probability, CharacterDataLoader charactersData, 

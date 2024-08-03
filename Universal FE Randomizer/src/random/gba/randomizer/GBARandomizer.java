@@ -558,12 +558,12 @@ public class GBARandomizer extends Randomizer {
 	 ****************************************************************/
 	private void randomizeClassesIfNecessary(String seed)
 	{
-		// for (GBAFEClassData feclass : classData.allClassesInData() )
-		// {
-		// 	GBAFEStatDto promoBonuses = feclass.getPromoBonuses();
-		// 	System.out.println( String.format( "%s[%d]<%d>", feclass.displayString(), feclass.getID(), feclass.getSpriteIndex() ) );
-		// 	System.out.println( promoBonuses.toString() );
-		// }
+		for (GBAFEClassData feclass : classData.allClassesInData() )
+		{
+			GBAFEStatDto promoBonuses = feclass.getPromoBonuses();
+			System.out.println( String.format( "%s[%d]<%d>", feclass.displayString(), feclass.getID(), feclass.getSpriteIndex() ) );
+			System.out.println( promoBonuses.toString() );
+		}
 		if (classes != null)
 		{
 			if (classes.randomizePCs) {

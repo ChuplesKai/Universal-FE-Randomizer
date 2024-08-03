@@ -100,7 +100,8 @@ public class GBACrossGameData {
 		}
 		// Try to find the class in the targetGame by name
 		classOpt = getClassFromProviderByName(targetGameProvider, classToSubstitute);
-		if (classOpt.isPresent() && !isExceptionCase(targetGameProvider, classOpt) && classData.isValidClass(classOpt.get().getID())) {
+		if (classOpt.isPresent() && !isExceptionCase(targetGameProvider, classOpt) && classData.isValidClass(classOpt.get().getID()))
+		{
 			DebugPrinter.log(DebugPrinter.Key.GBA_CHARACTER_SHUFFLING,
 					"Could find the class from a naive search of the name in the target game.");
 			return classOpt.get();
@@ -133,16 +134,20 @@ public class GBACrossGameData {
      */
     protected static boolean isExceptionCase(GBAFEClassProvider provider, Optional<GBAFEClass> classOpt) {
         GBAFEClass chosenClass = classOpt.get();
-        if (provider instanceof FE8Data) {
+        if (provider instanceof FE8Data)
+        {
             return (Arrays.asList(FE8Data.CharacterClass.BARD, // Lack of Magic Animations?
                             // These following female classes are too much of a pain to make work.
                             // They have the same animation as the male one anyway, don't have Promo Bonuses
                             // either.
             				// TAG: Okay, but is that fixable?
                             FE8Data.CharacterClass.WYVERN_RIDER_F, FE8Data.CharacterClass.WYVERN_LORD_F,
-                            FE8Data.CharacterClass.HERO_F, FE8Data.CharacterClass.SHAMAN_F, FE8Data.CharacterClass.DRUID_F
+                            FE8Data.CharacterClass.HERO_F
+                            //, FE8Data.CharacterClass.SHAMAN_F, FE8Data.CharacterClass.DRUID_F
             ).contains(chosenClass));
-        } else if (provider instanceof FE7Data) {
+        }
+        else if (provider instanceof FE7Data)
+        {
             return (Arrays.asList(FE7Data.CharacterClass.CAVALIER_F, // Not a useable class
                     FE7Data.CharacterClass.MERCENARY_F, // Not a useable class
                     // These following female classes are too much of a pain to make work.
@@ -153,7 +158,9 @@ public class GBACrossGameData {
                     FE7Data.CharacterClass.WYVERNKNIGHT_F, FE7Data.CharacterClass.NOMAD_F,
                     FE7Data.CharacterClass.NOMADTROOPER_F
             ).contains(chosenClass));
-        } else if (provider instanceof FE6Data) {
+        }
+        else if (provider instanceof FE6Data)
+        {
             return (Arrays.asList(FE6Data.CharacterClass.PALADIN_F, // Not a useable class
                     FE6Data.CharacterClass.CAVALIER_F, // Not a useable class
                     FE6Data.CharacterClass.MERCENARY_F // Not a useable class
@@ -229,9 +236,9 @@ public class GBACrossGameData {
 		addEntry(GameType.FE6, FE6Data.CharacterClass.SNIPER, FE7Data.CharacterClass.SNIPER, FE8Data.CharacterClass.SNIPER);
 		addEntry(GameType.FE6, FE6Data.CharacterClass.ARCHER_F, FE7Data.CharacterClass.ARCHER_F, FE8Data.CharacterClass.ARCHER_F);
 		addEntry(GameType.FE6, FE6Data.CharacterClass.SHAMAN, FE7Data.CharacterClass.SHAMAN, FE8Data.CharacterClass.SHAMAN);
-		addEntry(GameType.FE6, FE6Data.CharacterClass.SHAMAN_F, FE7Data.CharacterClass.SHAMAN, FE8Data.CharacterClass.SHAMAN);
+		addEntry(GameType.FE6, FE6Data.CharacterClass.SHAMAN_F, FE7Data.CharacterClass.SHAMAN, FE8Data.CharacterClass.SHAMAN_F);
 		addEntry(GameType.FE6, FE6Data.CharacterClass.DRUID, FE7Data.CharacterClass.DRUID, FE8Data.CharacterClass.DRUID);
-		addEntry(GameType.FE6, FE6Data.CharacterClass.DRUID_F, FE7Data.CharacterClass.DRUID, FE8Data.CharacterClass.DRUID);
+		addEntry(GameType.FE6, FE6Data.CharacterClass.DRUID_F, FE7Data.CharacterClass.DRUID, FE8Data.CharacterClass.DRUID_F);
 		addEntry(GameType.FE6, FE6Data.CharacterClass.CLERIC, FE7Data.CharacterClass.CLERIC, FE8Data.CharacterClass.CLERIC);
 		addEntry(GameType.FE6, FE6Data.CharacterClass.WYVERN_RIDER, FE7Data.CharacterClass.WYVERNKNIGHT, FE8Data.CharacterClass.WYVERN_RIDER);
 		addEntry(GameType.FE6, FE6Data.CharacterClass.WYVERN_RIDER_F, FE7Data.CharacterClass.WYVERNKNIGHT, FE8Data.CharacterClass.WYVERN_RIDER);
@@ -319,6 +326,7 @@ public class GBACrossGameData {
 		addEntry(GameType.FE8, FE8Data.CharacterClass.SNIPER, FE6Data.CharacterClass.SNIPER, FE7Data.CharacterClass.SNIPER);
 		addEntry(GameType.FE8, FE8Data.CharacterClass.ARCHER_F, FE6Data.CharacterClass.ARCHER_F, FE7Data.CharacterClass.ARCHER_F);
 		addEntry(GameType.FE8, FE8Data.CharacterClass.SHAMAN, FE6Data.CharacterClass.SHAMAN, FE7Data.CharacterClass.SHAMAN);
+		addEntry(GameType.FE8, FE8Data.CharacterClass.SHAMAN_F, FE6Data.CharacterClass.SHAMAN_F, FE7Data.CharacterClass.SHAMAN);
 		addEntry(GameType.FE8, FE8Data.CharacterClass.CLERIC, FE6Data.CharacterClass.CLERIC, FE7Data.CharacterClass.CLERIC);
 		addEntry(GameType.FE8, FE8Data.CharacterClass.WYVERN_RIDER, FE6Data.CharacterClass.WYVERN_RIDER, FE7Data.CharacterClass.WYVERNKNIGHT);
 		addEntry(GameType.FE8, FE8Data.CharacterClass.ROGUE, FE6Data.CharacterClass.SWORDMASTER, FE7Data.CharacterClass.ASSASSIN);

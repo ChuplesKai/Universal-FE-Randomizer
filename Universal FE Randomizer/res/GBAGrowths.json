@@ -148,6 +148,10 @@
         "growths":{"hp":70, "str":55, "skl":35, "spd":25, "lck":20, "def":10, "res":40}
     },
     {
+        "name":"SHAMAN_F",
+        "growths":{"hp":70, "str":55, "skl":35, "spd":25, "lck":20, "def":10, "res":40}
+    },
+    {
         "name":"THIEF",
         "growths":{"hp":70, "str":30, "skl":35, "spd":50, "lck":40, "def":10, "res":15}
     },
@@ -281,7 +285,15 @@
         "growths":{"hp":65, "str":40, "skl":30, "spd":20, "lck":15, "def":10, "res":35}
     },
     {
+        "name":"SUMMONER_F",
+        "growths":{"hp":65, "str":40, "skl":30, "spd":20, "lck":15, "def":10, "res":35}
+    },
+    {
         "name":"DRUID",
+        "growths":{"hp":65, "str":40, "skl":30, "spd":20, "lck":15, "def":5, "res":40}
+    },
+    {
+        "name":"DRUID_F",
         "growths":{"hp":65, "str":40, "skl":30, "spd":20, "lck":15, "def":5, "res":40}
     },
     // Monster Classes
