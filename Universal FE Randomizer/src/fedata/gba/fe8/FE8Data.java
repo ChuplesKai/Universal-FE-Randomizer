@@ -3822,8 +3822,10 @@ public class FE8Data implements GBAFECharacterProvider, GBAFEClassProvider, GBAF
 
 	//TAG: Are the fem classes already handled by promotion items?
 	public List<GBAFEClass> additionalClassesForPromotionItem(GBAFEPromotionItem promotionItem,
-			List<Byte> existingClassIDs) {
-		if (promotionItem == PromotionItem.KNIGHT_CREST) {
+			List<Byte> existingClassIDs) 
+	{
+		if (promotionItem == PromotionItem.KNIGHT_CREST)
+		{
 			return new ArrayList<GBAFEClass>(Arrays.asList(
 					CharacterClass.EIRIKA_LORD,
 					CharacterClass.EPHRAIM_LORD,

@@ -480,6 +480,15 @@ public class GBARandomizer extends Randomizer {
 		updateStatusString("Loading Palette Mapper...");
 		updateProgress(0.40);
 		fe8_paletteMapper = paletteData.setupFE8SpecialManagers(handler, fe8_promotionManager);
+
+		//DEBUG: Can I read the promotion branch table?
+		// long baseAddress = FileReadHelper.readAddress(handler, FE8Data.PromotionBranchTablePointer);
+		// for( int classID = 0; classID < 120; classID++ )
+		// {
+		// 	long offset = baseAddress + classID * FE8Data.BytesPerPromotionBranchEntry;
+		// 	byte[] promoBranch = handler.readBytesAtOffset( offset, FE8Data.BytesPerPromotionBranchEntry );
+		// 	System.out.println( String.format( "%d(0x%s) : %d %d", classID, Integer.toHexString(classID), promoBranch[0] & 0xFF, promoBranch[1] & 0xFF ) );
+		// }
 		
 		handler.clearAppliedDiffs();
 	}
@@ -558,12 +567,14 @@ public class GBARandomizer extends Randomizer {
 	 ****************************************************************/
 	private void randomizeClassesIfNecessary(String seed)
 	{
-		for (GBAFEClassData feclass : classData.allClassesInData() )
-		{
-			GBAFEStatDto promoBonuses = feclass.getPromoBonuses();
-			System.out.println( String.format( "%s[%d]<%d>", feclass.displayString(), feclass.getID(), feclass.getSpriteIndex() ) );
-			System.out.println( promoBonuses.toString() );
-		}
+		// for (GBAFEClassData feclass : classData.allClassesInData() )
+		// {
+		// 	GBAFEStatDto promoBonuses = feclass.getPromoBonuses();
+		// 	GBAFEStatDto caps = feclass.getCaps();
+		// 	System.out.println( String.format( "%s [%d] <%d>", feclass.displayString(), feclass.getID(), feclass.getTargetPromotionID() ) );
+		// 	System.out.println( "Promo: " + promoBonuses.toString() );
+		// 	System.out.println( "Caps:" + caps.toString() );
+		// }
 		if (classes != null)
 		{
 			if (classes.randomizePCs) {
@@ -906,15 +917,31 @@ public class GBARandomizer extends Randomizer {
 					}
 				}
 			}
-		} else if (gameType == GameType.FE8) {
-			// FE8 stores this in a separate table.
-			for (GBAFEClassData charClass : classData.allClasses()) {
-				if (classData.isPromotedClass(charClass.getID())) {
+		}
+		else if (gameType == GameType.FE8)
+		{
+			// FE8 stores promotion data in a separate table.
+			// There's a promotion map made in FE8 Data, let's use it!
+			for (GBAFEClassData charClass : classData.allClasses())
+			{
+				// First check for patches defined in the FE8 Data
+				if( FE8Data.CharacterClass.promotionMap.containsKey( FE8Data.CharacterClass.valueOf( charClass.getID() ) ) )
+				{
+					// Set< FE8Data.CharacterClass > promoSet = FE8Data.promotionMap.get( charClass.getID() ); // Get'em
+					// FE8Data.CharacterClass[] promotions = promoSet.toArray(); // Get as an array for ease
+					// Then simply use the utilities already made to set the promotion ids?
+					fe8_promotionManager.setFirstPromotionOptionForClass(charClass.getID(), fe8_promotionManager.getFirstPromotionOptionClassID(charClass.getID()));
+					fe8_promotionManager.setSecondPromotionOptionForClass(charClass.getID(), fe8_promotionManager.getSecondPromotionOptionClassID(charClass.getID()));
+				}
+				// Then do the promotion patch
+				if (classData.isPromotedClass(charClass.getID()))
+				{
 					int demotedID1 = fe8_promotionManager.getFirstPromotionOptionClassID(charClass.getID());
 					int demotedID2 = fe8_promotionManager.getSecondPromotionOptionClassID(charClass.getID());
-					if (demotedID1 == 0 && demotedID2 == 0) {
-						// If we have no promotions and we are a promoted class, then apply our fix.
-						// Promote into yourself if this happens.
+					// If we have no promotions and we are a promoted class, then apply our fix.
+					// Promote into yourself if this happens.
+					if (demotedID1 == 0 && demotedID2 == 0)
+					{
 						fe8_promotionManager.setFirstPromotionOptionForClass(charClass.getID(), charClass.getID());
 					}
 				}

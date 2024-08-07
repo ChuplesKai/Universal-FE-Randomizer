@@ -50,8 +50,10 @@ public class FE8PromotionManager {
 			wasModified = false;
 		}
 
-		public void commitChanges() {
-			if (wasModified) {
+		public void commitChanges()
+		{
+			if (wasModified)
+			{
 				originalData = data.clone();
 				hasChanges = true;
 			}
@@ -78,10 +80,12 @@ public class FE8PromotionManager {
 	
 	private Map<FE8Data.CharacterClass, PromotionBranch> promotionBranches;
 
-	public FE8PromotionManager(FileHandler handler) {
+	public FE8PromotionManager(FileHandler handler)
+	{
 		promotionBranches = new HashMap<FE8Data.CharacterClass, PromotionBranch>();
 		long address = FileReadHelper.readAddress(handler, FE8Data.PromotionBranchTablePointer);
-		for (FE8Data.CharacterClass currentClass : FE8Data.CharacterClass.values()) { // These are conveniently labeled in order of class ID.
+		for (FE8Data.CharacterClass currentClass : FE8Data.CharacterClass.values()) 
+		{ // These are conveniently labeled in order of class ID.
 			int index = currentClass.ID;
 			promotionBranches.put(currentClass, new PromotionBranch(handler, address + (index * FE8Data.BytesPerPromotionBranchEntry)));
 		}
@@ -89,6 +93,10 @@ public class FE8PromotionManager {
 		// Override Soldiers to promote.
 		setFirstPromotionOptionForClass(FE8Data.CharacterClass.SOLDIER.ID, FE8Data.CharacterClass.GENERAL.ID);
 		setSecondPromotionOptionForClass(FE8Data.CharacterClass.SOLDIER.ID, FE8Data.CharacterClass.PALADIN.ID);
+		// Okay, what happens if I do it here?
+		setFirstPromotionOptionForClass(FE8Data.CharacterClass.SHAMAN_F.ID, FE8Data.CharacterClass.DRUID_F.ID);
+		setSecondPromotionOptionForClass(FE8Data.CharacterClass.SHAMAN_F.ID, FE8Data.CharacterClass.SUMMONER_F.ID);
+
 	}
 	
 	public Boolean hasPromotions(int baseClassID) {
@@ -111,7 +119,8 @@ public class FE8PromotionManager {
 		return branch.getSecondPromotion();
 	}
 	
-	public void setFirstPromotionOptionForClass(int baseClassID, int firstPromotionClassID) {
+	public void setFirstPromotionOptionForClass(int baseClassID, int firstPromotionClassID)
+	{
 		FE8Data.CharacterClass baseClass = FE8Data.CharacterClass.valueOf(baseClassID);
 		if (baseClass == null) { return; }
 		FE8Data.CharacterClass promotedClass = FE8Data.CharacterClass.valueOf(firstPromotionClassID);
@@ -133,18 +142,24 @@ public class FE8PromotionManager {
 		branch.setSecondPromotion(promotedClass.ID);
 	}
 	
-	public void commit() {
-		for (PromotionBranch branch : promotionBranches.values()) {
+	public void commit()
+	{
+		for (PromotionBranch branch : promotionBranches.values())
+		{
 			branch.commitChanges();
 		}
 	}
 	
-	public void compileDiffs(DiffCompiler compiler) {
-		for (PromotionBranch branch : promotionBranches.values()) {
+	public void compileDiffs(DiffCompiler compiler)
+	{
+		for (PromotionBranch branch : promotionBranches.values())
+		{
 			branch.commitChanges();
-			if (branch.hasCommittedChanges()) {
+			if (branch.hasCommittedChanges())
+			{
 				Diff diff = new Diff(branch.getAddressOffset(), branch.getData().length, branch.getData(), null);
 				compiler.addDiff(diff);
+				System.out.println( String.format( "%s :: [0]: %d  [1]: %d", Long.toHexString(branch.getAddressOffset()), branch.getData()[0], branch.getData()[1] ) );
 			}
 		}
 	}
