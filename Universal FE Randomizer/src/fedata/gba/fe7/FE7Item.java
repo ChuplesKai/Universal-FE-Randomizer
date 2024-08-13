@@ -8,6 +8,7 @@ import java.util.Random;
 
 import fedata.gba.GBAFEItemData;
 import fedata.gba.GBAFESpellAnimationCollection;
+import fedata.gba.GBAFEWeaponDto;
 import fedata.gba.fe7.FE7Data.Item.Ability1Mask;
 import fedata.gba.fe7.FE7Data.Item.Ability2Mask;
 import fedata.gba.fe7.FE7Data.Item.FE7WeaponRank;
@@ -555,9 +556,15 @@ public class FE7Item implements GBAFEItemData {
 	public void turnIntoLordWeapon(int lordID, int nameIndex, int descriptionIndex, WeaponType weaponType,
 			boolean isUnbreakable, int targetWeaponWeight, GBAFEItemData referenceItem, ItemDataLoader itemData,
 			FreeSpaceManager freeSpace) {
-		// We don't really use this for FE7, but if we need it, we can implement it.
-		
+		// We don't really use this for FE7, but if we need it, we can implement it.		
 	}
+
+	@Override
+	public void turnIntoLordWeapon(int lordID, int nameIndex, int descriptionIndex, boolean isUnbreakable, 
+		GBAFEWeaponDto weaponData, ItemDataLoader itemData, FreeSpaceManager freeSpace) 
+	{
+	}
+
 
 	@Override
 	public GBAFEItemData createLordWeapon(int lordID, int newItemID, int nameIndex, int descriptionIndex, WeaponType weaponType,

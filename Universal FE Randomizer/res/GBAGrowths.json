@@ -108,6 +108,10 @@
         "growths":{"hp":70, "str":45, "skl":35, "spd":35, "lck":25, "def":25, "res":15}
     },
     {
+        "name":"MERCENARY_F",
+        "growths":{"hp":70, "str":45, "skl":35, "spd":35, "lck":25, "def":25, "res":15}
+    },
+    {
         "name":"MONK",
         "growths":{"hp":55, "str":35, "skl":50, "spd":40, "lck":30, "def":5, "res":40}
     },
@@ -161,6 +165,10 @@
     },
     {
         "name":"WYVERN_RIDER",
+        "growths":{"hp":85, "str":45, "skl":35, "spd":30, "lck":20, "def":25, "res":10}
+    },
+    {
+        "name":"WYVERN_RIDER_F",
         "growths":{"hp":85, "str":45, "skl":35, "spd":30, "lck":20, "def":25, "res":10}
     },
     // Promoted Classes
@@ -245,6 +253,10 @@
         "growths":{"hp":65, "str":40, "skl":35, "spd":25, "lck":25, "def":15, "res":15}
     },
     {
+        "name":"HERO_F",
+        "growths":{"hp":65, "str":40, "skl":35, "spd":25, "lck":25, "def":15, "res":15}
+    },
+    {
         "name":"SWORDMASTER_F",
         "growths":{"hp":70, "str":35, "skl":35, "spd":40, "lck":30, "def":5, "res":5}
     },
@@ -278,6 +290,10 @@
     },
     {
         "name":"WYVERN_LORD",
+        "growths":{"hp":80, "str":40, "skl":30, "spd":30, "lck":15, "def":15, "res":10}
+    },
+    {
+        "name":"WYVERN_LORD_F",
         "growths":{"hp":80, "str":40, "skl":30, "spd":30, "lck":15, "def":15, "res":10}
     },
     {

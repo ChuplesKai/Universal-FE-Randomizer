@@ -93,10 +93,13 @@ public class FE8PromotionManager {
 		// Override Soldiers to promote.
 		setFirstPromotionOptionForClass(FE8Data.CharacterClass.SOLDIER.ID, FE8Data.CharacterClass.GENERAL.ID);
 		setSecondPromotionOptionForClass(FE8Data.CharacterClass.SOLDIER.ID, FE8Data.CharacterClass.PALADIN.ID);
-		// Okay, what happens if I do it here?
+		// For Some Reason, this seems to be the critical point to overwrite promotion options
 		setFirstPromotionOptionForClass(FE8Data.CharacterClass.SHAMAN_F.ID, FE8Data.CharacterClass.DRUID_F.ID);
 		setSecondPromotionOptionForClass(FE8Data.CharacterClass.SHAMAN_F.ID, FE8Data.CharacterClass.SUMMONER_F.ID);
-
+		setFirstPromotionOptionForClass(FE8Data.CharacterClass.MERCENARY_F.ID, FE8Data.CharacterClass.HERO_F.ID);
+		setSecondPromotionOptionForClass(FE8Data.CharacterClass.MERCENARY_F.ID, FE8Data.CharacterClass.RANGER_F.ID);
+		setFirstPromotionOptionForClass(FE8Data.CharacterClass.WYVERN_RIDER_F.ID, FE8Data.CharacterClass.WYVERN_KNIGHT_F.ID);
+		setSecondPromotionOptionForClass(FE8Data.CharacterClass.WYVERN_RIDER_F.ID, FE8Data.CharacterClass.WYVERN_LORD_F.ID);
 	}
 	
 	public Boolean hasPromotions(int baseClassID) {
@@ -159,7 +162,7 @@ public class FE8PromotionManager {
 			{
 				Diff diff = new Diff(branch.getAddressOffset(), branch.getData().length, branch.getData(), null);
 				compiler.addDiff(diff);
-				System.out.println( String.format( "%s :: [0]: %d  [1]: %d", Long.toHexString(branch.getAddressOffset()), branch.getData()[0], branch.getData()[1] ) );
+				// System.out.println( String.format( "%s :: [0]: %d  [1]: %d", Long.toHexString(branch.getAddressOffset()), branch.getData()[0], branch.getData()[1] ) );
 			}
 		}
 	}

@@ -8,6 +8,7 @@ import java.util.Random;
 
 import fedata.gba.GBAFEItemData;
 import fedata.gba.GBAFESpellAnimationCollection;
+import fedata.gba.GBAFEWeaponDto;
 import fedata.gba.fe6.FE6Data.Item.Ability1Mask;
 import fedata.gba.fe6.FE6Data.Item.Ability2Mask;
 import fedata.gba.fe6.FE6Data.Item.FE6WeaponRank;
@@ -536,8 +537,8 @@ public class FE6Item implements GBAFEItemData {
 
 	@Override
 	public void turnIntoLordWeapon(int lordID, int nameIndex, int descriptionIndex, WeaponType weaponType,
-			boolean isUnbreakable, int targetWeaponWeight, GBAFEItemData referenceItem, ItemDataLoader itemData, FreeSpaceManager freeSpace) {
-		
+			boolean isUnbreakable, int targetWeaponWeight, GBAFEItemData referenceItem, ItemDataLoader itemData, FreeSpaceManager freeSpace)
+	{		
 		// Update name and description pointers.
 		byte[] nameData = YuneUtil.byteArrayFromLongValue(nameIndex, true, 2);
 		byte[] descriptionData = YuneUtil.byteArrayFromLongValue(descriptionIndex, true, 2);
@@ -596,6 +597,81 @@ public class FE6Item implements GBAFEItemData {
 		setCritical(referenceItem.getCritical());
 		int minRange = weaponType == WeaponType.BOW ? 2 : 1;
 		int maxRange = weaponType == WeaponType.SWORD || weaponType == WeaponType.LANCE || weaponType == WeaponType.AXE ? 1 : 2; 
+		data[25] = (byte)((minRange << 4) | (maxRange));
+		data[26] = 0;
+		data[27] = 0; // Cost per use. Not useful since it's not sellable.
+		data[28] = (byte)(FE6Data.Item.FE6WeaponRank.E.value & 0xFF); // Not really necessary, but to be safe.
+		// Weapon icon is unchanged. We'll be replacing the icon.
+		// Staff use effect should be 0. We don't deal with staves.
+		data[30] = 0;
+		data[31] = 0; // No other weird effects.
+		wasModified = true;
+	}
+
+	@Override
+	public void turnIntoLordWeapon(int lordID, int nameIndex, int descriptionIndex, boolean isUnbreakable, 
+		GBAFEWeaponDto weaponData, ItemDataLoader itemData, FreeSpaceManager freeSpace) 
+	{
+		// Update name and description pointers.
+		byte[] nameData = YuneUtil.byteArrayFromLongValue(nameIndex, true, 2);
+		byte[] descriptionData = YuneUtil.byteArrayFromLongValue(descriptionIndex, true, 2);
+		data[0] = nameData[0];
+		data[1] = nameData[1];
+		data[2] = descriptionData[0];
+		data[3] = descriptionData[1];
+		data[4] = 0;
+		data[5] = 0; // Use Item Description, which shouldn't be used.
+		// Item ID should not change.
+		switch (weaponData.newType) {
+		case SWORD: data[7] = 0; break;
+		case LANCE: data[7] = 1; break;
+		case AXE: data[7] = 2; break;
+		case BOW: data[7] = 3; break;
+		case ANIMA: data[7] = 5; break;
+		case LIGHT: data[7] = 6; break;
+		case DARK: data[7] = 7; break;
+		default: assert false; break;
+		}
+		int ability1 = FE6Data.Item.Ability1Mask.WEAPON.ID;
+		if (weaponData.newType == WeaponType.ANIMA || weaponData.newType == WeaponType.LIGHT || weaponData.newType == WeaponType.DARK) {
+			ability1 |= FE6Data.Item.Ability1Mask.MAGIC.ID;
+		}
+		ability1 |= FE6Data.Item.Ability1Mask.UNSELLABLE.ID;
+		if (isUnbreakable) {
+			ability1 |= FE6Data.Item.Ability1Mask.UNBREAKABLE.ID;
+		}
+		data[8] = (byte)(ability1 & 0xFF);
+		data[9] = (byte)(FE6Data.Item.Ability2Mask.LORD_LOCK.ID & 0xFF);
+		// Null out stat bonuses.
+		setStatBonusPointer(0);
+		// Effectiveness. It should be effective against Knights and Cavs. If it's a bow, it also needs fliers.
+		long knightCavClassOffsets = itemData.offsetForAdditionalData(AdditionalData.KNIGHTCAV_EFFECT);
+		if (weaponData.newType == WeaponType.BOW) {
+			byte[] flierClassIDs = itemData.bytesForAdditionalData(AdditionalData.FLIERS_EFFECT);
+			byte[] knightCavClassIDs = itemData.bytesForAdditionalData(AdditionalData.KNIGHTCAV_EFFECT);
+			ByteArrayBuilder newClassIDs = new ByteArrayBuilder();
+			newClassIDs.appendBytes(knightCavClassIDs);
+			if (newClassIDs.getLastByteWritten() == 0) {
+				newClassIDs.deleteLastByte();
+			}
+			newClassIDs.appendBytes(flierClassIDs);
+			if (newClassIDs.getLastByteWritten() != 0) {
+				newClassIDs.appendByte((byte)0);
+			}
+			setEffectivenessPointer(freeSpace.setValue(newClassIDs.toByteArray(), "Knights, Cavs, and Flier Effectiveness"));
+		} else {
+			setEffectivenessPointer(knightCavClassOffsets);
+		}
+		
+		setDurability(weaponData.newDurability);
+		setMight(weaponData.newMt);
+		setHit(weaponData.newHit);
+		setWeight(weaponData.newWt);
+		setCritical(weaponData.newCrt);
+		int minRange = weaponData.newMinRange;
+		int maxRange = weaponData.newMinRange;
+		// int minRange = weaponType == WeaponType.BOW ? 2 : 1;
+		// int maxRange = weaponType == WeaponType.SWORD || weaponType == WeaponType.LANCE || weaponType == WeaponType.AXE ? 1 : 2; 
 		data[25] = (byte)((minRange << 4) | (maxRange));
 		data[26] = 0;
 		data[27] = 0; // Cost per use. Not useful since it's not sellable.

@@ -2,34 +2,43 @@
   {
     "targetName":"Iron Blade",
     "newDisplayName":"Iron Dagger",
+    "icon":"",
     "newMt":2,
     "newWt":5,
-    "newHit":80,
-    "newCrt":10,
+    "newHit":85,
+    "newCrt":5,
     "newMinRange":1,
     "newMaxRange":2,
-    "newDurability":35
+    "newDurability":35,
+    "animation":0,
+    "flash":0
   },
   {
     "targetName":"Steel Blade",
     "newDisplayName":"Steel Dagger",
+    "icon":"",
     "newMt":4,
     "newWt":7,
-    "newHit":70,
-    "newCrt":15,
+    "newHit":75,
+    "newCrt":10,
     "newMinRange":1,
     "newMaxRange":2,
-    "newDurability":30
+    "newDurability":30,
+    "animation":0,
+    "flash":0
   },
   {
     "targetName":"Silver Blade",
     "newDisplayName":"Silver Dagger",
+    "icon":"",
     "newMt":6,
     "newWt":9,
-    "newHit":60,
-    "newCrt":20,
+    "newHit":65,
+    "newCrt":15,
     "newMinRange":1,
     "newMaxRange":2,
-    "newDurability":25
+    "newDurability":25,
+    "animation":0,
+    "flash":0
   }
 ]

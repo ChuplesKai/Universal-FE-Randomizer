@@ -35,6 +35,9 @@ public class ClassRandomizer {
 	static final int rngSalt = 874;
 	static boolean hasThief = false;
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public static void randomizeClassMovement(int minMOV, int maxMOV, ClassDataLoader classData, FERandom rng)
 	{
 		GBAFEClassData[] allClasses = classData.allClasses();
@@ -69,6 +72,9 @@ public class ClassRandomizer {
 		}
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public static void randomizePlayableCharacterClasses(ClassOptions options, ItemAssignmentOptions inventoryOptions, GameType type, CharacterDataLoader charactersData, ClassDataLoader classData, ChapterLoader chapterData, ItemDataLoader itemData, TextLoader textData, Random rng) {
 		GBAFECharacterData[] allPlayableCharacters = charactersData.playableCharacters();
 		Map<Integer, GBAFEClassData> determinedClasses = new HashMap<Integer, GBAFEClassData>();
@@ -172,6 +178,9 @@ public class ClassRandomizer {
 		}
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public static void randomizeBossCharacterClasses(ClassOptions options, ItemAssignmentOptions inventoryOptions, GameType type, CharacterDataLoader charactersData, ClassDataLoader classData, ChapterLoader chapterData, ItemDataLoader itemData, TextLoader textData, Random rng)
 	{
 		GBAFECharacterData[] allBossCharacters = charactersData.bossCharacters();
@@ -258,6 +267,9 @@ public class ClassRandomizer {
 		}
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public static void randomizeMinionClasses(ClassOptions options, ItemAssignmentOptions inventoryOptions, GameType type, CharacterDataLoader charactersData, ClassDataLoader classData, ChapterLoader chapterData, ItemDataLoader itemData, Random rng) {
 		Boolean includeLords = false;
 		Boolean includeThieves = false;
@@ -441,27 +453,24 @@ public class ClassRandomizer {
 		}
 	}
 
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private static void updateCharacterToClass(ClassOptions classOptions, ItemAssignmentOptions inventoryOptions, GBAFECharacterData character, GBAFEClassData sourceClass, GBAFEClassData targetClass, Boolean ranged, Boolean melee, CharacterDataLoader charData, ClassDataLoader classData, ChapterLoader chapterData, ItemDataLoader itemData, TextLoader textData, Boolean forceBasicWeapons, Random rng)
 	{
 		character.prepareForClassRandomization();
 		character.setClassID(targetClass.getID());
-		if (charData.isBossCharacterID(character.getID()))
-		{
-			transferBossWeaponLevels(character, sourceClass, targetClass);
-		}
-		else
-		{
-			GBASlotAdjustmentService.transferWeaponRanks(character, sourceClass, targetClass, rng);
-		}
+		if (charData.isBossCharacterID(character.getID())) { transferBossWeaponLevels(character, sourceClass, targetClass); }
+		else { GBASlotAdjustmentService.transferWeaponRanks(character, sourceClass, targetClass, rng); }
 
 		// Small nudge - Soldiers are way too weak, so bump up anyone switching into one.
 		if( !sourceClass.displayString().equals("SOLDIER") && targetClass.displayString().equals("SOLDIER") )
 		{
-			character.setBaseSTR( character.getBaseSTR() + 1 );
-			character.setBaseSKL( character.getBaseSKL() + 2 );
+			character.setBaseSTR( character.getBaseSTR() + 2 );
+			character.setBaseSKL( character.getBaseSKL() + 3 );
+			character.setBaseSPD( character.getBaseSPD() + 1 );
 			character.setBaseDEF( character.getBaseDEF() + 3 );
 		}
-
 
 		switch (classOptions.basesTransfer)
 		{
@@ -544,6 +553,9 @@ public class ClassRandomizer {
 		}
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private static void applyBaseCorrectionForCharacter(GBAFECharacterData character, GBAFEClassData sourceClass, GBAFEClassData targetClass) {
 		int hpDelta = sourceClass.getBaseHP() - targetClass.getBaseHP();
 		character.setBaseHP(character.getBaseHP() + hpDelta);
@@ -567,6 +579,9 @@ public class ClassRandomizer {
 		}
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private static void adjustBasesToMatchClass(GBAFECharacterData character, GBAFEClassData sourceClass, GBAFEClassData targetClass) {
 		// HP transfers directly, as does LCK.
 		int hpDelta = sourceClass.getBaseHP() - targetClass.getBaseHP();
@@ -591,6 +606,9 @@ public class ClassRandomizer {
 		character.setBaseRES(mappedStats.get(4) - targetClass.getBaseRES());
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private static void adjustGrowthsToMatchClass(GBAFECharacterData character, GBAFEClassData sourceClass, GBAFEClassData targetClass) {
 		List<Integer> mappedGrowths = RelativeValueMapper.mappedValues(Arrays.asList(character.getHPGrowth(), character.getSTRGrowth(), character.getSKLGrowth(), character.getSPDGrowth(), character.getDEFGrowth(), character.getRESGrowth(), character.getLCKGrowth()),
 				Arrays.asList(targetClass.getHPGrowth(), targetClass.getSTRGrowth(), targetClass.getSKLGrowth(), targetClass.getSPDGrowth(), targetClass.getDEFGrowth(), targetClass.getRESGrowth(), targetClass.getLCKGrowth()));
@@ -604,7 +622,10 @@ public class ClassRandomizer {
 		character.setLCKGrowth( YuneUtil.round5( mappedGrowths.get(6)) );
 	}
 	
+	/*****************************************************************
 	// TODO: Offer an option for sidegrade strictness?
+	 * 
+	 ****************************************************************/
 	private static void updateMinionToClass(ItemAssignmentOptions inventoryOptions, GBAFEChapterUnitData chapterUnit, GBAFECharacterData minionCharacter, GBAFEClassData targetClass, ClassDataLoader classData, ItemDataLoader itemData, Random rng) {
 		DebugPrinter.log(DebugPrinter.Key.CLASS_RANDOMIZER, "Updating minion from class 0x" + Integer.toHexString(chapterUnit.getStartingClass()) + " to class 0x" + Integer.toHexString(targetClass.getID()));
 		DebugPrinter.log(DebugPrinter.Key.CLASS_RANDOMIZER, "Starting Inventory: [0x" + Integer.toHexString(chapterUnit.getItem1()) + ", 0x" + Integer.toHexString(chapterUnit.getItem2()) + ", 0x" + Integer.toHexString(chapterUnit.getItem3()) + ", 0x" + Integer.toHexString(chapterUnit.getItem4()) + "]");
@@ -613,6 +634,9 @@ public class ClassRandomizer {
 		DebugPrinter.log(DebugPrinter.Key.CLASS_RANDOMIZER, "Minion update complete. Inventory: [0x" + Integer.toHexString(chapterUnit.getItem1()) + ", 0x" + Integer.toHexString(chapterUnit.getItem2()) + ", 0x" + Integer.toHexString(chapterUnit.getItem3()) + ", 0x" + Integer.toHexString(chapterUnit.getItem4()) + "]");
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private static void updateMinionCharacterToClass(ItemAssignmentOptions inventoryOptions, GBAFEChapterUnitData chapterUnit, GBAFECharacterData minionCharacter, GBAFEClassData sourceClass, GBAFEClassData targetClass, ClassDataLoader classData, ItemDataLoader itemData, Random rng) {
 		// Write this into the character data.
 		minionCharacter.setClassID(targetClass.getID());
@@ -621,6 +645,9 @@ public class ClassRandomizer {
 		validateMinionInventory(inventoryOptions, chapterUnit, minionCharacter, classData, itemData, rng);
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public static void validateFormerThiefInventory(GBAFEChapterUnitData chapterUnit, ItemDataLoader itemData) {
 		Set<GBAFEItemData> itemsToRetain = itemsToRetain(chapterUnit, itemData);
 		
@@ -641,6 +668,9 @@ public class ClassRandomizer {
 		}
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private static Set<GBAFEItemData> itemsToRetain(GBAFEChapterUnitData chapterUnit, ItemDataLoader itemData) {
 		int item1ID = chapterUnit.getItem1();
 		GBAFEItemData item1 = itemData.itemWithID(item1ID);
@@ -662,6 +692,9 @@ public class ClassRandomizer {
 		return itemsToRetain;
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private static void itemsToGiveBack(GBAFEChapterUnitData chapterUnit, Set<GBAFEItemData> itemsToRetain, ItemDataLoader itemData) {
 		int item1ID = chapterUnit.getItem1();
 		GBAFEItemData item1 = itemData.itemWithID(item1ID);
@@ -680,6 +713,9 @@ public class ClassRandomizer {
 		}
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public static void validateSpecialClassInventory(GBAFEChapterUnitData chapterUnit, ItemDataLoader itemData, Random rng) {
 		Set<GBAFEItemData> itemsToRetain = itemsToRetain(chapterUnit, itemData);
 		
@@ -695,6 +731,9 @@ public class ClassRandomizer {
 		}
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private static void giveItemsToChapterUnit(GBAFEChapterUnitData chapterUnit, GBAFEItemData[] items) {
 		int[] requiredItemIDs = new int[items.length];
 		for (int i = 0; i < items.length; i++) {
@@ -703,6 +742,9 @@ public class ClassRandomizer {
 		chapterUnit.giveItems(requiredItemIDs);
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private static void validateMinionInventory(ItemAssignmentOptions inventoryOptions, GBAFEChapterUnitData chapterUnit, GBAFEClassData targetClass, ClassDataLoader classData, ItemDataLoader itemData, Random rng) {
 		int classID = chapterUnit.getStartingClass();
 		GBAFEClassData unitClass = classData.classForID(classID);
@@ -838,6 +880,9 @@ public class ClassRandomizer {
 		}
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private static void validateMinionInventory(ItemAssignmentOptions inventoryOptions, GBAFEChapterUnitData chapterUnit, GBAFECharacterData minionCharacter, ClassDataLoader classData, ItemDataLoader itemData, Random rng) {
 		int classID = chapterUnit.getStartingClass();
 		GBAFEClassData unitClass = classData.classForID(classID);
@@ -971,6 +1016,9 @@ public class ClassRandomizer {
 		}
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	public static void validateCharacterInventory(ItemAssignmentOptions inventoryOptions, GBAFECharacterData character, GBAFEClassData charClass, GBAFEChapterUnitData chapterUnit, Boolean ranged, Boolean melee, CharacterDataLoader charData, ClassDataLoader classData, ItemDataLoader itemData, TextLoader textData, Boolean forceBasic, Random rng) {
 		int item1ID = chapterUnit.getItem1();
 		GBAFEItemData item1 = itemData.itemWithID(item1ID);
@@ -1158,6 +1206,9 @@ public class ClassRandomizer {
 		DebugPrinter.log(DebugPrinter.Key.CLASS_RANDOMIZER, "Final Inventory: [0x" + Integer.toHexString(item1ID) + (item1 == null ? "" : " (" + textData.getStringAtIndex(item1.getNameIndex(), true) + ")") + ", 0x" + Integer.toHexString(item2ID) + (item2 == null ? "" : " (" + textData.getStringAtIndex(item2.getNameIndex(), true) + ")") + ", 0x" + Integer.toHexString(item3ID) + (item3 == null ? "" : " (" + textData.getStringAtIndex(item3.getNameIndex(), true) + ")") + ", 0x" + Integer.toHexString(item4ID) + (item4 == null ? "" : " (" + textData.getStringAtIndex(item4.getNameIndex(), true) + ")") + "]");
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private static GBAFEItemData[] topRankWeaponsForClass(GBAFEClassData characterClass, ItemDataLoader itemData) {
 		ArrayList<GBAFEItemData> items = new ArrayList<GBAFEItemData>();
 		if (characterClass.getSwordRank() > 0) { items.addAll(Arrays.asList(itemData.itemsOfTypeAndEqualRank(WeaponType.SWORD, WeaponRank.S, false, false, true))); }
@@ -1172,6 +1223,9 @@ public class ClassRandomizer {
 		return items.toArray(new GBAFEItemData[items.size()]);
 	}
 	
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private static Boolean canCharacterUseItem(GBAFECharacterData character, GBAFEItemData weapon, ItemDataLoader itemData) {
 		int weaponRankValue = itemData.weaponRankValueForRank(weapon.getWeaponRank());
 		if ((weapon.getType() == WeaponType.SWORD && character.getSwordRank() >= weaponRankValue) ||
@@ -1187,7 +1241,10 @@ public class ClassRandomizer {
 		
 		return false;
 	}
-	
+
+	/*****************************************************************
+	 * 
+	 ****************************************************************/
 	private static void transferBossWeaponLevels(GBAFECharacterData character, GBAFEClassData sourceClass, GBAFEClassData targetClass) {
 		WeaponRanks ranks = new WeaponRanks(character, sourceClass);
 		Optional<WeaponRank> highestRank = ranks.asList().stream().max(WeaponRank::compare);

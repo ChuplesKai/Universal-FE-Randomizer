@@ -16,8 +16,8 @@ import ui.model.RecruitmentOptions;
 import ui.model.RecruitmentOptions.ClassMode;
 import util.DebugPrinter;
 
-public class GBASlotAdjustmentService {
-
+public class GBASlotAdjustmentService
+{
 	/**
 	 * This Constant is for the level at which a character is assumed to be promoted with regards to Slot Adjustment.
 	 * F.e. if Eirika -> Seth she would only get 9 levels then promote. 
@@ -32,6 +32,8 @@ public class GBASlotAdjustmentService {
 	 * and characters that get negative levels don't become too weak. 
 	 */
 	private static final int AUTOLEVEL_REDUCTION_THRESHOLD = 11;
+
+	private static final int AUTOLEVEL_REDUCTION = 5;
 	
 	/*****************************************************************
 	 * Used by Recruitment Randomization and Character Shuffling to Calculate the following information:
@@ -55,14 +57,14 @@ public class GBASlotAdjustmentService {
 		if (!isPromoted && shouldBePromoted && dto.levelAdjustment > AUTOLEVEL_REDUCTION_THRESHOLD)
 		{
 			DebugPrinter.log(key, "Dropping 3 additional levels for new prepromotes.");
-			dto.levelAdjustment  -= 3;
+			dto.levelAdjustment  -= AUTOLEVEL_REDUCTION;
 		} 
 		// This really really doesn't seem needed, pre-promotes come in with too much base
 		else if(isPromoted && !shouldBePromoted && dto.levelAdjustment < -AUTOLEVEL_REDUCTION_THRESHOLD)
 		{
 			// Likewise, don't ruin former prepromotes as much
 			DebugPrinter.log(key, "Dropping 3 less levels for newly demoted units.");
-			dto.levelAdjustment  += 3;
+			dto.levelAdjustment  += AUTOLEVEL_REDUCTION;
 		}
 		
 		// If the character needs to be promoted.
@@ -82,7 +84,7 @@ public class GBASlotAdjustmentService {
 						DebugPrinter.log(key, "Promotion Options: [" + String.join(", ", promotionOptions.stream().map(charClass -> (textData.getStringAtIndex(charClass.getNameIndex(), true))).collect(Collectors.toList())) + "]");
 						if (!promotionOptions.isEmpty()) {
 							targetClass = promotionOptions.get(rng.nextInt(promotionOptions.size()));
-							dto.levelAdjustment += 10;
+							dto.levelAdjustment += ASSUMED_PROMOTION_LEVEL;
 						}
 					}
 				} else {

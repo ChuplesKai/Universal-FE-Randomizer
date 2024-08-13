@@ -2,6 +2,7 @@ package fedata.gba;
 
 import java.util.Random;
 
+import fedata.gba.GBAFEWeaponDto;
 import fedata.gba.general.WeaponEffects;
 import fedata.gba.general.WeaponRank;
 import fedata.gba.general.WeaponType;
@@ -72,6 +73,7 @@ public interface GBAFEItemData extends FEModifiableData, FEPrintableData {
 	public void applyRandomEffect(WeightedDistributor<WeaponEffects> allowedEffects, ItemDataLoader itemData, TextLoader textData, GBAFESpellAnimationCollection spellAnimations, Random rng);
 
 	public void turnIntoLordWeapon(int lordID, int nameIndex, int descriptionIndex, WeaponType weaponType, boolean isUnbreakable, int targetWeaponWeight, GBAFEItemData referenceItem, ItemDataLoader itemData, FreeSpaceManager freeSpace);
+	public void turnIntoLordWeapon(int lordID, int nameIndex, int descriptionIndex, boolean isUnbreakable, GBAFEWeaponDto weaponStats, ItemDataLoader itemData, FreeSpaceManager freeSpace);
 	
 	public GBAFEItemData createLordWeapon(int lordID, int newItemID, int nameIndex, int descriptionIndex, WeaponType weaponType, boolean isUnbreakable, int targetWeaponWeight, int iconIndex, ItemDataLoader itemData, FreeSpaceManager freeSpace);
 }

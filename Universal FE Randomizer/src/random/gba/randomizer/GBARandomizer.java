@@ -18,6 +18,7 @@ import random.gba.loader.*;
 import io.UPSPatcherStatusListener;
 import random.gba.loader.ItemDataLoader.AdditionalData;
 import random.gba.randomizer.shuffling.CharacterShuffler;
+import random.gba.randomizer.GBAPRFMaker;
 import random.general.Randomizer;
 import random.general.FERandom;
 import ui.model.*;
@@ -927,8 +928,6 @@ public class GBARandomizer extends Randomizer {
 				// First check for patches defined in the FE8 Data
 				if( FE8Data.CharacterClass.promotionMap.containsKey( FE8Data.CharacterClass.valueOf( charClass.getID() ) ) )
 				{
-					// Set< FE8Data.CharacterClass > promoSet = FE8Data.promotionMap.get( charClass.getID() ); // Get'em
-					// FE8Data.CharacterClass[] promotions = promoSet.toArray(); // Get as an array for ease
 					// Then simply use the utilities already made to set the promotion ids?
 					fe8_promotionManager.setFirstPromotionOptionForClass(charClass.getID(), fe8_promotionManager.getFirstPromotionOptionClassID(charClass.getID()));
 					fe8_promotionManager.setSecondPromotionOptionForClass(charClass.getID(), fe8_promotionManager.getSecondPromotionOptionClassID(charClass.getID()));
@@ -1530,7 +1529,9 @@ public class GBARandomizer extends Randomizer {
 		}
 		
 		// Creation of Preferred (PRF) Weapons
-		if (prfs != null && prfs.createPrfs) {
+		//GBAPRFMaker prfMaker = new GBAPRFMaker();
+		if (prfs != null && prfs.createPrfs)
+		{
 			boolean unbreakablePrfs = prfs.unbreakablePrfs;
 
 			//For some reason, doing each game separately?  Gotta be a better way.
@@ -2074,139 +2075,29 @@ public class GBARandomizer extends Randomizer {
 				GBAFECharacterData eirika = charData.characterWithID(FE8Data.Character.EIRIKA.ID);
 				GBAFECharacterData ephraim = charData.characterWithID(FE8Data.Character.EPHRAIM.ID);
 				
-				GBAFEClassData eirikaClass = classData.classForID(eirika.getClassID());
-				GBAFEClassData ephraimClass = classData.classForID(ephraim.getClassID());
+				GBAFEWeaponDto eirikaWeaponData = GBAPRFMaker.makePRF( eirika, 4, classData, rng );
+				GBAFEWeaponDto ephraimWeaponData = GBAPRFMaker.makePRF( ephraim, 5, classData, rng );
 				
-				List<WeaponType> eirikaWeaponTypes = classData.usableTypesForClass(eirikaClass);
-				List<WeaponType> ephraimWeaponTypes = classData.usableTypesForClass(ephraimClass);
-				
-				eirikaWeaponTypes.remove(WeaponType.STAFF);
-				ephraimWeaponTypes.remove(WeaponType.STAFF);
-				
-				String eirikaIconName = null;
-				String eirikaWeaponName = null;
-				WeaponType eirikaSelectedType = null;
-				String ephraimIconName = null;
-				String ephraimWeaponName = null;
-				WeaponType ephraimSelectedType = null;
-				
-				if (!eirikaWeaponTypes.isEmpty()) {
-					eirikaSelectedType = eirikaWeaponTypes.get(rng.nextInt(eirikaWeaponTypes.size()));
-					switch (eirikaSelectedType) {
-					case SWORD:
-						eirikaWeaponName = "Moon Blade";
-						eirikaIconName = "weaponIcons/MoonBlade.png";
-						break;
-					case LANCE:
-						eirikaWeaponName = "Moon Spear";
-						eirikaIconName = "weaponIcons/MoonSpear.png";
-						break;
-					case AXE:
-						eirikaWeaponName = "Moon Hammer";
-						eirikaIconName = "weaponIcons/MoonHammer.png";
-						break;
-					case BOW:
-						eirikaWeaponName = "Moon Shot";
-						eirikaIconName = "weaponIcons/MoonShot.png";
-						break;
-					case ANIMA:
-						eirikaWeaponName = "Lunar Bolt";
-						eirikaIconName = "weaponIcons/LunarBolt.png";
-						break;
-					case DARK:
-						eirikaWeaponName = "Lunar Eclipse";
-						eirikaIconName = "weaponIcons/LunarEclipse.png";
-						break;
-					case LIGHT:
-						eirikaWeaponName = "Lunar Beam";
-						eirikaIconName = "weaponIcons/LunarBeam.png";
-						break;
-					default: 
-						break;
-					}
-				}
-				
-				if (!ephraimWeaponTypes.isEmpty()) {
-					ephraimSelectedType = ephraimWeaponTypes.get(rng.nextInt(ephraimWeaponTypes.size()));
-					switch (ephraimSelectedType) {
-					case SWORD:
-						ephraimWeaponName = "Sun Blade";
-						ephraimIconName = "weaponIcons/SunBlade.png";
-						break;
-					case LANCE:
-						ephraimWeaponName = "Sun Spear";
-						ephraimIconName = "weaponIcons/SunSpear.png";
-						break;
-					case AXE:
-						ephraimWeaponName = "Sun Mallet";
-						ephraimIconName = "weaponIcons/SunMallet.png";
-						break;
-					case BOW:
-						ephraimWeaponName = "Sun Shot";
-						ephraimIconName = "weaponIcons/SunShot.png";
-						break;
-					case ANIMA:
-						ephraimWeaponName = "Solar Flare";
-						ephraimIconName = "weaponIcons/SolarFlare.png";
-						break;
-					case DARK:
-						ephraimWeaponName = "Solar Eclipse";
-						ephraimIconName = "weaponIcons/SolarEclipse.png";
-						break;
-					case LIGHT:
-						ephraimWeaponName = "Solar Beam";
-						ephraimIconName = "weaponIcons/SolarBeam.png";
-						break;
-					default: 
-						break;
-					}
-				}
-					
-				if (eirikaWeaponName != null && eirikaIconName != null) {
+				// If the PRF Generator actually made at hing
+				if (eirikaWeaponData != null )
+				{
 					// Replace the old icon.
-					byte[] iconData = GBAImageCodec.getGBAGraphicsDataForImage(eirikaIconName, GBAImageCodec.gbaWeaponColorPalette);
+					byte[] iconData = GBAImageCodec.getGBAGraphicsDataForImage(eirikaWeaponData.icon, GBAImageCodec.gbaWeaponColorPalette);
 					if (iconData == null) {
-						notifyError("Invalid image data for icon " + eirikaIconName);
+						notifyError("Invalid image data for icon " + eirikaWeaponData.icon);
 					}
 					diffCompiler.addDiff(new Diff(0x592B74, iconData.length, iconData, null));
 					
 					// Reusing the dummy Mani Katti
-					textData.setStringAtIndex(0x3A, eirikaWeaponName + "[X]");
+					textData.setStringAtIndex(0x3A, eirikaWeaponData.newDisplayName + "[X]");
 					// We need a description string so that the rest of the weapon stats will show, even if it's a blank string.
 					textData.setStringAtIndex(0x3B, " [.][X]");
 					
 					GBAFEItemData itemToReplace = itemData.itemWithID(FE8Data.Item.UNUSED_MANI_KATTI.ID);
-					itemToReplace.turnIntoLordWeapon(eirika.getID(), 0x3A, 0x3B, eirikaSelectedType, unbreakablePrfs, eirikaClass.getCON() + eirika.getConstitution(), 
-							itemData.itemWithID(FE8Data.Item.RAPIER.ID), itemData, freeSpace);
+					itemToReplace.turnIntoLordWeapon(eirika.getID(), 0x3A, 0x3B, unbreakablePrfs, eirikaWeaponData, itemData, freeSpace);
 					
-					switch (eirikaSelectedType) {
-					case SWORD:
-					case LANCE:
-					case AXE:
-						itemData.spellAnimations.addAnimation(itemToReplace.getID(), 2, 
-								FE8SpellAnimationCollection.Animation.NONE2.value, FE8SpellAnimationCollection.Flash.WHITE.value);
-						break;
-					case BOW:
-						itemData.spellAnimations.addAnimation(itemToReplace.getID(), 2, 
-								FE8SpellAnimationCollection.Animation.ARROW.value, FE8SpellAnimationCollection.Flash.WHITE.value);
-						break;
-					case ANIMA:
-						itemData.spellAnimations.addAnimation(itemToReplace.getID(), 2, 
-								FE8SpellAnimationCollection.Animation.THUNDER.value, FE8SpellAnimationCollection.Flash.YELLOW.value);
-						break;
-					case DARK:
-						itemData.spellAnimations.addAnimation(itemToReplace.getID(), 2, 
-								FE8SpellAnimationCollection.Animation.FLUX.value, FE8SpellAnimationCollection.Flash.DARK.value);
-						break;
-					case LIGHT:
-						itemData.spellAnimations.addAnimation(itemToReplace.getID(), 2, 
-								FE8SpellAnimationCollection.Animation.DIVINE.value, FE8SpellAnimationCollection.Flash.BLUE.value);
-						break;
-					default:
-						// No animation needed here.
-						break;
-					}
-					
+					itemData.spellAnimations.addAnimation(itemToReplace.getID(), 2, eirikaWeaponData.animation, eirikaWeaponData.flash);
+
 					// Make sure Eirika herself can. She'll use the unused Lyn Lock.
 					eirika.enableWeaponLock(FE8Data.CharacterAndClassAbility4Mask.EIRIKA_WEAPON_LOCK.getValue());
 					itemToReplace.setAbility3(FE8Data.Item.Ability3Mask.EIRIKA_LOCK.ID);
@@ -2215,52 +2106,28 @@ public class GBARandomizer extends Randomizer {
 					GBAFEChapterData prologue = chapterData.chapterWithID(FE8Data.ChapterPointer.PROLOGUE.chapterID);
 					GBAFEChapterItemData item = prologue.chapterItemGivenToCharacter(FE8Data.Character.EIRIKA.ID);
 					item.setItemID(itemToReplace.getID());
+					System.out.println( eirikaWeaponData.toString() );
 				}
 				
-				if (ephraimWeaponName != null && ephraimIconName != null) {
+				// If the PRF Generator actually made a thing
+				if (ephraimWeaponData != null )
+				{
 					// Replace the old icon.
-					byte[] iconData = GBAImageCodec.getGBAGraphicsDataForImage(ephraimIconName, GBAImageCodec.gbaWeaponColorPalette);
+					byte[] iconData = GBAImageCodec.getGBAGraphicsDataForImage(ephraimWeaponData.icon, GBAImageCodec.gbaWeaponColorPalette);
 					if (iconData == null) {
-						notifyError("Invalid image data for icon " + ephraimIconName);
+						notifyError("Invalid image data for icon " + ephraimWeaponData.icon);
 					}
 					diffCompiler.addDiff(new Diff(0x594474, iconData.length, iconData, null));
 					
 					// Reusing the dummy Forblaze
-					textData.setStringAtIndex(0x3C, ephraimWeaponName + "[X]");
+					textData.setStringAtIndex(0x3C, ephraimWeaponData.newDisplayName + "[X]");
 					// We need a description string for the rest of the weapon stats to show up.
 					textData.setStringAtIndex(0x3D, " [.][X]");
 					
 					GBAFEItemData itemToReplace = itemData.itemWithID(FE8Data.Item.UNUSED_FORBLAZE.ID);
-					itemToReplace.turnIntoLordWeapon(eirika.getID(), 0x3C, 0x3D, ephraimSelectedType, unbreakablePrfs, ephraimClass.getCON() + ephraim.getConstitution(), 
-							itemData.itemWithID(FE8Data.Item.REGINLEIF.ID), itemData, freeSpace);
-					
-					switch (ephraimSelectedType) {
-					case SWORD:
-					case LANCE:
-					case AXE:
-						itemData.spellAnimations.addAnimation(itemToReplace.getID(), 2, 
-								FE8SpellAnimationCollection.Animation.NONE2.value, FE8SpellAnimationCollection.Flash.WHITE.value);
-						break;
-					case BOW:
-						itemData.spellAnimations.addAnimation(itemToReplace.getID(), 2, 
-								FE8SpellAnimationCollection.Animation.ARROW.value, FE8SpellAnimationCollection.Flash.WHITE.value);
-						break;
-					case ANIMA:
-						itemData.spellAnimations.addAnimation(itemToReplace.getID(), 2, 
-								FE8SpellAnimationCollection.Animation.ELFIRE.value, FE8SpellAnimationCollection.Flash.RED.value);
-						break;
-					case DARK:
-						itemData.spellAnimations.addAnimation(itemToReplace.getID(), 2, 
-								FE8SpellAnimationCollection.Animation.FLUX.value, FE8SpellAnimationCollection.Flash.DARK.value);
-						break;
-					case LIGHT:
-						itemData.spellAnimations.addAnimation(itemToReplace.getID(), 2, 
-								FE8SpellAnimationCollection.Animation.DIVINE.value, FE8SpellAnimationCollection.Flash.YELLOW.value);
-						break;
-					default:
-						// No animation needed here.
-						break;
-					}
+					itemToReplace.turnIntoLordWeapon(ephraim.getID(), 0x3C, 0x3D, unbreakablePrfs, ephraimWeaponData, itemData, freeSpace);
+
+					itemData.spellAnimations.addAnimation(itemToReplace.getID(), 2, ephraimWeaponData.animation, ephraimWeaponData.flash);
 					
 					// Make sure Ephraim himself can. He'll use the unused Athos Lock.
 					ephraim.enableWeaponLock(FE8Data.CharacterAndClassAbility4Mask.UNUSED_ATHOS_LOCK.getValue());
@@ -2274,6 +2141,7 @@ public class GBARandomizer extends Randomizer {
 							unit.giveItem(itemToReplace.getID());
 						}
 					}
+					System.out.println( ephraimWeaponData.toString() );
 				}
 			}
 		}
