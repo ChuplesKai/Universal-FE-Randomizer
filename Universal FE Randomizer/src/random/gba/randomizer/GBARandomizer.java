@@ -2075,8 +2075,8 @@ public class GBARandomizer extends Randomizer {
 				GBAFECharacterData eirika = charData.characterWithID(FE8Data.Character.EIRIKA.ID);
 				GBAFECharacterData ephraim = charData.characterWithID(FE8Data.Character.EPHRAIM.ID);
 				
-				GBAFEWeaponDto eirikaWeaponData = GBAPRFMaker.makePRF( eirika, 4, classData, rng );
-				GBAFEWeaponDto ephraimWeaponData = GBAPRFMaker.makePRF( ephraim, 5, classData, rng );
+				GBAFEWeaponDto eirikaWeaponData = GBAPRFMaker.makePRF( eirika, 4, classData, unbreakablePrfs, rng );
+				GBAFEWeaponDto ephraimWeaponData = GBAPRFMaker.makePRF( ephraim, 5, classData, unbreakablePrfs, rng );
 				
 				// If the PRF Generator actually made at hing
 				if (eirikaWeaponData != null )
