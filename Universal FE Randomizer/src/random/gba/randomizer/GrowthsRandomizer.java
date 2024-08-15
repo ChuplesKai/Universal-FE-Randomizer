@@ -170,7 +170,7 @@ public class GrowthsRandomizer
 	 ****************************************************************/
 	public static GBAFEStatDto randomizeDelta(int mult, int delta, int minGrowth, int maxGrowth, boolean adjustHP, GBAFEStatDto inputGrowths, FERandom rng)
 	{
-		return new GBAFEStatDto( YuneUtil.clamp( adjustHP ? inputGrowths.hp + (mult * rng.sample( delta )) : inputGrowths.hp, minGrowth, maxGrowth ),
+		return new GBAFEStatDto( YuneUtil.clamp( adjustHP ? inputGrowths.hp + (mult * rng.sample( delta )) : inputGrowths.hp, minGrowth + hpBonus, maxGrowth + hpBonus ),
 				YuneUtil.clamp( inputGrowths.str + (mult * rng.sample( delta )), minGrowth, maxGrowth ),
 				YuneUtil.clamp( inputGrowths.skl + (mult * rng.sample( delta )), minGrowth, maxGrowth ),
 				YuneUtil.clamp( inputGrowths.spd + (mult * rng.sample( delta )), minGrowth, maxGrowth ),
@@ -185,10 +185,10 @@ public class GrowthsRandomizer
 	 ****************************************************************/
 	public static GBAFEStatDto fullRandomizeRange(int mult, int minGrowth, int range, boolean adjustHP, GBAFEStatDto inputGrowths, FERandom rng)
 	{
-		return new GBAFEStatDto( adjustHP ? (mult * rng.nextInt(range)) + minGrowth + hpBonus : inputGrowths.hp,
-				(mult * rng.nextInt(range)) + minGrowth, (mult * rng.nextInt(range)) + minGrowth,
-				(mult * rng.nextInt(range)) + minGrowth, (mult * rng.nextInt(range)) + minGrowth,
-				(mult * rng.nextInt(range)) + minGrowth, (mult * rng.nextInt(range)) + minGrowth );
+		return new GBAFEStatDto( adjustHP ? (mult * rng.sampleRange(0,range)) + minGrowth + hpBonus : inputGrowths.hp,
+				(mult * rng.sampleRange(0,range)) + minGrowth, (mult * rng.sampleRange(0,range)) + minGrowth,
+				(mult * rng.sampleRange(0,range)) + minGrowth, (mult * rng.sampleRange(0,range)) + minGrowth,
+				(mult * rng.sampleRange(0,range)) + minGrowth, (mult * rng.sampleRange(0,range)) + minGrowth );
 	}
 
 }
